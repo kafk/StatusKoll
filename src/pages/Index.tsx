@@ -1,12 +1,28 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import HomePage from '@/components/HomePage';
+import StatusPage from '@/components/StatusPage';
+import CustomersPage from '@/components/CustomersPage';
+import BottomNav from '@/components/BottomNav';
+import FAB from '@/components/FAB';
+import BookingModal from '@/components/BookingModal';
+
+type Page = 'home' | 'status' | 'customers';
 
 const Index = () => {
+  const [activePage, setActivePage] = useState<Page>('home');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-[428px] mx-auto px-5 relative z-[1]">
+        {activePage === 'home' && <HomePage />}
+        {activePage === 'status' && <StatusPage />}
+        {activePage === 'customers' && <CustomersPage />}
       </div>
+
+      <FAB onClick={() => setIsModalOpen(true)} />
+      <BookingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <BottomNav activePage={activePage} onPageChange={setActivePage} />
     </div>
   );
 };
