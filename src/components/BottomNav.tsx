@@ -1,6 +1,6 @@
-import { Home, Activity, Users } from 'lucide-react';
+import { Home, Activity, Users, Coins } from 'lucide-react';
 
-type Page = 'home' | 'status' | 'customers';
+type Page = 'home' | 'status' | 'customers' | 'economy';
 
 interface BottomNavProps {
   activePage: Page;
@@ -12,6 +12,7 @@ const BottomNav = ({ activePage, onPageChange }: BottomNavProps) => {
     { id: 'home', label: 'Hem', icon: Home },
     { id: 'status', label: 'Status', icon: Activity },
     { id: 'customers', label: 'Kunder', icon: Users },
+    { id: 'economy', label: 'Ekonomi', icon: Coins },
   ];
 
   return (
