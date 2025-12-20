@@ -1,40 +1,42 @@
 import { Users, Coins } from 'lucide-react';
 
-// Anpassade genererade ikoner
-import phoneTapCheck from '@/assets/icons/phone-tap-check.png';
-import phoneBooking from '@/assets/icons/phone-booking.png';
-import handCalendarCheck from '@/assets/icons/hand-calendar-check.png';
-import phoneHomeBooking from '@/assets/icons/phone-home-booking.png';
-import clipboardTap from '@/assets/icons/clipboard-tap.png';
-import mobileConfirmed from '@/assets/icons/mobile-confirmed.png';
+// Enkla linje-ikoner
+import phoneTapSimple from '@/assets/icons/phone-tap-simple.png';
+import phoneTapMinimal from '@/assets/icons/phone-tap-minimal.png';
+import phoneTapLine from '@/assets/icons/phone-tap-line.png';
+import phoneClickCheck from '@/assets/icons/phone-click-check.png';
 
-const customIcons = [
-  { src: phoneTapCheck, name: 'Phone Tap Check', desc: 'Mobil + hand + check' },
-  { src: phoneBooking, name: 'Phone Booking', desc: 'Mobil bekräftad' },
-  { src: handCalendarCheck, name: 'Hand Calendar', desc: 'Hand + kalender' },
+// Tidigare genererade
+import phoneBooking from '@/assets/icons/phone-booking.png';
+import phoneHomeBooking from '@/assets/icons/phone-home-booking.png';
+
+const simpleIcons = [
+  { src: phoneTapSimple, name: 'Simple Coral', desc: 'Tunn linje, coral' },
+  { src: phoneTapMinimal, name: 'Minimal Gray', desc: 'Grå, tap + check' },
+  { src: phoneTapLine, name: 'Line Art', desc: 'Svart linje' },
+  { src: phoneClickCheck, name: 'Click Hand', desc: 'Enkel hand' },
+  { src: phoneBooking, name: 'Phone Check', desc: 'Teal bekräftad' },
   { src: phoneHomeBooking, name: 'Phone Home', desc: 'Boende + check' },
-  { src: clipboardTap, name: 'Clipboard Tap', desc: 'Lista + hand' },
-  { src: mobileConfirmed, name: 'Mobile Confirmed', desc: 'Hand håller mobil' },
 ];
 
 const IconSuggestions = () => {
   return (
     <div className="p-5 max-w-[500px] mx-auto pb-20">
-      <h2 className="font-display text-2xl font-bold gradient-text mb-6">Anpassade Ikoner</h2>
+      <h2 className="font-display text-2xl font-bold gradient-text mb-6">Enkla Linje-ikoner</h2>
       <p className="text-sm text-muted-foreground mb-6">
-        Genererade i din apps färgschema (coral/teal) med mobil + hand + check tema
+        Minimalistiska ikoner med mobil + hand + check
       </p>
       
-      {/* Custom generated icons */}
+      {/* Simple line icons */}
       <div className="mb-8">
-        <h3 className="font-display text-lg font-bold mb-4">Plattform-ikoner (6 st)</h3>
+        <h3 className="font-display text-lg font-bold mb-4">Plattform-ikoner</h3>
         <div className="grid grid-cols-3 gap-4">
-          {customIcons.map(({ src, name, desc }, index) => (
+          {simpleIcons.map(({ src, name, desc }, index) => (
             <div
               key={index}
               className="bg-card border border-border rounded-xl p-4 flex flex-col items-center gap-2 hover:border-primary transition-all hover:-translate-y-1"
             >
-              <img src={src} alt={name} className="w-16 h-16 object-contain" />
+              <img src={src} alt={name} className="w-14 h-14 object-contain" />
               <span className="text-[10px] font-bold text-center leading-tight">{name}</span>
               <span className="text-[9px] text-muted-foreground text-center">{desc}</span>
             </div>
@@ -42,9 +44,9 @@ const IconSuggestions = () => {
         </div>
       </div>
 
-      {/* Rekommenderad kombination */}
+      {/* Rekommenderad */}
       <div className="mt-8 p-5 bg-card border-2 border-primary/30 rounded-xl">
-        <h3 className="font-display text-lg font-bold mb-4 gradient-text">Rekommenderad kombination</h3>
+        <h3 className="font-display text-lg font-bold mb-4 gradient-text">Rekommenderad</h3>
         <div className="grid grid-cols-3 gap-4 text-center">
           <div className="flex flex-col items-center gap-2">
             <Users className="w-10 h-10 text-primary" strokeWidth={1.5} />
@@ -57,16 +59,16 @@ const IconSuggestions = () => {
             <span className="text-[10px] text-muted-foreground">Pris</span>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <img src={phoneTapCheck} alt="Phone Tap" className="w-10 h-10 object-contain" />
-            <span className="text-xs font-bold">Phone Tap</span>
+            <img src={phoneTapMinimal} alt="Minimal" className="w-10 h-10 object-contain" />
+            <span className="text-xs font-bold">Minimal</span>
             <span className="text-[10px] text-muted-foreground">Plattform</span>
           </div>
         </div>
       </div>
 
-      {/* Alternativ 1 */}
+      {/* Alternativ: Coral */}
       <div className="mt-4 p-5 bg-card border border-border rounded-xl">
-        <h3 className="font-display text-lg font-bold mb-4">Alternativ: Teal tema</h3>
+        <h3 className="font-display text-lg font-bold mb-4">Alternativ: Coral</h3>
         <div className="grid grid-cols-3 gap-4 text-center">
           <div className="flex flex-col items-center gap-2">
             <Users className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
@@ -77,15 +79,15 @@ const IconSuggestions = () => {
             <span className="text-xs font-bold">Coins</span>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <img src={phoneHomeBooking} alt="Phone Home" className="w-10 h-10 object-contain" />
-            <span className="text-xs font-bold">Phone Home</span>
+            <img src={phoneTapSimple} alt="Simple" className="w-10 h-10 object-contain" />
+            <span className="text-xs font-bold">Simple Coral</span>
           </div>
         </div>
       </div>
 
-      {/* Alternativ 2 */}
+      {/* Alternativ: Svart */}
       <div className="mt-4 p-5 bg-card border border-border rounded-xl">
-        <h3 className="font-display text-lg font-bold mb-4">Alternativ: Kalender</h3>
+        <h3 className="font-display text-lg font-bold mb-4">Alternativ: Svart linje</h3>
         <div className="grid grid-cols-3 gap-4 text-center">
           <div className="flex flex-col items-center gap-2">
             <Users className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
@@ -96,8 +98,8 @@ const IconSuggestions = () => {
             <span className="text-xs font-bold">Coins</span>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <img src={handCalendarCheck} alt="Calendar" className="w-10 h-10 object-contain" />
-            <span className="text-xs font-bold">Hand Calendar</span>
+            <img src={phoneTapLine} alt="Line" className="w-10 h-10 object-contain" />
+            <span className="text-xs font-bold">Line Art</span>
           </div>
         </div>
       </div>
