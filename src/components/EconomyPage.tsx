@@ -1,34 +1,42 @@
 import { useState } from 'react';
-import { Plus, Trash2, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
+import { format } from 'date-fns';
+import { sv } from 'date-fns/locale';
+import { Plus, Trash2, TrendingUp, TrendingDown, Wallet, CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 import Header from './Header';
 
 interface Cost {
   id: string;
   name: string;
   amount: number;
+  date: Date;
 }
 
 const EconomyPage = () => {
-  const [income] = useState(45000); // Total income from bookings
+  const [income] = useState(45000);
   
   const [fixedCosts, setFixedCosts] = useState<Cost[]>([
-    { id: '1', name: 'Hyra', amount: 8000 },
-    { id: '2', name: 'El & Vatten', amount: 1500 },
-    { id: '3', name: 'Försäkring', amount: 800 },
+    { id: '1', name: 'Hyra', amount: 8000, date: new Date(2024, 11, 1) },
+    { id: '2', name: 'El & Vatten', amount: 1500, date: new Date(2024, 11, 1) },
+    { id: '3', name: 'Försäkring', amount: 800, date: new Date(2024, 11, 1) },
   ]);
   
   const [variableCosts, setVariableCosts] = useState<Cost[]>([
-    { id: '1', name: 'Städning', amount: 2400 },
-    { id: '2', name: 'Förbrukningsmaterial', amount: 600 },
+    { id: '1', name: 'Städning', amount: 2400, date: new Date(2024, 11, 15) },
+    { id: '2', name: 'Förbrukningsmaterial', amount: 600, date: new Date(2024, 11, 10) },
   ]);
 
   const [newFixedName, setNewFixedName] = useState('');
   const [newFixedAmount, setNewFixedAmount] = useState('');
+  const [newFixedDate, setNewFixedDate] = useState<Date>(new Date());
   const [newVariableName, setNewVariableName] = useState('');
   const [newVariableAmount, setNewVariableAmount] = useState('');
+  const [newVariableDate, setNewVariableDate] = useState<Date>(new Date());
 
   const totalFixedCosts = fixedCosts.reduce((sum, c) => sum + c.amount, 0);
   const totalVariableCosts = variableCosts.reduce((sum, c) => sum + c.amount, 0);
@@ -40,10 +48,12 @@ const EconomyPage = () => {
       setFixedCosts([...fixedCosts, {
         id: Date.now().toString(),
         name: newFixedName,
-        amount: parseFloat(newFixedAmount)
+        amount: parseFloat(newFixedAmount),
+        date: newFixedDate
       }]);
       setNewFixedName('');
       setNewFixedAmount('');
+      setNewFixedDate(new Date());
     }
   };
 
@@ -52,10 +62,12 @@ const EconomyPage = () => {
       setVariableCosts([...variableCosts, {
         id: Date.now().toString(),
         name: newVariableName,
-        amount: parseFloat(newVariableAmount)
+        amount: parseFloat(newVariableAmount),
+        date: newVariableDate
       }]);
       setNewVariableName('');
       setNewVariableAmount('');
+      setNewVariableDate(new Date());
     }
   };
 
@@ -118,7 +130,10 @@ const EconomyPage = () => {
           <div className="space-y-3 mb-4">
             {fixedCosts.map(cost => (
               <div key={cost.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
-                <span className="text-sm">{cost.name}</span>
+                <div>
+                  <span className="text-sm">{cost.name}</span>
+                  <p className="text-xs text-muted-foreground">{format(cost.date, 'd MMM yyyy', { locale: sv })}</p>
+                </div>
                 <div className="flex items-center gap-2">
                   <span className="font-medium">{cost.amount.toLocaleString()} kr</span>
                   <button 
@@ -132,12 +147,12 @@ const EconomyPage = () => {
             ))}
           </div>
           
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Input 
               placeholder="Kostnad..." 
               value={newFixedName}
               onChange={(e) => setNewFixedName(e.target.value)}
-              className="flex-1"
+              className="flex-1 min-w-[100px]"
             />
             <Input 
               placeholder="Belopp" 
@@ -146,6 +161,23 @@ const EconomyPage = () => {
               onChange={(e) => setNewFixedAmount(e.target.value)}
               className="w-24"
             />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className={cn("w-[120px] justify-start text-left font-normal", !newFixedDate && "text-muted-foreground")}>
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {format(newFixedDate, 'd MMM', { locale: sv })}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={newFixedDate}
+                  onSelect={(date) => date && setNewFixedDate(date)}
+                  initialFocus
+                  className="p-3 pointer-events-auto"
+                />
+              </PopoverContent>
+            </Popover>
             <Button size="icon" onClick={addFixedCost}>
               <Plus className="w-4 h-4" />
             </Button>
@@ -169,7 +201,10 @@ const EconomyPage = () => {
           <div className="space-y-3 mb-4">
             {variableCosts.map(cost => (
               <div key={cost.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
-                <span className="text-sm">{cost.name}</span>
+                <div>
+                  <span className="text-sm">{cost.name}</span>
+                  <p className="text-xs text-muted-foreground">{format(cost.date, 'd MMM yyyy', { locale: sv })}</p>
+                </div>
                 <div className="flex items-center gap-2">
                   <span className="font-medium">{cost.amount.toLocaleString()} kr</span>
                   <button 
@@ -183,12 +218,12 @@ const EconomyPage = () => {
             ))}
           </div>
           
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Input 
               placeholder="Kostnad..." 
               value={newVariableName}
               onChange={(e) => setNewVariableName(e.target.value)}
-              className="flex-1"
+              className="flex-1 min-w-[100px]"
             />
             <Input 
               placeholder="Belopp" 
@@ -197,6 +232,23 @@ const EconomyPage = () => {
               onChange={(e) => setNewVariableAmount(e.target.value)}
               className="w-24"
             />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className={cn("w-[120px] justify-start text-left font-normal", !newVariableDate && "text-muted-foreground")}>
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {format(newVariableDate, 'd MMM', { locale: sv })}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={newVariableDate}
+                  onSelect={(date) => date && setNewVariableDate(date)}
+                  initialFocus
+                  className="p-3 pointer-events-auto"
+                />
+              </PopoverContent>
+            </Popover>
             <Button size="icon" onClick={addVariableCost}>
               <Plus className="w-4 h-4" />
             </Button>
