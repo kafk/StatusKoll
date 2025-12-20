@@ -18,7 +18,18 @@ import {
   ExternalLink,
   Share2,
   Building2,
-  Store
+  Store,
+  // Nya plattforms-ikoner
+  Home,
+  Hotel,
+  BedDouble,
+  Building,
+  Landmark,
+  MapPin,
+  Calendar,
+  Bookmark,
+  Tag,
+  ShoppingBag
 } from 'lucide-react';
 
 /**
@@ -41,14 +52,17 @@ import {
  * - PiggyBank: Spargris
  * - Coins: Mynt
  * 
- * PLATTFORM (ersätter 🌐):
- * - Globe: Klassisk jordglob
- * - Globe2: Alternativ glob
- * - Link: Länk-kedja
- * - ExternalLink: Extern länk
- * - Share2: Delning
- * - Building2: Företag/plattform
- * - Store: Butik/marknadsplats
+ * PLATTFORM (bokningssidor som Booking.com, Airbnb):
+ * - Home: Hus/boende
+ * - Hotel: Hotell
+ * - BedDouble: Säng/sovplats
+ * - Building: Byggnad
+ * - Building2: Alt byggnad
+ * - Landmark: Landmärke
+ * - MapPin: Platsmarkör
+ * - Calendar: Kalender/bokning
+ * - Bookmark: Bokmärke
+ * - Tag: Tagg/etikett
  */
 
 const IconSuggestions = () => {
@@ -72,13 +86,16 @@ const IconSuggestions = () => {
   ];
 
   const platformIcons = [
-    { Icon: Globe, name: 'Globe', desc: 'Jordglob' },
-    { Icon: Globe2, name: 'Globe2', desc: 'Alt glob' },
-    { Icon: Link, name: 'Link', desc: 'Länk-kedja' },
-    { Icon: ExternalLink, name: 'ExternalLink', desc: 'Extern länk' },
-    { Icon: Share2, name: 'Share2', desc: 'Delning' },
-    { Icon: Building2, name: 'Building2', desc: 'Företag' },
-    { Icon: Store, name: 'Store', desc: 'Marknadsplats' },
+    { Icon: Home, name: 'Home', desc: 'Hus/boende' },
+    { Icon: Hotel, name: 'Hotel', desc: 'Hotell' },
+    { Icon: BedDouble, name: 'BedDouble', desc: 'Säng/sovplats' },
+    { Icon: Building, name: 'Building', desc: 'Byggnad' },
+    { Icon: Building2, name: 'Building2', desc: 'Alt byggnad' },
+    { Icon: Landmark, name: 'Landmark', desc: 'Landmärke' },
+    { Icon: MapPin, name: 'MapPin', desc: 'Platsmarkör' },
+    { Icon: Calendar, name: 'Calendar', desc: 'Bokning' },
+    { Icon: Bookmark, name: 'Bookmark', desc: 'Bokmärke' },
+    { Icon: Tag, name: 'Tag', desc: 'Källa/tagg' },
   ];
 
   const IconSection = ({ 
