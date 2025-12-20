@@ -12,28 +12,27 @@ import {
   CircleDollarSign,
   PiggyBank,
   Coins,
-  // Plattforms-ikoner - klick/check/bokning
+  // Mobil + interaktion ikoner
   SmartphoneNfc,
+  SmartphoneCharging,
+  Smartphone,
   TabletSmartphone,
-  CheckCircle,
-  CheckCircle2,
-  CheckSquare,
-  CheckSquare2,
-  CircleCheck,
-  ClipboardCheck,
-  ClipboardList,
-  ListChecks,
-  ListTodo,
-  CalendarCheck,
-  CalendarCheck2,
-  FileCheck,
-  FileCheck2,
-  BadgeCheck,
-  ShieldCheck,
-  SquareCheckBig,
-  CircleDot,
-  MousePointerClick,
-  Hand
+  PhoneCall,
+  PhoneIncoming,
+  PhoneOutgoing,
+  PhoneForwarded,
+  Fingerprint,
+  ScanLine,
+  QrCode,
+  NfcIcon,
+  Bluetooth,
+  Wifi,
+  Signal,
+  MonitorSmartphone,
+  Vibrate,
+  BellRing,
+  MessageSquare,
+  Send
 } from 'lucide-react';
 
 const IconSuggestions = () => {
@@ -56,27 +55,28 @@ const IconSuggestions = () => {
     { Icon: Coins, name: 'Coins', desc: 'Mynt' },
   ];
 
+  // Mobil med interaktion - telefon + tap/aktivitet
   const platformIcons = [
-    { Icon: SmartphoneNfc, name: 'SmartphoneNfc', desc: 'Mobil + tap' },
-    { Icon: TabletSmartphone, name: 'TabletSmartphone', desc: 'Enheter' },
-    { Icon: CheckCircle, name: 'CheckCircle', desc: 'Check cirkel' },
-    { Icon: CheckCircle2, name: 'CheckCircle2', desc: 'Alt check' },
-    { Icon: CheckSquare, name: 'CheckSquare', desc: 'Check ruta' },
-    { Icon: CheckSquare2, name: 'CheckSquare2', desc: 'Alt ruta' },
-    { Icon: CircleCheck, name: 'CircleCheck', desc: 'Cirkel check' },
-    { Icon: ClipboardCheck, name: 'ClipboardCheck', desc: 'Urklipp ✓' },
-    { Icon: ClipboardList, name: 'ClipboardList', desc: 'Urklipp lista' },
-    { Icon: ListChecks, name: 'ListChecks', desc: 'Lista checks' },
-    { Icon: ListTodo, name: 'ListTodo', desc: 'Todo-lista' },
-    { Icon: CalendarCheck, name: 'CalendarCheck', desc: 'Kalender ✓' },
-    { Icon: CalendarCheck2, name: 'CalendarCheck2', desc: 'Alt kalender' },
-    { Icon: FileCheck, name: 'FileCheck', desc: 'Fil check' },
-    { Icon: FileCheck2, name: 'FileCheck2', desc: 'Alt fil' },
-    { Icon: BadgeCheck, name: 'BadgeCheck', desc: 'Badge ✓' },
-    { Icon: ShieldCheck, name: 'ShieldCheck', desc: 'Sköld ✓' },
-    { Icon: SquareCheckBig, name: 'SquareCheckBig', desc: 'Stor check' },
-    { Icon: MousePointerClick, name: 'MousePointerClick', desc: 'Klick' },
-    { Icon: Hand, name: 'Hand', desc: 'Hand/tap' },
+    { Icon: SmartphoneNfc, name: 'SmartphoneNfc', desc: 'Mobil tap' },
+    { Icon: SmartphoneCharging, name: 'SmartphoneCharging', desc: 'Mobil aktiv' },
+    { Icon: Smartphone, name: 'Smartphone', desc: 'Mobil' },
+    { Icon: TabletSmartphone, name: 'TabletSmartphone', desc: 'Mobil+platta' },
+    { Icon: MonitorSmartphone, name: 'MonitorSmartphone', desc: 'Synk' },
+    { Icon: PhoneCall, name: 'PhoneCall', desc: 'Samtal' },
+    { Icon: PhoneIncoming, name: 'PhoneIncoming', desc: 'Inkommande' },
+    { Icon: PhoneOutgoing, name: 'PhoneOutgoing', desc: 'Utgående' },
+    { Icon: PhoneForwarded, name: 'PhoneForwarded', desc: 'Vidarekopplad' },
+    { Icon: Fingerprint, name: 'Fingerprint', desc: 'Touch ID' },
+    { Icon: ScanLine, name: 'ScanLine', desc: 'Skanna' },
+    { Icon: QrCode, name: 'QrCode', desc: 'QR-kod' },
+    { Icon: NfcIcon, name: 'NfcIcon', desc: 'NFC tap' },
+    { Icon: Bluetooth, name: 'Bluetooth', desc: 'Trådlös' },
+    { Icon: Wifi, name: 'Wifi', desc: 'Online' },
+    { Icon: Signal, name: 'Signal', desc: 'Signal' },
+    { Icon: Vibrate, name: 'Vibrate', desc: 'Vibration' },
+    { Icon: BellRing, name: 'BellRing', desc: 'Notis' },
+    { Icon: MessageSquare, name: 'MessageSquare', desc: 'Meddelande' },
+    { Icon: Send, name: 'Send', desc: 'Skicka' },
   ];
 
   const IconSection = ({ 
@@ -111,11 +111,11 @@ const IconSuggestions = () => {
       
       <IconSection title="Gäster" icons={guestIcons} accentColor="text-primary" />
       <IconSection title="Pris" icons={priceIcons} accentColor="text-warning" />
-      <IconSection title="Plattform (20 st)" icons={platformIcons} accentColor="text-secondary" />
+      <IconSection title="Plattform - Mobil + Interaktion (20 st)" icons={platformIcons} accentColor="text-secondary" />
 
       {/* Rekommenderad kombination */}
       <div className="mt-8 p-5 bg-card border-2 border-primary/30 rounded-xl">
-        <h3 className="font-display text-lg font-bold mb-4 gradient-text">Rekommenderad kombination</h3>
+        <h3 className="font-display text-lg font-bold mb-4 gradient-text">Rekommenderad: Mobil + tap</h3>
         <div className="grid grid-cols-3 gap-4 text-center">
           <div className="flex flex-col items-center gap-2">
             <Users className="w-10 h-10 text-primary" strokeWidth={1.5} />
@@ -128,8 +128,8 @@ const IconSuggestions = () => {
             <span className="text-[10px] text-muted-foreground">Pris</span>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <ClipboardCheck className="w-10 h-10 text-secondary" strokeWidth={1.5} />
-            <span className="text-xs font-bold">ClipboardCheck</span>
+            <SmartphoneNfc className="w-10 h-10 text-secondary" strokeWidth={1.5} />
+            <span className="text-xs font-bold">SmartphoneNfc</span>
             <span className="text-[10px] text-muted-foreground">Plattform</span>
           </div>
         </div>
@@ -137,7 +137,7 @@ const IconSuggestions = () => {
 
       {/* Alternativ */}
       <div className="mt-4 p-5 bg-card border border-border rounded-xl">
-        <h3 className="font-display text-lg font-bold mb-4">Alternativ: Kalender-stil</h3>
+        <h3 className="font-display text-lg font-bold mb-4">Alternativ: Touch/Fingerprint</h3>
         <div className="grid grid-cols-3 gap-4 text-center">
           <div className="flex flex-col items-center gap-2">
             <Users className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
@@ -148,8 +148,8 @@ const IconSuggestions = () => {
             <span className="text-xs font-bold">Coins</span>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <CalendarCheck className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
-            <span className="text-xs font-bold">CalendarCheck</span>
+            <Fingerprint className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
+            <span className="text-xs font-bold">Fingerprint</span>
           </div>
         </div>
       </div>
