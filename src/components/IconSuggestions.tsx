@@ -1,37 +1,29 @@
 import { Users, Coins } from 'lucide-react';
 
-// Enkla linje-ikoner
-import phoneTapSimple from '@/assets/icons/phone-tap-simple.png';
-import phoneTapMinimal from '@/assets/icons/phone-tap-minimal.png';
-import phoneTapLine from '@/assets/icons/phone-tap-line.png';
-import phoneClickCheck from '@/assets/icons/phone-click-check.png';
+// Nya linje-ikoner i korall-stil
+import platformPhoneCheck from '@/assets/icons/platform-phone-check.png';
+import platformHandTap from '@/assets/icons/platform-hand-tap.png';
+import platformClick from '@/assets/icons/platform-click.png';
 
-// Tidigare genererade
-import phoneBooking from '@/assets/icons/phone-booking.png';
-import phoneHomeBooking from '@/assets/icons/phone-home-booking.png';
-
-const simpleIcons = [
-  { src: phoneTapSimple, name: 'Simple Coral', desc: 'Tunn linje, coral' },
-  { src: phoneTapMinimal, name: 'Minimal Gray', desc: 'Grå, tap + check' },
-  { src: phoneTapLine, name: 'Line Art', desc: 'Svart linje' },
-  { src: phoneClickCheck, name: 'Click Hand', desc: 'Enkel hand' },
-  { src: phoneBooking, name: 'Phone Check', desc: 'Teal bekräftad' },
-  { src: phoneHomeBooking, name: 'Phone Home', desc: 'Boende + check' },
+const platformIcons = [
+  { src: platformPhoneCheck, name: 'Phone Check', desc: 'Mobil + check' },
+  { src: platformHandTap, name: 'Hand Tap', desc: 'Hand trycker' },
+  { src: platformClick, name: 'Cursor Click', desc: 'Pekare' },
 ];
 
 const IconSuggestions = () => {
   return (
     <div className="p-5 max-w-[500px] mx-auto pb-20">
-      <h2 className="font-display text-2xl font-bold gradient-text mb-6">Enkla Linje-ikoner</h2>
+      <h2 className="font-display text-2xl font-bold gradient-text mb-6">Plattform-ikoner</h2>
       <p className="text-sm text-muted-foreground mb-6">
-        Minimalistiska ikoner med mobil + hand + check
+        Tunna linje-ikoner i korall-stil
       </p>
       
-      {/* Simple line icons */}
+      {/* Platform icons */}
       <div className="mb-8">
-        <h3 className="font-display text-lg font-bold mb-4">Plattform-ikoner</h3>
+        <h3 className="font-display text-lg font-bold mb-4">Nya ikoner</h3>
         <div className="grid grid-cols-3 gap-4">
-          {simpleIcons.map(({ src, name, desc }, index) => (
+          {platformIcons.map(({ src, name, desc }, index) => (
             <div
               key={index}
               className="bg-card border border-border rounded-xl p-4 flex flex-col items-center gap-2 hover:border-primary transition-all hover:-translate-y-1"
@@ -59,47 +51,9 @@ const IconSuggestions = () => {
             <span className="text-[10px] text-muted-foreground">Pris</span>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <img src={phoneTapMinimal} alt="Minimal" className="w-10 h-10 object-contain" />
-            <span className="text-xs font-bold">Minimal</span>
+            <img src={platformPhoneCheck} alt="Phone Check" className="w-10 h-10 object-contain" />
+            <span className="text-xs font-bold">Phone Check</span>
             <span className="text-[10px] text-muted-foreground">Plattform</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Alternativ: Coral */}
-      <div className="mt-4 p-5 bg-card border border-border rounded-xl">
-        <h3 className="font-display text-lg font-bold mb-4">Alternativ: Coral</h3>
-        <div className="grid grid-cols-3 gap-4 text-center">
-          <div className="flex flex-col items-center gap-2">
-            <Users className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
-            <span className="text-xs font-bold">Users</span>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <Coins className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
-            <span className="text-xs font-bold">Coins</span>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <img src={phoneTapSimple} alt="Simple" className="w-10 h-10 object-contain" />
-            <span className="text-xs font-bold">Simple Coral</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Alternativ: Svart */}
-      <div className="mt-4 p-5 bg-card border border-border rounded-xl">
-        <h3 className="font-display text-lg font-bold mb-4">Alternativ: Svart linje</h3>
-        <div className="grid grid-cols-3 gap-4 text-center">
-          <div className="flex flex-col items-center gap-2">
-            <Users className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
-            <span className="text-xs font-bold">Users</span>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <Coins className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
-            <span className="text-xs font-bold">Coins</span>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <img src={phoneTapLine} alt="Line" className="w-10 h-10 object-contain" />
-            <span className="text-xs font-bold">Line Art</span>
           </div>
         </div>
       </div>
