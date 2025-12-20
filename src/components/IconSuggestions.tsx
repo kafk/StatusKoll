@@ -12,24 +12,17 @@ import {
   CircleDollarSign,
   PiggyBank,
   Coins,
-  Globe,
-  Globe2,
-  Link,
-  ExternalLink,
-  Share2,
-  Building2,
-  Store,
-  // Nya plattforms-ikoner
-  Home,
-  Hotel,
-  BedDouble,
-  Building,
-  Landmark,
-  MapPin,
-  Calendar,
-  Bookmark,
-  Tag,
-  ShoppingBag
+  // Plattforms-ikoner - mobil/dator
+  Smartphone,
+  TabletSmartphone,
+  Monitor,
+  Laptop,
+  MonitorSmartphone,
+  AppWindow,
+  LayoutGrid,
+  MousePointerClick,
+  SquareMousePointer,
+  Airplay
 } from 'lucide-react';
 
 /**
@@ -52,17 +45,17 @@ import {
  * - PiggyBank: Spargris
  * - Coins: Mynt
  * 
- * PLATTFORM (bokningssidor som Booking.com, Airbnb):
- * - Home: Hus/boende
- * - Hotel: Hotell
- * - BedDouble: Säng/sovplats
- * - Building: Byggnad
- * - Building2: Alt byggnad
- * - Landmark: Landmärke
- * - MapPin: Platsmarkör
- * - Calendar: Kalender/bokning
- * - Bookmark: Bokmärke
- * - Tag: Tagg/etikett
+ * PLATTFORM (bokning via mobil/dator):
+ * - Smartphone: Mobil
+ * - TabletSmartphone: Surfplatta & mobil
+ * - Monitor: Datorskärm
+ * - Laptop: Laptop
+ * - MonitorSmartphone: Skärm & mobil
+ * - AppWindow: App-fönster
+ * - LayoutGrid: App-grid
+ * - MousePointerClick: Klick/bokning
+ * - SquareMousePointer: Klick i ruta
+ * - Airplay: Streaming/digital
  */
 
 const IconSuggestions = () => {
@@ -86,16 +79,16 @@ const IconSuggestions = () => {
   ];
 
   const platformIcons = [
-    { Icon: Home, name: 'Home', desc: 'Hus/boende' },
-    { Icon: Hotel, name: 'Hotel', desc: 'Hotell' },
-    { Icon: BedDouble, name: 'BedDouble', desc: 'Säng/sovplats' },
-    { Icon: Building, name: 'Building', desc: 'Byggnad' },
-    { Icon: Building2, name: 'Building2', desc: 'Alt byggnad' },
-    { Icon: Landmark, name: 'Landmark', desc: 'Landmärke' },
-    { Icon: MapPin, name: 'MapPin', desc: 'Platsmarkör' },
-    { Icon: Calendar, name: 'Calendar', desc: 'Bokning' },
-    { Icon: Bookmark, name: 'Bookmark', desc: 'Bokmärke' },
-    { Icon: Tag, name: 'Tag', desc: 'Källa/tagg' },
+    { Icon: Smartphone, name: 'Smartphone', desc: 'Mobil' },
+    { Icon: TabletSmartphone, name: 'TabletSmartphone', desc: 'Surfplatta' },
+    { Icon: Monitor, name: 'Monitor', desc: 'Datorskärm' },
+    { Icon: Laptop, name: 'Laptop', desc: 'Laptop' },
+    { Icon: MonitorSmartphone, name: 'MonitorSmartphone', desc: 'Skärm & mobil' },
+    { Icon: AppWindow, name: 'AppWindow', desc: 'App-fönster' },
+    { Icon: LayoutGrid, name: 'LayoutGrid', desc: 'App-grid' },
+    { Icon: MousePointerClick, name: 'MousePointerClick', desc: 'Klick/bokning' },
+    { Icon: SquareMousePointer, name: 'SquareMousePointer', desc: 'Klick i ruta' },
+    { Icon: Airplay, name: 'Airplay', desc: 'Digital' },
   ];
 
   const IconSection = ({ 
@@ -137,18 +130,18 @@ const IconSuggestions = () => {
         <h3 className="font-display text-lg font-bold mb-4 gradient-text">Rekommenderad kombination</h3>
         <div className="grid grid-cols-3 gap-4 text-center">
           <div className="flex flex-col items-center gap-2">
-            <UsersRound className="w-10 h-10 text-primary" strokeWidth={1.5} />
-            <span className="text-xs font-bold">UsersRound</span>
+            <Users className="w-10 h-10 text-primary" strokeWidth={1.5} />
+            <span className="text-xs font-bold">Users</span>
             <span className="text-[10px] text-muted-foreground">Gäster</span>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <Euro className="w-10 h-10 text-warning" strokeWidth={1.5} />
-            <span className="text-xs font-bold">Euro</span>
+            <Coins className="w-10 h-10 text-warning" strokeWidth={1.5} />
+            <span className="text-xs font-bold">Coins</span>
             <span className="text-[10px] text-muted-foreground">Pris</span>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <Globe className="w-10 h-10 text-secondary" strokeWidth={1.5} />
-            <span className="text-xs font-bold">Globe</span>
+            <Smartphone className="w-10 h-10 text-secondary" strokeWidth={1.5} />
+            <span className="text-xs font-bold">Smartphone</span>
             <span className="text-[10px] text-muted-foreground">Plattform</span>
           </div>
         </div>
@@ -167,8 +160,8 @@ const IconSuggestions = () => {
             <span className="text-xs font-bold">Wallet</span>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <Link className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
-            <span className="text-xs font-bold">Link</span>
+            <Monitor className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
+            <span className="text-xs font-bold">Monitor</span>
           </div>
         </div>
       </div>
