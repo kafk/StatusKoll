@@ -1,16 +1,14 @@
 import { Users, Coins } from 'lucide-react';
 
-// Minimalistiska plattform-ikoner
-import platformV1 from '@/assets/icons/platform-v1.png';
-import platformV2 from '@/assets/icons/platform-v2.png';
-import platformV3 from '@/assets/icons/platform-v3.png';
-import platformV4 from '@/assets/icons/platform-v4.png';
+// Linje-ikoner i korall-stil
+import platformPhoneCheck from '@/assets/icons/platform-phone-check.png';
+import platformHandTap from '@/assets/icons/platform-hand-tap.png';
+import platformClick from '@/assets/icons/platform-click.png';
 
 const platformIcons = [
-  { src: platformV1, name: 'Monitor', desc: 'Skärm + hus' },
-  { src: platformV2, name: 'House Check', desc: 'Hus + check' },
-  { src: platformV3, name: 'Browser', desc: 'Webbläsare + klick' },
-  { src: platformV4, name: 'Laptop', desc: 'Laptop + hus' },
+  { src: platformPhoneCheck, name: 'Phone Check', desc: 'Mobil + check' },
+  { src: platformHandTap, name: 'Hand Tap', desc: 'Hand trycker' },
+  { src: platformClick, name: 'Cursor Click', desc: 'Pekare' },
 ];
 
 const IconSuggestions = () => {
@@ -24,7 +22,7 @@ const IconSuggestions = () => {
       {/* Platform icons */}
       <div className="mb-8">
         <h3 className="font-display text-lg font-bold mb-4">Nya ikoner</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           {platformIcons.map(({ src, name, desc }, index) => (
             <div
               key={index}
@@ -53,8 +51,8 @@ const IconSuggestions = () => {
             <span className="text-[10px] text-muted-foreground">Pris</span>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <img src={platformV1} alt="Monitor" className="w-10 h-10 object-contain" />
-            <span className="text-xs font-bold">Monitor</span>
+            <img src={platformPhoneCheck} alt="Phone Check" className="w-10 h-10 object-contain" />
+            <span className="text-xs font-bold">Phone Check</span>
             <span className="text-[10px] text-muted-foreground">Plattform</span>
           </div>
         </div>
