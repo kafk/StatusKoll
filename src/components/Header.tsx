@@ -15,7 +15,7 @@ const Header = ({ title = "STATUS", subtitle }: HeaderProps) => {
         )}
       </div>
       <span className="px-3 py-1.5 bg-card border border-border rounded-full text-xs font-bold text-muted-foreground hover:border-primary hover:text-primary transition-all cursor-pointer hover:-translate-y-0.5">
-        v1.05
+        v1.1
       </span>
     </header>
   );
