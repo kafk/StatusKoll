@@ -12,51 +12,29 @@ import {
   CircleDollarSign,
   PiggyBank,
   Coins,
-  // Plattforms-ikoner - mobil/dator
-  Smartphone,
+  // Plattforms-ikoner - klick/check/bokning
+  SmartphoneNfc,
   TabletSmartphone,
-  Monitor,
-  Laptop,
-  MonitorSmartphone,
-  AppWindow,
-  LayoutGrid,
+  CheckCircle,
+  CheckCircle2,
+  CheckSquare,
+  CheckSquare2,
+  CircleCheck,
+  ClipboardCheck,
+  ClipboardList,
+  ListChecks,
+  ListTodo,
+  CalendarCheck,
+  CalendarCheck2,
+  FileCheck,
+  FileCheck2,
+  BadgeCheck,
+  ShieldCheck,
+  SquareCheckBig,
+  CircleDot,
   MousePointerClick,
-  SquareMousePointer,
-  Airplay
+  Hand
 } from 'lucide-react';
-
-/**
- * Ikonförslag för kundkort
- * 
- * GÄSTER (ersätter 🧑‍🤝‍🧑):
- * - Users: Klassisk grupp-ikon, tydlig
- * - UsersRound: Mjukare rundad stil
- * - UserRound: Enkel person
- * - UserCircle: Person i cirkel
- * - PersonStanding: Helfigur
- * - Contact: Kontaktkort-stil
- * 
- * PRIS (ersätter 💰):
- * - Euro: Direkt Euro-symbol
- * - Wallet: Plånbok
- * - CreditCard: Kreditkort
- * - Banknote: Sedel
- * - CircleDollarSign: Dollar i cirkel
- * - PiggyBank: Spargris
- * - Coins: Mynt
- * 
- * PLATTFORM (bokning via mobil/dator):
- * - Smartphone: Mobil
- * - TabletSmartphone: Surfplatta & mobil
- * - Monitor: Datorskärm
- * - Laptop: Laptop
- * - MonitorSmartphone: Skärm & mobil
- * - AppWindow: App-fönster
- * - LayoutGrid: App-grid
- * - MousePointerClick: Klick/bokning
- * - SquareMousePointer: Klick i ruta
- * - Airplay: Streaming/digital
- */
 
 const IconSuggestions = () => {
   const guestIcons = [
@@ -79,16 +57,26 @@ const IconSuggestions = () => {
   ];
 
   const platformIcons = [
-    { Icon: Smartphone, name: 'Smartphone', desc: 'Mobil' },
-    { Icon: TabletSmartphone, name: 'TabletSmartphone', desc: 'Surfplatta' },
-    { Icon: Monitor, name: 'Monitor', desc: 'Datorskärm' },
-    { Icon: Laptop, name: 'Laptop', desc: 'Laptop' },
-    { Icon: MonitorSmartphone, name: 'MonitorSmartphone', desc: 'Skärm & mobil' },
-    { Icon: AppWindow, name: 'AppWindow', desc: 'App-fönster' },
-    { Icon: LayoutGrid, name: 'LayoutGrid', desc: 'App-grid' },
-    { Icon: MousePointerClick, name: 'MousePointerClick', desc: 'Klick/bokning' },
-    { Icon: SquareMousePointer, name: 'SquareMousePointer', desc: 'Klick i ruta' },
-    { Icon: Airplay, name: 'Airplay', desc: 'Digital' },
+    { Icon: SmartphoneNfc, name: 'SmartphoneNfc', desc: 'Mobil + tap' },
+    { Icon: TabletSmartphone, name: 'TabletSmartphone', desc: 'Enheter' },
+    { Icon: CheckCircle, name: 'CheckCircle', desc: 'Check cirkel' },
+    { Icon: CheckCircle2, name: 'CheckCircle2', desc: 'Alt check' },
+    { Icon: CheckSquare, name: 'CheckSquare', desc: 'Check ruta' },
+    { Icon: CheckSquare2, name: 'CheckSquare2', desc: 'Alt ruta' },
+    { Icon: CircleCheck, name: 'CircleCheck', desc: 'Cirkel check' },
+    { Icon: ClipboardCheck, name: 'ClipboardCheck', desc: 'Urklipp ✓' },
+    { Icon: ClipboardList, name: 'ClipboardList', desc: 'Urklipp lista' },
+    { Icon: ListChecks, name: 'ListChecks', desc: 'Lista checks' },
+    { Icon: ListTodo, name: 'ListTodo', desc: 'Todo-lista' },
+    { Icon: CalendarCheck, name: 'CalendarCheck', desc: 'Kalender ✓' },
+    { Icon: CalendarCheck2, name: 'CalendarCheck2', desc: 'Alt kalender' },
+    { Icon: FileCheck, name: 'FileCheck', desc: 'Fil check' },
+    { Icon: FileCheck2, name: 'FileCheck2', desc: 'Alt fil' },
+    { Icon: BadgeCheck, name: 'BadgeCheck', desc: 'Badge ✓' },
+    { Icon: ShieldCheck, name: 'ShieldCheck', desc: 'Sköld ✓' },
+    { Icon: SquareCheckBig, name: 'SquareCheckBig', desc: 'Stor check' },
+    { Icon: MousePointerClick, name: 'MousePointerClick', desc: 'Klick' },
+    { Icon: Hand, name: 'Hand', desc: 'Hand/tap' },
   ];
 
   const IconSection = ({ 
@@ -102,15 +90,15 @@ const IconSuggestions = () => {
   }) => (
     <div className="mb-8">
       <h3 className="font-display text-lg font-bold mb-4">{title}</h3>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-4 gap-3">
         {icons.map(({ Icon, name, desc }) => (
           <div
             key={name}
-            className="bg-card border border-border rounded-xl p-4 flex flex-col items-center gap-2 hover:border-primary transition-all"
+            className="bg-card border border-border rounded-xl p-3 flex flex-col items-center gap-1.5 hover:border-primary transition-all"
           >
-            <Icon className={`w-8 h-8 ${accentColor}`} strokeWidth={1.5} />
-            <span className="text-xs font-bold">{name}</span>
-            <span className="text-[10px] text-muted-foreground">{desc}</span>
+            <Icon className={`w-7 h-7 ${accentColor}`} strokeWidth={1.5} />
+            <span className="text-[10px] font-bold text-center leading-tight">{name}</span>
+            <span className="text-[9px] text-muted-foreground text-center">{desc}</span>
           </div>
         ))}
       </div>
@@ -118,12 +106,12 @@ const IconSuggestions = () => {
   );
 
   return (
-    <div className="p-5 max-w-[428px] mx-auto">
+    <div className="p-5 max-w-[500px] mx-auto pb-20">
       <h2 className="font-display text-2xl font-bold gradient-text mb-6">Ikonförslag</h2>
       
       <IconSection title="Gäster" icons={guestIcons} accentColor="text-primary" />
       <IconSection title="Pris" icons={priceIcons} accentColor="text-warning" />
-      <IconSection title="Plattform" icons={platformIcons} accentColor="text-secondary" />
+      <IconSection title="Plattform (20 st)" icons={platformIcons} accentColor="text-secondary" />
 
       {/* Rekommenderad kombination */}
       <div className="mt-8 p-5 bg-card border-2 border-primary/30 rounded-xl">
@@ -140,28 +128,28 @@ const IconSuggestions = () => {
             <span className="text-[10px] text-muted-foreground">Pris</span>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <Smartphone className="w-10 h-10 text-secondary" strokeWidth={1.5} />
-            <span className="text-xs font-bold">Smartphone</span>
+            <ClipboardCheck className="w-10 h-10 text-secondary" strokeWidth={1.5} />
+            <span className="text-xs font-bold">ClipboardCheck</span>
             <span className="text-[10px] text-muted-foreground">Plattform</span>
           </div>
         </div>
       </div>
 
-      {/* Alternativ: Minimal stil */}
+      {/* Alternativ */}
       <div className="mt-4 p-5 bg-card border border-border rounded-xl">
-        <h3 className="font-display text-lg font-bold mb-4">Alternativ: Minimal</h3>
+        <h3 className="font-display text-lg font-bold mb-4">Alternativ: Kalender-stil</h3>
         <div className="grid grid-cols-3 gap-4 text-center">
           <div className="flex flex-col items-center gap-2">
             <Users className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
             <span className="text-xs font-bold">Users</span>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <Wallet className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
-            <span className="text-xs font-bold">Wallet</span>
+            <Coins className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
+            <span className="text-xs font-bold">Coins</span>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <Monitor className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
-            <span className="text-xs font-bold">Monitor</span>
+            <CalendarCheck className="w-10 h-10 text-foreground/70" strokeWidth={1.5} />
+            <span className="text-xs font-bold">CalendarCheck</span>
           </div>
         </div>
       </div>
