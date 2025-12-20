@@ -1,4 +1,5 @@
 import { Customer } from '@/types/rental';
+import { Users, Coins, Globe } from 'lucide-react';
 
 interface CustomerListCardProps {
   customer: Customer;
@@ -29,17 +30,17 @@ const CustomerListCard = ({ customer, onClick }: CustomerListCardProps) => {
 
       <div className="grid grid-cols-3 gap-3 text-center">
         <div className="flex flex-col items-center">
-          <div className="text-xl mb-1">🧑‍🤝‍🧑</div>
+          <Users className="w-6 h-6 text-primary mb-1" strokeWidth={1.5} />
           <div className="font-display text-base font-bold mb-0.5">{customer.guests}</div>
           <div className="text-[10px] text-muted-foreground uppercase tracking-wide">Gäster</div>
         </div>
         <div className="flex flex-col items-center">
-          <div className="text-xl mb-1">💰</div>
+          <Coins className="w-6 h-6 text-warning mb-1" strokeWidth={1.5} />
           <div className="font-display text-base font-bold mb-0.5">{customer.amount}</div>
           <div className="text-[10px] text-muted-foreground uppercase tracking-wide">Pris</div>
         </div>
         <div className="flex flex-col items-center">
-          <div className="text-xl mb-1">🌐</div>
+          <Globe className="w-6 h-6 text-secondary mb-1" strokeWidth={1.5} />
           <div className="font-display text-base font-bold mb-0.5">{customer.platform}</div>
           <div className="text-[10px] text-muted-foreground uppercase tracking-wide">Plattform</div>
         </div>
