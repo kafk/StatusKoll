@@ -1,9 +1,13 @@
+import { useNavigate } from "react-router-dom";
+
 interface HeaderProps {
   title?: string;
   subtitle?: string;
 }
 
 const Header = ({ title = "STATUS", subtitle }: HeaderProps) => {
+  const navigate = useNavigate();
+
   return (
     <header className="flex justify-between items-center py-5 pb-8 animate-slide-down">
       <div>
@@ -14,9 +18,12 @@ const Header = ({ title = "STATUS", subtitle }: HeaderProps) => {
           <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
         )}
       </div>
-      <span className="px-3 py-1.5 bg-card border border-border rounded-full text-xs font-bold text-muted-foreground hover:border-primary hover:text-primary transition-all cursor-pointer hover:-translate-y-0.5">
+      <button
+        onClick={() => navigate("/changelog")}
+        className="px-3 py-1.5 bg-card border border-border rounded-full text-xs font-bold text-muted-foreground hover:border-primary hover:text-primary transition-all hover:-translate-y-0.5"
+      >
         v1.1
-      </span>
+      </button>
     </header>
   );
 };
