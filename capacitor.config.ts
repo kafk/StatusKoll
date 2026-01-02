@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.2150d111842e489ab3502a738d3e0e7d',
+  appId: 'se.gotainnovation.statuskoll',
   appName: 'Stugkoll',
   webDir: 'dist',
   server: {
