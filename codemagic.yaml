@@ -16,62 +16,31 @@ workflows:
         XCODE_SCHEME: "App"
       node: 22
       xcode: latest
-      cocoapods: default
 
     scripts:
       - name: Install npm dependencies
         script: |
-          set -euo pipefail
           npm install
 
       - name: Build web app
         script: |
-          set -euo pipefail
           mkdir -p dist
           npm run build
 
       - name: Add iOS platform
         script: |
-          set -euo pipefail
-          if [ ! -d "ios" ]; then
-            npx cap add ios
-          else
-            echo "ios/ already exists"
-          fi
-          ls -la ios || true
-          ls -la ios/App || true
+          npx cap add ios || true
 
       - name: Sync Capacitor
         script: |
-          set -euo pipefail
           npx cap sync ios
-          ls -la ios/App || true
-
-      - name: Install CocoaPods dependencies
-        script: |
-          set -euo pipefail
-          if [ ! -d "ios/App" ]; then
-            echo "ERROR: ios/App directory missing"
-            ls -la
-            exit 1
-          fi
-          if [ ! -f "ios/App/Podfile" ]; then
-            echo "ERROR: Podfile missing at ios/App/Podfile"
-            echo "Looking for any Podfile under ios/ ..."
-            find ios -maxdepth 4 -name Podfile -print || true
-            exit 1
-          fi
-          cd ios/App
-          pod install --repo-update
 
       - name: Set up code signing
         script: |
-          set -euo pipefail
           xcode-project use-profiles
 
       - name: Build iOS app
         script: |
-          set -euo pipefail
           xcode-project build-ipa \
             --workspace "$XCODE_WORKSPACE" \
             --scheme "$XCODE_SCHEME"
