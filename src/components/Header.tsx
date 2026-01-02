@@ -9,7 +9,7 @@ const Header = ({ title = "STATUS", subtitle }: HeaderProps) => {
   const navigate = useNavigate();
 
   return (
-    <header className="flex justify-between items-center py-5 pb-8 animate-slide-down">
+    <header className="flex justify-between items-center pt-12 pb-8 animate-slide-down">
       <div>
         <h1 className="font-display text-3xl font-extrabold gradient-text tracking-tight">
           {title}
