@@ -24,10 +24,9 @@ const Timeline = () => {
   return (
     <div>
       <div
-        className="flex justify-between items-center mb-5 animate-fade-in-up"
+        className="flex justify-end items-center mb-5 animate-fade-in-up"
         style={{ animationDelay: '0.2s' }}
       >
-        <h2 className="font-display text-xl font-bold tracking-tight">Tidslinje</h2>
         <FilterTabs tabs={tabs} activeTab={activeFilter} onTabChange={setActiveFilter} />
       </div>
 
