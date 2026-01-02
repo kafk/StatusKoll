@@ -20,10 +20,17 @@ workflows:
         script: npm install
       - name: Build web app
         script: npm run build
-      - name: Add iOS platform and sync
+      - name: Add iOS platform
         script: |
-          npx cap add ios || true
+          echo "Adding iOS platform..."
+          npx cap add ios
+          echo "iOS platform added successfully"
+      - name: Sync Capacitor
+        script: |
+          echo "Syncing Capacitor..."
           npx cap sync ios
+          echo "Capacitor synced successfully"
+          ls -la ios/App/
       - name: Install CocoaPods
         script: |
           cd ios/App
