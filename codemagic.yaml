@@ -22,17 +22,24 @@ workflows:
         script: npm run build
       - name: Add iOS platform
         script: |
+          set -euo pipefail
           echo "Adding iOS platform..."
           npx cap add ios
-          echo "iOS platform added successfully"
+          echo "iOS platform added"
+          ls -la ios || true
+
       - name: Sync Capacitor
         script: |
+          set -euo pipefail
           echo "Syncing Capacitor..."
           npx cap sync ios
-          echo "Capacitor synced successfully"
-          ls -la ios/App/
+          echo "Capacitor synced"
+          ls -la ios/App || true
+
       - name: Install CocoaPods
         script: |
+          set -euo pipefail
+          test -f ios/App/Podfile
           cd ios/App
           pod install --repo-update
       - name: Set up code signing
