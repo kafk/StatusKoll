@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { format } from 'date-fns';
+import { useState, useMemo } from 'react';
+import { format, getYear, parseISO } from 'date-fns';
 import { sv } from 'date-fns/locale';
 import { Plus, Trash2, TrendingUp, TrendingDown, Wallet, CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import Header from './Header';
 import { useCosts, useCreateCost, useDeleteCost } from '@/hooks/useCosts';
@@ -24,15 +25,46 @@ const EconomyPage = () => {
   const [newVariableName, setNewVariableName] = useState('');
   const [newVariableAmount, setNewVariableAmount] = useState('');
   const [newVariableDate, setNewVariableDate] = useState<Date>(new Date());
+  const [selectedYear, setSelectedYear] = useState<string>('all');
 
-  // Calculate income from customers
-  const income = customers?.reduce((total, customer) => {
+  // Get available years from data
+  const availableYears = useMemo(() => {
+    const years = new Set<number>();
+    
+    costs?.forEach(cost => {
+      years.add(getYear(parseISO(cost.date)));
+    });
+    
+    customers?.forEach(customer => {
+      years.add(getYear(parseISO(customer.check_in)));
+    });
+    
+    if (years.size === 0) {
+      years.add(new Date().getFullYear());
+    }
+    
+    return Array.from(years).sort((a, b) => b - a);
+  }, [costs, customers]);
+
+  // Filter data by selected year
+  const filteredCustomers = useMemo(() => {
+    if (selectedYear === 'all') return customers || [];
+    return customers?.filter(c => getYear(parseISO(c.check_in)) === parseInt(selectedYear)) || [];
+  }, [customers, selectedYear]);
+
+  const filteredCosts = useMemo(() => {
+    if (selectedYear === 'all') return costs || [];
+    return costs?.filter(c => getYear(parseISO(c.date)) === parseInt(selectedYear)) || [];
+  }, [costs, selectedYear]);
+
+  // Calculate income from filtered customers
+  const income = filteredCustomers.reduce((total, customer) => {
     const amount = parseFloat(customer.amount.replace('€', '').replace(',', '.')) || 0;
     return total + amount;
-  }, 0) || 0;
+  }, 0);
 
-  const fixedCosts = costs?.filter(c => c.type === 'fixed') || [];
-  const variableCosts = costs?.filter(c => c.type === 'variable') || [];
+  const fixedCosts = filteredCosts.filter(c => c.type === 'fixed');
+  const variableCosts = filteredCosts.filter(c => c.type === 'variable');
 
   const totalFixedCosts = fixedCosts.reduce((sum, c) => sum + Number(c.amount), 0);
   const totalVariableCosts = variableCosts.reduce((sum, c) => sum + Number(c.amount), 0);
@@ -76,9 +108,24 @@ const EconomyPage = () => {
   };
 
   if (costsLoading) {
-    return (
-      <div className="pb-24">
-        <Header title="Ekonomi" subtitle="Översikt av intäkter & kostnader" />
+  return (
+    <div className="pb-24">
+      <Header title="Ekonomi" subtitle="Översikt av intäkter & kostnader" />
+
+      {/* Year Filter */}
+      <div className="mb-4">
+        <Select value={selectedYear} onValueChange={setSelectedYear}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Välj år" />
+          </SelectTrigger>
+          <SelectContent className="bg-card border-border">
+            <SelectItem value="all">Alla år</SelectItem>
+            {availableYears.map(year => (
+              <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
         <div className="text-center text-muted-foreground py-8">Laddar...</div>
       </div>
     );
