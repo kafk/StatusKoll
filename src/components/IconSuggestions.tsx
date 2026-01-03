@@ -13,12 +13,27 @@ import appIconV3 from "@/assets/icons/app-icon-v3.png";
 import appIconV4 from "@/assets/icons/app-icon-v4.png";
 import appIconV5 from "@/assets/icons/app-icon-v5.png";
 
+// Polling style versions
+import pollingV1 from "@/assets/icons/polling-v1.png";
+import pollingV2 from "@/assets/icons/polling-v2.png";
+import pollingV3 from "@/assets/icons/polling-v3.png";
+import pollingV4 from "@/assets/icons/polling-v4.png";
+import pollingV5 from "@/assets/icons/polling-v5.png";
+
 const appIconVersions = [
   { src: appIconV1, label: "V1: Hus + Kalender", desc: "Hus med kalender-checkmark overlay" },
   { src: appIconV2, label: "V2: Kalender + Hus", desc: "Kalender fokus med hus-detalj" },
   { src: appIconV3, label: "V3: Mobil Bekräftelse", desc: "Telefon med checkmark-cirkel" },
   { src: appIconV4, label: "V4: Kalender + Nyckel", desc: "Uthyrning tema med nyckel" },
   { src: appIconV5, label: "V5: Hand Tap", desc: "Bekräftelse-gest i cirkel" },
+];
+
+const pollingVersions = [
+  { src: pollingV1, label: "Polling V1", desc: "Tre checkmarks i cirkel" },
+  { src: pollingV2, label: "Polling V2", desc: "Staplad korall med checks" },
+  { src: pollingV3, label: "Polling V3", desc: "Checklista med rutor" },
+  { src: pollingV4, label: "Polling V4", desc: "Cirkulär check-arrangement" },
+  { src: pollingV5, label: "Polling V5", desc: "Gradient med checkboxar" },
 ];
 
 const IconSuggestions = () => {
@@ -141,6 +156,29 @@ const IconSuggestions = () => {
               </div>
             </div>
             <span className="text-[10px] text-muted-foreground">Mörk</span>
+          </div>
+        </div>
+        
+        {/* Generated Polling Versions */}
+        <div className="mt-4 pt-4 border-t border-border">
+          <h4 className="font-display text-sm font-bold text-primary mb-3">5 Genererade Polling-varianter</h4>
+          <div className="grid grid-cols-2 gap-3">
+            {pollingVersions.map((icon, index) => (
+              <div 
+                key={index}
+                className="flex flex-col items-center gap-2 p-2 rounded-lg bg-muted/30"
+              >
+                <img 
+                  src={icon.src} 
+                  alt={icon.label} 
+                  className="w-20 h-20 rounded-2xl shadow-lg"
+                />
+                <div className="text-center">
+                  <h4 className="font-display text-xs font-bold">{icon.label}</h4>
+                  <p className="text-[10px] text-muted-foreground">{icon.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
