@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
 
 export interface Cost {
   id: string;
@@ -8,6 +9,7 @@ export interface Cost {
   date: string;
   type: 'fixed' | 'variable';
   created_at: string;
+  user_id: string | null;
 }
 
 export interface CostFormData {
@@ -34,12 +36,15 @@ export const useCosts = () => {
 
 export const useCreateCost = () => {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   
   return useMutation({
     mutationFn: async (cost: CostFormData) => {
+      if (!user) throw new Error('User must be authenticated');
+      
       const { data, error } = await supabase
         .from('costs')
-        .insert([cost])
+        .insert([{ ...cost, user_id: user.id }])
         .select()
         .single();
       
