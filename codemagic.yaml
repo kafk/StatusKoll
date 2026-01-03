@@ -51,6 +51,13 @@ workflows:
         script: |
           xcode-project use-profiles
 
+      - name: Set encryption export compliance
+        script: |
+          # Declare that app only uses standard Apple/HTTPS encryption (exempt)
+          /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" ios/App/App/Info.plist || \
+          /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" ios/App/App/Info.plist
+          echo "✅ Export compliance set: No non-exempt encryption"
+
       - name: Build iOS app
         script: |
           xcode-project build-ipa \
