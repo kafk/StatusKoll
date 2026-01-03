@@ -1,8 +1,45 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
+import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { useCreateCustomer } from '@/hooks/useCustomers';
 import { useCreateEvent } from '@/hooks/useEvents';
+
+// Validation schema for booking form
+const bookingSchema = z.object({
+  guestName: z.string()
+    .trim()
+    .min(1, 'Gästens namn krävs')
+    .max(100, 'Namnet får vara max 100 tecken'),
+  email: z.string()
+    .trim()
+    .email('Ogiltig e-postadress')
+    .max(255, 'E-postadressen får vara max 255 tecken')
+    .optional()
+    .or(z.literal('')),
+  checkIn: z.string()
+    .min(1, 'Incheckningsdatum krävs')
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Ogiltigt datumformat'),
+  checkOut: z.string()
+    .min(1, 'Utcheckningsdatum krävs')
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Ogiltigt datumformat'),
+  guests: z.string()
+    .min(1, 'Antal gäster krävs')
+    .transform((val) => parseInt(val, 10))
+    .pipe(z.number().int().min(1, 'Minst 1 gäst').max(50, 'Max 50 gäster')),
+  price: z.string()
+    .min(1, 'Pris krävs')
+    .transform((val) => parseFloat(val))
+    .pipe(z.number().positive('Priset måste vara positivt').max(1000000, 'Priset är för högt')),
+}).refine((data) => {
+  if (data.checkIn && data.checkOut) {
+    return new Date(data.checkOut) > new Date(data.checkIn);
+  }
+  return true;
+}, {
+  message: 'Utcheckning måste vara efter incheckning',
+  path: ['checkOut'],
+});
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -14,6 +51,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
   const createCustomer = useCreateCustomer();
   const createEvent = useCreateEvent();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
     guestName: '',
     email: '',
@@ -25,17 +63,40 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
+    
+    // Validate form data
+    const result = bookingSchema.safeParse(formData);
+    
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.errors.forEach((err) => {
+        const field = err.path[0] as string;
+        if (!fieldErrors[field]) {
+          fieldErrors[field] = err.message;
+        }
+      });
+      setErrors(fieldErrors);
+      toast({
+        title: 'Valideringsfel',
+        description: 'Kontrollera formuläret och försök igen.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsSubmitting(true);
+    const validData = result.data;
 
     try {
-      // Create customer
+      // Create customer with validated and sanitized data
       const customer = await createCustomer.mutateAsync({
-        name: formData.guestName,
-        email: formData.email || undefined,
-        check_in: formData.checkIn,
-        check_out: formData.checkOut,
-        amount: `${formData.price}€`,
-        guests: parseInt(formData.guests) || 1,
+        name: validData.guestName,
+        email: validData.email || undefined,
+        check_in: validData.checkIn,
+        check_out: validData.checkOut,
+        amount: `${validData.price}€`,
+        guests: validData.guests,
         platform: 'Direct',
         status: 'pending',
       });
@@ -44,15 +105,15 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
       await createEvent.mutateAsync({
         customer_id: customer.id,
         type: 'booking',
-        date: formData.checkIn,
-        description: formData.guestName,
-        amount: `${formData.price}€`,
+        date: validData.checkIn,
+        description: validData.guestName,
+        amount: `${validData.price}€`,
         note: `Bokning skapad direkt`,
       });
 
       toast({
         title: 'Bokning skapad!',
-        description: `Bokning för ${formData.guestName} har skapats.`,
+        description: `Bokning för ${validData.guestName} har skapats.`,
       });
 
       setFormData({
@@ -63,6 +124,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
         guests: '',
         price: '',
       });
+      setErrors({});
       onClose();
     } catch (error) {
       toast({
@@ -101,11 +163,12 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
             <input
               type="text"
               placeholder="Namn Efternamn"
-              required
+              maxLength={100}
               value={formData.guestName}
               onChange={(e) => setFormData({ ...formData, guestName: e.target.value })}
-              className="w-full px-3 py-3 bg-muted border border-border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground"
+              className={`w-full px-3 py-3 bg-muted border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground ${errors.guestName ? 'border-destructive' : 'border-border'}`}
             />
+            {errors.guestName && <p className="text-destructive text-xs mt-1">{errors.guestName}</p>}
           </div>
 
           <div className="mb-4">
@@ -115,10 +178,12 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
             <input
               type="email"
               placeholder="gast@email.com"
+              maxLength={255}
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-3 py-3 bg-muted border border-border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground"
+              className={`w-full px-3 py-3 bg-muted border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground ${errors.email ? 'border-destructive' : 'border-border'}`}
             />
+            {errors.email && <p className="text-destructive text-xs mt-1">{errors.email}</p>}
           </div>
 
           <div className="mb-4">
@@ -127,11 +192,11 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
             </label>
             <input
               type="date"
-              required
               value={formData.checkIn}
               onChange={(e) => setFormData({ ...formData, checkIn: e.target.value })}
-              className="w-full px-3 py-3 bg-muted border border-border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
+              className={`w-full px-3 py-3 bg-muted border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all ${errors.checkIn ? 'border-destructive' : 'border-border'}`}
             />
+            {errors.checkIn && <p className="text-destructive text-xs mt-1">{errors.checkIn}</p>}
           </div>
 
           <div className="mb-4">
@@ -140,11 +205,11 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
             </label>
             <input
               type="date"
-              required
               value={formData.checkOut}
               onChange={(e) => setFormData({ ...formData, checkOut: e.target.value })}
-              className="w-full px-3 py-3 bg-muted border border-border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
+              className={`w-full px-3 py-3 bg-muted border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all ${errors.checkOut ? 'border-destructive' : 'border-border'}`}
             />
+            {errors.checkOut && <p className="text-destructive text-xs mt-1">{errors.checkOut}</p>}
           </div>
 
           <div className="mb-4">
@@ -155,11 +220,12 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
               type="number"
               placeholder="2"
               min="1"
-              required
+              max="50"
               value={formData.guests}
               onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
-              className="w-full px-3 py-3 bg-muted border border-border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground"
+              className={`w-full px-3 py-3 bg-muted border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground ${errors.guests ? 'border-destructive' : 'border-border'}`}
             />
+            {errors.guests && <p className="text-destructive text-xs mt-1">{errors.guests}</p>}
           </div>
 
           <div className="mb-4">
@@ -170,11 +236,13 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
               type="number"
               placeholder="150"
               min="0"
-              required
+              max="1000000"
+              step="0.01"
               value={formData.price}
               onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-              className="w-full px-3 py-3 bg-muted border border-border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground"
+              className={`w-full px-3 py-3 bg-muted border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground ${errors.price ? 'border-destructive' : 'border-border'}`}
             />
+            {errors.price && <p className="text-destructive text-xs mt-1">{errors.price}</p>}
           </div>
 
           <div className="flex gap-3 mt-6">
