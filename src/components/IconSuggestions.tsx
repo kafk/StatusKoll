@@ -34,6 +34,13 @@ import darkCoralV3 from "@/assets/icons/dark-coral-v3.png";
 import darkCoralV4 from "@/assets/icons/dark-coral-v4.png";
 import darkCoralV5 from "@/assets/icons/dark-coral-v5.png";
 
+// App Style (Dark + Coral Gradient)
+import appStyleV1 from "@/assets/icons/app-style-v1.png";
+import appStyleV2 from "@/assets/icons/app-style-v2.png";
+import appStyleV3 from "@/assets/icons/app-style-v3.png";
+import appStyleV4 from "@/assets/icons/app-style-v4.png";
+import appStyleV5 from "@/assets/icons/app-style-v5.png";
+
 const appIconVersions = [
   { src: appIconV1, label: "V1: Hus + Kalender", desc: "Hus med kalender-checkmark overlay" },
   { src: appIconV2, label: "V2: Kalender + Hus", desc: "Kalender fokus med hus-detalj" },
@@ -64,6 +71,14 @@ const darkCoralVersions = [
   { src: darkCoralV3, label: "Dark V3", desc: "4 checkmarks grid" },
   { src: darkCoralV4, label: "Dark V4", desc: "Linje-checkboxar" },
   { src: darkCoralV5, label: "Dark V5", desc: "Tre cirklar horisontellt" },
+];
+
+const appStyleVersions = [
+  { src: appStyleV1, label: "Style V1", desc: "Korall cirklar + staplar" },
+  { src: appStyleV2, label: "Style V2", desc: "4 rader med gradient" },
+  { src: appStyleV3, label: "Style V3", desc: "Ren dark med korall" },
+  { src: appStyleV4, label: "Style V4", desc: "Centrerade checkmarks" },
+  { src: appStyleV5, label: "Style V5", desc: "Gradient + gray X" },
 ];
 
 const IconSuggestions = () => {
@@ -364,6 +379,34 @@ const IconSuggestions = () => {
         
         <div className="grid grid-cols-2 gap-3">
           {darkCoralVersions.map((icon, index) => (
+            <div 
+              key={index}
+              className="flex flex-col items-center gap-2 p-2 rounded-lg bg-muted/30"
+            >
+              <img 
+                src={icon.src} 
+                alt={icon.label} 
+                className="w-20 h-20 rounded-2xl shadow-lg"
+              />
+              <div className="text-center">
+                <h4 className="font-display text-xs font-bold">{icon.label}</h4>
+                <p className="text-[10px] text-muted-foreground">{icon.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* NEW: App Style (Dark + Coral Gradient) */}
+      <div className="bg-card border-2 border-primary rounded-xl p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-3 h-3 rounded-full bg-primary animate-pulse" />
+          <h3 className="font-display text-lg font-bold gradient-text">App Style — Dark + Korall</h3>
+        </div>
+        <p className="text-xs text-muted-foreground mb-4">Mörk polling-stil med appens korall-gradient färger</p>
+        
+        <div className="grid grid-cols-2 gap-3">
+          {appStyleVersions.map((icon, index) => (
             <div 
               key={index}
               className="flex flex-col items-center gap-2 p-2 rounded-lg bg-muted/30"
