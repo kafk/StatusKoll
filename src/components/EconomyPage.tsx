@@ -9,27 +9,14 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import Header from './Header';
-
-interface Cost {
-  id: string;
-  name: string;
-  amount: number;
-  date: Date;
-}
+import { useCosts, useCreateCost, useDeleteCost } from '@/hooks/useCosts';
+import { useCustomers } from '@/hooks/useCustomers';
 
 const EconomyPage = () => {
-  const [income] = useState(45000);
-  
-  const [fixedCosts, setFixedCosts] = useState<Cost[]>([
-    { id: '1', name: 'Hyra', amount: 8000, date: new Date(2024, 11, 1) },
-    { id: '2', name: 'El & Vatten', amount: 1500, date: new Date(2024, 11, 1) },
-    { id: '3', name: 'Försäkring', amount: 800, date: new Date(2024, 11, 1) },
-  ]);
-  
-  const [variableCosts, setVariableCosts] = useState<Cost[]>([
-    { id: '1', name: 'Städning', amount: 2400, date: new Date(2024, 11, 15) },
-    { id: '2', name: 'Förbrukningsmaterial', amount: 600, date: new Date(2024, 11, 10) },
-  ]);
+  const { data: costs, isLoading: costsLoading } = useCosts();
+  const { data: customers } = useCustomers();
+  const createCost = useCreateCost();
+  const deleteCost = useDeleteCost();
 
   const [newFixedName, setNewFixedName] = useState('');
   const [newFixedAmount, setNewFixedAmount] = useState('');
@@ -38,33 +25,42 @@ const EconomyPage = () => {
   const [newVariableAmount, setNewVariableAmount] = useState('');
   const [newVariableDate, setNewVariableDate] = useState<Date>(new Date());
 
-  const totalFixedCosts = fixedCosts.reduce((sum, c) => sum + c.amount, 0);
-  const totalVariableCosts = variableCosts.reduce((sum, c) => sum + c.amount, 0);
+  // Calculate income from customers
+  const income = customers?.reduce((total, customer) => {
+    const amount = parseFloat(customer.amount.replace('€', '').replace(',', '.')) || 0;
+    return total + amount;
+  }, 0) || 0;
+
+  const fixedCosts = costs?.filter(c => c.type === 'fixed') || [];
+  const variableCosts = costs?.filter(c => c.type === 'variable') || [];
+
+  const totalFixedCosts = fixedCosts.reduce((sum, c) => sum + Number(c.amount), 0);
+  const totalVariableCosts = variableCosts.reduce((sum, c) => sum + Number(c.amount), 0);
   const totalCosts = totalFixedCosts + totalVariableCosts;
   const profit = income - totalCosts;
 
-  const addFixedCost = () => {
+  const addFixedCost = async () => {
     if (newFixedName && newFixedAmount) {
-      setFixedCosts([...fixedCosts, {
-        id: Date.now().toString(),
+      await createCost.mutateAsync({
         name: newFixedName,
         amount: parseFloat(newFixedAmount),
-        date: newFixedDate
-      }]);
+        date: format(newFixedDate, 'yyyy-MM-dd'),
+        type: 'fixed'
+      });
       setNewFixedName('');
       setNewFixedAmount('');
       setNewFixedDate(new Date());
     }
   };
 
-  const addVariableCost = () => {
+  const addVariableCost = async () => {
     if (newVariableName && newVariableAmount) {
-      setVariableCosts([...variableCosts, {
-        id: Date.now().toString(),
+      await createCost.mutateAsync({
         name: newVariableName,
         amount: parseFloat(newVariableAmount),
-        date: newVariableDate
-      }]);
+        date: format(newVariableDate, 'yyyy-MM-dd'),
+        type: 'variable'
+      });
       setNewVariableName('');
       setNewVariableAmount('');
       setNewVariableDate(new Date());
@@ -72,12 +68,21 @@ const EconomyPage = () => {
   };
 
   const removeFixedCost = (id: string) => {
-    setFixedCosts(fixedCosts.filter(c => c.id !== id));
+    deleteCost.mutate(id);
   };
 
   const removeVariableCost = (id: string) => {
-    setVariableCosts(variableCosts.filter(c => c.id !== id));
+    deleteCost.mutate(id);
   };
+
+  if (costsLoading) {
+    return (
+      <div className="pb-24">
+        <Header title="Ekonomi" subtitle="Översikt av intäkter & kostnader" />
+        <div className="text-center text-muted-foreground py-8">Laddar...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="pb-24">
@@ -90,7 +95,7 @@ const EconomyPage = () => {
             <TrendingUp className="w-4 h-4 text-success" />
             <span className="text-xs text-muted-foreground">Intäkter</span>
           </div>
-          <p className="text-xl font-bold text-success">{income.toLocaleString()} kr</p>
+          <p className="text-xl font-bold text-success">{income.toLocaleString()} €</p>
         </Card>
         
         <Card className="p-4 bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
@@ -98,7 +103,7 @@ const EconomyPage = () => {
             <TrendingDown className="w-4 h-4 text-destructive" />
             <span className="text-xs text-muted-foreground">Kostnader</span>
           </div>
-          <p className="text-xl font-bold text-destructive">{totalCosts.toLocaleString()} kr</p>
+          <p className="text-xl font-bold text-destructive">{totalCosts.toLocaleString()} €</p>
         </Card>
       </div>
 
@@ -112,7 +117,7 @@ const EconomyPage = () => {
             <div>
               <p className="text-sm text-muted-foreground">Vinst efter kostnader</p>
               <p className={`text-2xl font-bold ${profit >= 0 ? 'text-primary' : 'text-destructive'}`}>
-                {profit >= 0 ? '+' : ''}{profit.toLocaleString()} kr
+                {profit >= 0 ? '+' : ''}{profit.toLocaleString()} €
               </p>
             </div>
           </div>
@@ -128,23 +133,27 @@ const EconomyPage = () => {
         
         <Card className="p-4">
           <div className="space-y-3 mb-4">
-            {fixedCosts.map(cost => (
-              <div key={cost.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
-                <div>
-                  <span className="text-sm">{cost.name}</span>
-                  <p className="text-xs text-muted-foreground">{format(cost.date, 'd MMM yyyy', { locale: sv })}</p>
+            {fixedCosts.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-2">Inga fasta kostnader</p>
+            ) : (
+              fixedCosts.map(cost => (
+                <div key={cost.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                  <div>
+                    <span className="text-sm">{cost.name}</span>
+                    <p className="text-xs text-muted-foreground">{format(new Date(cost.date), 'd MMM yyyy', { locale: sv })}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">{Number(cost.amount).toLocaleString()} €</span>
+                    <button 
+                      onClick={() => removeFixedCost(cost.id)}
+                      className="p-1 text-muted-foreground hover:text-destructive transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">{cost.amount.toLocaleString()} kr</span>
-                  <button 
-                    onClick={() => removeFixedCost(cost.id)}
-                    className="p-1 text-muted-foreground hover:text-destructive transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
           
           <div className="flex flex-wrap gap-2">
@@ -178,14 +187,14 @@ const EconomyPage = () => {
                 />
               </PopoverContent>
             </Popover>
-            <Button size="icon" onClick={addFixedCost}>
+            <Button size="icon" onClick={addFixedCost} disabled={createCost.isPending}>
               <Plus className="w-4 h-4" />
             </Button>
           </div>
           
           <div className="mt-3 pt-3 border-t border-border flex justify-between">
             <span className="text-sm text-muted-foreground">Totalt fasta</span>
-            <span className="font-bold">{totalFixedCosts.toLocaleString()} kr</span>
+            <span className="font-bold">{totalFixedCosts.toLocaleString()} €</span>
           </div>
         </Card>
       </div>
@@ -199,23 +208,27 @@ const EconomyPage = () => {
         
         <Card className="p-4">
           <div className="space-y-3 mb-4">
-            {variableCosts.map(cost => (
-              <div key={cost.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
-                <div>
-                  <span className="text-sm">{cost.name}</span>
-                  <p className="text-xs text-muted-foreground">{format(cost.date, 'd MMM yyyy', { locale: sv })}</p>
+            {variableCosts.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-2">Inga rörliga kostnader</p>
+            ) : (
+              variableCosts.map(cost => (
+                <div key={cost.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                  <div>
+                    <span className="text-sm">{cost.name}</span>
+                    <p className="text-xs text-muted-foreground">{format(new Date(cost.date), 'd MMM yyyy', { locale: sv })}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">{Number(cost.amount).toLocaleString()} €</span>
+                    <button 
+                      onClick={() => removeVariableCost(cost.id)}
+                      className="p-1 text-muted-foreground hover:text-destructive transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">{cost.amount.toLocaleString()} kr</span>
-                  <button 
-                    onClick={() => removeVariableCost(cost.id)}
-                    className="p-1 text-muted-foreground hover:text-destructive transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
           
           <div className="flex flex-wrap gap-2">
@@ -249,14 +262,14 @@ const EconomyPage = () => {
                 />
               </PopoverContent>
             </Popover>
-            <Button size="icon" onClick={addVariableCost}>
+            <Button size="icon" onClick={addVariableCost} disabled={createCost.isPending}>
               <Plus className="w-4 h-4" />
             </Button>
           </div>
           
           <div className="mt-3 pt-3 border-t border-border flex justify-between">
             <span className="text-sm text-muted-foreground">Totalt rörliga</span>
-            <span className="font-bold">{totalVariableCosts.toLocaleString()} kr</span>
+            <span className="font-bold">{totalVariableCosts.toLocaleString()} €</span>
           </div>
         </Card>
       </div>

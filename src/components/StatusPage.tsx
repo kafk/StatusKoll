@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { customers } from '@/data/mockData';
+import { useCustomers, formatCustomerForUI } from '@/hooks/useCustomers';
 import CustomerCard from './CustomerCard';
 import CustomerDetail from './CustomerDetail';
 import Header from './Header';
 import { Customer, FilterStatus, SortOrder } from '@/types/rental';
 
 const StatusPage = () => {
+  const { data: dbCustomers, isLoading } = useCustomers();
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [filter, setFilter] = useState<'all' | FilterStatus>('all');
   const [sort, setSort] = useState<SortOrder>('newest');
@@ -21,6 +22,8 @@ const StatusPage = () => {
     { label: 'Senast först', value: 'newest' as const },
     { label: 'Äldst först', value: 'oldest' as const },
   ];
+
+  const customers = dbCustomers?.map(formatCustomerForUI) || [];
 
   const filteredCustomers = customers
     .filter((c) => filter === 'all' || c.filterStatus === filter)
@@ -87,13 +90,19 @@ const StatusPage = () => {
       </div>
 
       <div>
-        {filteredCustomers.map((customer) => (
-          <CustomerCard
-            key={customer.id}
-            customer={customer}
-            onClick={() => setSelectedCustomer(customer)}
-          />
-        ))}
+        {isLoading ? (
+          <div className="text-center text-muted-foreground py-8">Laddar...</div>
+        ) : filteredCustomers.length === 0 ? (
+          <div className="text-center text-muted-foreground py-8">Inga bokningar hittades</div>
+        ) : (
+          filteredCustomers.map((customer) => (
+            <CustomerCard
+              key={customer.id}
+              customer={customer}
+              onClick={() => setSelectedCustomer(customer)}
+            />
+          ))
+        )}
       </div>
     </div>
   );

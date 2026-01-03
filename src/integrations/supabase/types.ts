@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      costs: {
+        Row: {
+          amount: number
+          created_at: string
+          date: string
+          id: string
+          name: string
+          type: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          date: string
+          id?: string
+          name: string
+          type: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          date?: string
+          id?: string
+          name?: string
+          type?: string
+        }
+        Relationships: []
+      }
       customers: {
         Row: {
           amount: string
