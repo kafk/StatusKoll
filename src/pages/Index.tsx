@@ -3,11 +3,12 @@ import HomePage from '@/components/HomePage';
 import StatusPage from '@/components/StatusPage';
 import CustomersPage from '@/components/CustomersPage';
 import EconomyPage from '@/components/EconomyPage';
+import StatisticsPage from '@/components/StatisticsPage';
 import BottomNav from '@/components/BottomNav';
 import FAB from '@/components/FAB';
 import BookingModal from '@/components/BookingModal';
 
-type Page = 'home' | 'status' | 'customers' | 'economy';
+type Page = 'home' | 'status' | 'customers' | 'economy' | 'statistics';
 
 const Index = () => {
   const [activePage, setActivePage] = useState<Page>('home');
@@ -20,6 +21,7 @@ const Index = () => {
         {activePage === 'status' && <StatusPage />}
         {activePage === 'customers' && <CustomersPage />}
         {activePage === 'economy' && <EconomyPage />}
+        {activePage === 'statistics' && <StatisticsPage />}
       </div>
 
       <FAB onClick={() => setIsModalOpen(true)} />
