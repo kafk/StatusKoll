@@ -124,81 +124,6 @@ const EconomyPage = () => {
         </div>
       </Card>
 
-      {/* Fixed Costs */}
-      <div className="mb-6">
-        <h3 className="font-display font-bold text-lg mb-3 flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-warning" />
-          Fasta kostnader
-        </h3>
-        
-        <Card className="p-4">
-          <div className="space-y-3 mb-4">
-            {fixedCosts.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-2">Inga fasta kostnader</p>
-            ) : (
-              fixedCosts.map(cost => (
-                <div key={cost.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
-                  <div>
-                    <span className="text-sm">{cost.name}</span>
-                    <p className="text-xs text-muted-foreground">{format(new Date(cost.date), 'd MMM yyyy', { locale: sv })}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">{Number(cost.amount).toLocaleString()} €</span>
-                    <button 
-                      onClick={() => removeFixedCost(cost.id)}
-                      className="p-1 text-muted-foreground hover:text-destructive transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-          
-          <div className="flex flex-wrap gap-2">
-            <Input 
-              placeholder="Kostnad..." 
-              value={newFixedName}
-              onChange={(e) => setNewFixedName(e.target.value)}
-              className="flex-1 min-w-[100px]"
-            />
-            <Input 
-              placeholder="Belopp" 
-              type="number"
-              value={newFixedAmount}
-              onChange={(e) => setNewFixedAmount(e.target.value)}
-              className="w-24"
-            />
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" className={cn("w-[120px] justify-start text-left font-normal", !newFixedDate && "text-muted-foreground")}>
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {format(newFixedDate, 'd MMM', { locale: sv })}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={newFixedDate}
-                  onSelect={(date) => date && setNewFixedDate(date)}
-                  initialFocus
-                  className="p-3 pointer-events-auto"
-                />
-              </PopoverContent>
-            </Popover>
-            <Button size="icon" onClick={addFixedCost} disabled={createCost.isPending}>
-              <Plus className="w-4 h-4" />
-            </Button>
-          </div>
-          
-          <div className="mt-3 pt-3 border-t border-border flex justify-between">
-            <span className="text-sm text-muted-foreground">Totalt fasta</span>
-            <span className="font-bold">{totalFixedCosts.toLocaleString()} €</span>
-          </div>
-        </Card>
-      </div>
-
       {/* Variable Costs */}
       <div className="mb-6">
         <h3 className="font-display font-bold text-lg mb-3 flex items-center gap-2">
@@ -270,6 +195,81 @@ const EconomyPage = () => {
           <div className="mt-3 pt-3 border-t border-border flex justify-between">
             <span className="text-sm text-muted-foreground">Totalt rörliga</span>
             <span className="font-bold">{totalVariableCosts.toLocaleString()} €</span>
+          </div>
+        </Card>
+      </div>
+
+      {/* Fixed Costs */}
+      <div className="mb-6">
+        <h3 className="font-display font-bold text-lg mb-3 flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-warning" />
+          Fasta kostnader
+        </h3>
+        
+        <Card className="p-4">
+          <div className="space-y-3 mb-4">
+            {fixedCosts.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-2">Inga fasta kostnader</p>
+            ) : (
+              fixedCosts.map(cost => (
+                <div key={cost.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                  <div>
+                    <span className="text-sm">{cost.name}</span>
+                    <p className="text-xs text-muted-foreground">{format(new Date(cost.date), 'd MMM yyyy', { locale: sv })}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">{Number(cost.amount).toLocaleString()} €</span>
+                    <button 
+                      onClick={() => removeFixedCost(cost.id)}
+                      className="p-1 text-muted-foreground hover:text-destructive transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+          
+          <div className="flex flex-wrap gap-2">
+            <Input 
+              placeholder="Kostnad..." 
+              value={newFixedName}
+              onChange={(e) => setNewFixedName(e.target.value)}
+              className="flex-1 min-w-[100px]"
+            />
+            <Input 
+              placeholder="Belopp" 
+              type="number"
+              value={newFixedAmount}
+              onChange={(e) => setNewFixedAmount(e.target.value)}
+              className="w-24"
+            />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className={cn("w-[120px] justify-start text-left font-normal", !newFixedDate && "text-muted-foreground")}>
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {format(newFixedDate, 'd MMM', { locale: sv })}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={newFixedDate}
+                  onSelect={(date) => date && setNewFixedDate(date)}
+                  initialFocus
+                  className="p-3 pointer-events-auto"
+                />
+              </PopoverContent>
+            </Popover>
+            <Button size="icon" onClick={addFixedCost} disabled={createCost.isPending}>
+              <Plus className="w-4 h-4" />
+            </Button>
+          </div>
+          
+          <div className="mt-3 pt-3 border-t border-border flex justify-between">
+            <span className="text-sm text-muted-foreground">Totalt fasta</span>
+            <span className="font-bold">{totalFixedCosts.toLocaleString()} €</span>
           </div>
         </Card>
       </div>
