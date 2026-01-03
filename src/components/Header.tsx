@@ -1,4 +1,7 @@
 import { useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
 
 interface HeaderProps {
   title?: string;
@@ -7,6 +10,21 @@ interface HeaderProps {
 
 const Header = ({ title = "STATUS", subtitle }: HeaderProps) => {
   const navigate = useNavigate();
+  const { signOut } = useAuth();
+  const { toast } = useToast();
+
+  const handleLogout = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast({
+        title: "Fel",
+        description: "Kunde inte logga ut.",
+        variant: "destructive",
+      });
+    } else {
+      navigate("/auth");
+    }
+  };
 
   return (
     <header className="flex justify-between items-center pt-12 pb-8 animate-slide-down">
@@ -18,12 +36,21 @@ const Header = ({ title = "STATUS", subtitle }: HeaderProps) => {
           <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
         )}
       </div>
-      <button
-        onClick={() => navigate("/changelog")}
-        className="px-3 py-1.5 bg-card border border-border rounded-full text-xs font-bold text-muted-foreground hover:border-primary hover:text-primary transition-all hover:-translate-y-0.5"
-      >
-        v1.3
-      </button>
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => navigate("/changelog")}
+          className="px-3 py-1.5 bg-card border border-border rounded-full text-xs font-bold text-muted-foreground hover:border-primary hover:text-primary transition-all hover:-translate-y-0.5"
+        >
+          v1.3
+        </button>
+        <button
+          onClick={handleLogout}
+          className="p-2 bg-card border border-border rounded-full text-muted-foreground hover:border-destructive hover:text-destructive transition-all hover:-translate-y-0.5"
+          title="Logga ut"
+        >
+          <LogOut className="w-4 h-4" />
+        </button>
+      </div>
     </header>
   );
 };

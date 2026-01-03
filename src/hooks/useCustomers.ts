@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { format, parseISO } from 'date-fns';
+import { useAuth } from './useAuth';
 
 export interface Customer {
   id: string;
@@ -16,6 +17,7 @@ export interface Customer {
   payment_done: boolean | null;
   created_at: string;
   updated_at: string;
+  user_id: string | null;
 }
 
 export interface CustomerFormData {
@@ -46,12 +48,15 @@ export const useCustomers = () => {
 
 export const useCreateCustomer = () => {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   
   return useMutation({
     mutationFn: async (customer: CustomerFormData) => {
+      if (!user) throw new Error('User must be authenticated');
+      
       const { data, error } = await supabase
         .from('customers')
-        .insert([customer])
+        .insert([{ ...customer, user_id: user.id }])
         .select()
         .single();
       

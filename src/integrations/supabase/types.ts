@@ -22,6 +22,7 @@ export type Database = {
           id: string
           name: string
           type: string
+          user_id: string | null
         }
         Insert: {
           amount: number
@@ -30,6 +31,7 @@ export type Database = {
           id?: string
           name: string
           type: string
+          user_id?: string | null
         }
         Update: {
           amount?: number
@@ -38,6 +40,7 @@ export type Database = {
           id?: string
           name?: string
           type?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -56,6 +59,7 @@ export type Database = {
           platform: string | null
           status: string
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           amount: string
@@ -71,6 +75,7 @@ export type Database = {
           platform?: string | null
           status?: string
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           amount?: string
@@ -86,6 +91,7 @@ export type Database = {
           platform?: string | null
           status?: string
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -101,6 +107,7 @@ export type Database = {
           performed_by: string | null
           transaction_id: string | null
           type: string
+          user_id: string | null
         }
         Insert: {
           amount?: string | null
@@ -113,6 +120,7 @@ export type Database = {
           performed_by?: string | null
           transaction_id?: string | null
           type: string
+          user_id?: string | null
         }
         Update: {
           amount?: string | null
@@ -125,6 +133,7 @@ export type Database = {
           performed_by?: string | null
           transaction_id?: string | null
           type?: string
+          user_id?: string | null
         }
         Relationships: [
           {

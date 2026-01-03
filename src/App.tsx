@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import IconSuggestions from "./components/IconSuggestions";
 import Changelog from "./pages/Changelog";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Auth from "./pages/Auth";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="/icons" element={<IconSuggestions />} />
           <Route path="/changelog" element={<Changelog />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />

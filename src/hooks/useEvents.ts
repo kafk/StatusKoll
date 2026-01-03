@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { format, parseISO } from 'date-fns';
 import { RentalEvent, EventType } from '@/types/rental';
+import { useAuth } from './useAuth';
 
 export interface DbEvent {
   id: string;
@@ -14,6 +15,7 @@ export interface DbEvent {
   performed_by: string | null;
   transaction_id: string | null;
   created_at: string;
+  user_id: string | null;
 }
 
 export interface EventFormData {
@@ -44,12 +46,15 @@ export const useEvents = () => {
 
 export const useCreateEvent = () => {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   
   return useMutation({
     mutationFn: async (event: EventFormData) => {
+      if (!user) throw new Error('User must be authenticated');
+      
       const { data, error } = await supabase
         .from('events')
-        .insert([event])
+        .insert([{ ...event, user_id: user.id }])
         .select()
         .single();
       
