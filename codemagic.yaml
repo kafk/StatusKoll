@@ -35,6 +35,12 @@ workflows:
         script: |
           npx cap sync ios
 
+      - name: Set up app icons
+        script: |
+          unzip -o assets/icons.zip -d assets/
+          cp -r assets/apple-devices/AppIcon.appiconset/* ios/App/App/Assets.xcassets/AppIcon.appiconset/
+          echo "✅ App icons installed"
+
       - name: Increment build number
         script: |
           cd ios/App
