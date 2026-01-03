@@ -12,8 +12,17 @@ interface ChangelogEntry {
 
 const changelog: ChangelogEntry[] = [
   {
-    version: "1.2",
+    version: "1.3",
     date: "2025-01-03",
+    changes: [
+      { type: "feature", description: "Ny Statistik-sida med årsjämförelse i linjediagram" },
+      { type: "feature", description: "Årsfilter i Ekonomi-sidan för att visa specifikt år" },
+      { type: "improvement", description: "Förbättrad navigering med fem flikar" },
+    ],
+  },
+  {
+    version: "1.2",
+    date: "2025-01-02",
     changes: [
       { type: "feature", description: "Databasintegration med riktig data" },
       { type: "feature", description: "Kostnadshantering i ekonomisidan" },
