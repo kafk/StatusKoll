@@ -12,8 +12,19 @@ interface ChangelogEntry {
 
 const changelog: ChangelogEntry[] = [
   {
+    version: "1.2",
+    date: "2025-01-03",
+    changes: [
+      { type: "feature", description: "Databasintegration med riktig data" },
+      { type: "feature", description: "Kostnadshantering i ekonomisidan" },
+      { type: "feature", description: "Realtidssynkronisering av kunder och händelser" },
+      { type: "improvement", description: "Rörliga kostnader visas nu före fasta kostnader" },
+      { type: "improvement", description: "Förbättrad statusöversikt med databasdata" },
+    ],
+  },
+  {
     version: "1.1",
-    date: "2025-01-20",
+    date: "2024-12-20",
     changes: [
       { type: "feature", description: "Ny ekonomisida med inkomster och kostnader" },
       { type: "feature", description: "Möjlighet att lägga till fasta och rörliga kostnader" },
@@ -23,7 +34,7 @@ const changelog: ChangelogEntry[] = [
   },
   {
     version: "1.0",
-    date: "2025-01-15",
+    date: "2024-12-15",
     changes: [
       { type: "feature", description: "Första versionen av appen" },
       { type: "feature", description: "Kundhantering med lista och detaljvy" },
