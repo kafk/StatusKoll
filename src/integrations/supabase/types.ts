@@ -14,7 +14,101 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      customers: {
+        Row: {
+          amount: string
+          check_in: string
+          check_out: string
+          cleaning_done: boolean | null
+          created_at: string
+          email: string | null
+          guests: number | null
+          id: string
+          name: string
+          payment_done: boolean | null
+          platform: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount: string
+          check_in: string
+          check_out: string
+          cleaning_done?: boolean | null
+          created_at?: string
+          email?: string | null
+          guests?: number | null
+          id?: string
+          name: string
+          payment_done?: boolean | null
+          platform?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: string
+          check_in?: string
+          check_out?: string
+          cleaning_done?: boolean | null
+          created_at?: string
+          email?: string | null
+          guests?: number | null
+          id?: string
+          name?: string
+          payment_done?: boolean | null
+          platform?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          amount: string | null
+          created_at: string
+          customer_id: string | null
+          date: string
+          description: string
+          id: string
+          note: string | null
+          performed_by: string | null
+          transaction_id: string | null
+          type: string
+        }
+        Insert: {
+          amount?: string | null
+          created_at?: string
+          customer_id?: string | null
+          date: string
+          description: string
+          id?: string
+          note?: string | null
+          performed_by?: string | null
+          transaction_id?: string | null
+          type: string
+        }
+        Update: {
+          amount?: string | null
+          created_at?: string
+          customer_id?: string | null
+          date?: string
+          description?: string
+          id?: string
+          note?: string | null
+          performed_by?: string | null
+          transaction_id?: string | null
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

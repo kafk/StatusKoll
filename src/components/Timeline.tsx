@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { events } from '@/data/mockData';
+import { useEvents, formatEventForUI } from '@/hooks/useEvents';
 import EventCard from './EventCard';
 import FilterTabs from './FilterTabs';
 import { EventType } from '@/types/rental';
@@ -7,6 +7,7 @@ import { EventType } from '@/types/rental';
 const Timeline = () => {
   const [activeFilter, setActiveFilter] = useState('Alla');
   const tabs = ['Alla', 'Bokning', 'Städ', 'Betalning'];
+  const { data: dbEvents, isLoading } = useEvents();
 
   const filterMap: Record<string, EventType | 'all'> = {
     'Alla': 'all',
@@ -14,6 +15,8 @@ const Timeline = () => {
     'Städ': 'cleaning',
     'Betalning': 'payment',
   };
+
+  const events = dbEvents?.map(formatEventForUI) || [];
 
   const filteredEvents = events.filter((event) => {
     const filterType = filterMap[activeFilter];
@@ -40,9 +43,15 @@ const Timeline = () => {
           }}
         />
 
-        {filteredEvents.map((event, index) => (
-          <EventCard key={event.id} event={event} index={index} />
-        ))}
+        {isLoading ? (
+          <div className="text-muted-foreground text-center py-8">Laddar...</div>
+        ) : filteredEvents.length === 0 ? (
+          <div className="text-muted-foreground text-center py-8">Inga händelser ännu</div>
+        ) : (
+          filteredEvents.map((event, index) => (
+            <EventCard key={event.id} event={event} index={index} />
+          ))
+        )}
       </div>
     </div>
   );
