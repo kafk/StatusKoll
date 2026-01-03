@@ -41,9 +41,10 @@ workflows:
           cp -r assets/apple-devices/AppIcon.appiconset/* ios/App/App/Assets.xcassets/AppIcon.appiconset/
           echo "✅ App icons installed"
 
-      - name: Increment build number
+      - name: Set version and build number
         script: |
           cd ios/App
+          agvtool new-marketing-version 1.1
           agvtool new-version -all $(($(date +%s) / 60))
 
       - name: Set up code signing
