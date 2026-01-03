@@ -20,6 +20,13 @@ import pollingV3 from "@/assets/icons/polling-v3.png";
 import pollingV4 from "@/assets/icons/polling-v4.png";
 import pollingV5 from "@/assets/icons/polling-v5.png";
 
+// Expense app inspired versions
+import expenseV1 from "@/assets/icons/expense-v1.png";
+import expenseV2 from "@/assets/icons/expense-v2.png";
+import expenseV3 from "@/assets/icons/expense-v3.png";
+import expenseV4 from "@/assets/icons/expense-v4.png";
+import expenseV5 from "@/assets/icons/expense-v5.png";
+
 const appIconVersions = [
   { src: appIconV1, label: "V1: Hus + Kalender", desc: "Hus med kalender-checkmark overlay" },
   { src: appIconV2, label: "V2: Kalender + Hus", desc: "Kalender fokus med hus-detalj" },
@@ -34,6 +41,14 @@ const pollingVersions = [
   { src: pollingV3, label: "Polling V3", desc: "Checklista med rutor" },
   { src: pollingV4, label: "Polling V4", desc: "Cirkulär check-arrangement" },
   { src: pollingV5, label: "Polling V5", desc: "Gradient med checkboxar" },
+];
+
+const expenseVersions = [
+  { src: expenseV1, label: "Donut Chart", desc: "Korall/teal cirkeldiagram med siffra" },
+  { src: expenseV2, label: "Kategori Grid", desc: "4 kategori-knappar i grid" },
+  { src: expenseV3, label: "Kort + Check", desc: "Vitt kort med bekräftelse-knapp" },
+  { src: expenseV4, label: "Progress Ring", desc: "Hus i cirkulär progress-ring" },
+  { src: expenseV5, label: "Staplar", desc: "Färgade horisontella staplar" },
 ];
 
 const IconSuggestions = () => {
@@ -293,6 +308,34 @@ const IconSuggestions = () => {
             </div>
             <span className="text-[10px] text-muted-foreground">Med bakgrund</span>
           </div>
+        </div>
+      </div>
+
+      {/* NEW: Expense App Inspired Style */}
+      <div className="bg-card border-2 border-warning/30 rounded-xl p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-3 h-3 rounded-full bg-warning animate-pulse" />
+          <h3 className="font-display text-lg font-bold text-warning">Expense App Inspirerad</h3>
+        </div>
+        <p className="text-xs text-muted-foreground mb-4">Baserat på inspirationsbilden med donut-diagram och kategori-chips</p>
+        
+        <div className="grid grid-cols-2 gap-3">
+          {expenseVersions.map((icon, index) => (
+            <div 
+              key={index}
+              className="flex flex-col items-center gap-2 p-2 rounded-lg bg-muted/30"
+            >
+              <img 
+                src={icon.src} 
+                alt={icon.label} 
+                className="w-20 h-20 rounded-2xl shadow-lg"
+              />
+              <div className="text-center">
+                <h4 className="font-display text-xs font-bold">{icon.label}</h4>
+                <p className="text-[10px] text-muted-foreground">{icon.desc}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
