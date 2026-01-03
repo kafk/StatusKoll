@@ -27,6 +27,13 @@ import expenseV3 from "@/assets/icons/expense-v3.png";
 import expenseV4 from "@/assets/icons/expense-v4.png";
 import expenseV5 from "@/assets/icons/expense-v5.png";
 
+// Dark + Coral versions
+import darkCoralV1 from "@/assets/icons/dark-coral-v1.png";
+import darkCoralV2 from "@/assets/icons/dark-coral-v2.png";
+import darkCoralV3 from "@/assets/icons/dark-coral-v3.png";
+import darkCoralV4 from "@/assets/icons/dark-coral-v4.png";
+import darkCoralV5 from "@/assets/icons/dark-coral-v5.png";
+
 const appIconVersions = [
   { src: appIconV1, label: "V1: Hus + Kalender", desc: "Hus med kalender-checkmark overlay" },
   { src: appIconV2, label: "V2: Kalender + Hus", desc: "Kalender fokus med hus-detalj" },
@@ -49,6 +56,14 @@ const expenseVersions = [
   { src: expenseV3, label: "Kort + Check", desc: "Vitt kort med bekräftelse-knapp" },
   { src: expenseV4, label: "Progress Ring", desc: "Hus i cirkulär progress-ring" },
   { src: expenseV5, label: "Staplar", desc: "Färgade horisontella staplar" },
+];
+
+const darkCoralVersions = [
+  { src: darkCoralV1, label: "Dark V1", desc: "Mörk med korall cirklar" },
+  { src: darkCoralV2, label: "Dark V2", desc: "Staplad 3D med korall" },
+  { src: darkCoralV3, label: "Dark V3", desc: "4 checkmarks grid" },
+  { src: darkCoralV4, label: "Dark V4", desc: "Linje-checkboxar" },
+  { src: darkCoralV5, label: "Dark V5", desc: "Tre cirklar horisontellt" },
 ];
 
 const IconSuggestions = () => {
@@ -321,6 +336,34 @@ const IconSuggestions = () => {
         
         <div className="grid grid-cols-2 gap-3">
           {expenseVersions.map((icon, index) => (
+            <div 
+              key={index}
+              className="flex flex-col items-center gap-2 p-2 rounded-lg bg-muted/30"
+            >
+              <img 
+                src={icon.src} 
+                alt={icon.label} 
+                className="w-20 h-20 rounded-2xl shadow-lg"
+              />
+              <div className="text-center">
+                <h4 className="font-display text-xs font-bold">{icon.label}</h4>
+                <p className="text-[10px] text-muted-foreground">{icon.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* NEW: Dark + Coral Style */}
+      <div className="bg-card border-2 border-gray-700 rounded-xl p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-3 h-3 rounded-full bg-gray-700 animate-pulse" />
+          <h3 className="font-display text-lg font-bold">Mörk + Korall</h3>
+        </div>
+        <p className="text-xs text-muted-foreground mb-4">Mörk bakgrund med korall accenter — inspirerad av Polling Style Mörk</p>
+        
+        <div className="grid grid-cols-2 gap-3">
+          {darkCoralVersions.map((icon, index) => (
             <div 
               key={index}
               className="flex flex-col items-center gap-2 p-2 rounded-lg bg-muted/30"
