@@ -1,6 +1,8 @@
-import { stats } from '@/data/mockData';
+import { useStats } from '@/hooks/useStats';
 
 const StatsGrid = () => {
+  const stats = useStats();
+  
   const statItems = [
     { label: 'Bokningar', value: stats.bookings },
     { label: 'Städningar', value: stats.cleanings },

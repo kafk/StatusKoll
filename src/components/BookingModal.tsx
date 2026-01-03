@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useCreateCustomer } from '@/hooks/useCustomers';
+import { useCreateEvent } from '@/hooks/useEvents';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -9,6 +11,9 @@ interface BookingModalProps {
 
 const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
   const { toast } = useToast();
+  const createCustomer = useCreateCustomer();
+  const createEvent = useCreateEvent();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     guestName: '',
     email: '',
@@ -18,21 +23,56 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
     price: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: 'Bokning skapad!',
-      description: `Bokning för ${formData.guestName} har skapats.`,
-    });
-    setFormData({
-      guestName: '',
-      email: '',
-      checkIn: '',
-      checkOut: '',
-      guests: '',
-      price: '',
-    });
-    onClose();
+    setIsSubmitting(true);
+
+    try {
+      // Create customer
+      const customer = await createCustomer.mutateAsync({
+        name: formData.guestName,
+        email: formData.email || undefined,
+        check_in: formData.checkIn,
+        check_out: formData.checkOut,
+        amount: `${formData.price}€`,
+        guests: parseInt(formData.guests) || 1,
+        platform: 'Direct',
+        status: 'pending',
+      });
+
+      // Create booking event
+      await createEvent.mutateAsync({
+        customer_id: customer.id,
+        type: 'booking',
+        date: formData.checkIn,
+        description: formData.guestName,
+        amount: `${formData.price}€`,
+        note: `Bokning skapad direkt`,
+      });
+
+      toast({
+        title: 'Bokning skapad!',
+        description: `Bokning för ${formData.guestName} har skapats.`,
+      });
+
+      setFormData({
+        guestName: '',
+        email: '',
+        checkIn: '',
+        checkOut: '',
+        guests: '',
+        price: '',
+      });
+      onClose();
+    } catch (error) {
+      toast({
+        title: 'Fel',
+        description: 'Kunde inte skapa bokningen. Försök igen.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -75,7 +115,6 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
             <input
               type="email"
               placeholder="gast@email.com"
-              required
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className="w-full px-3 py-3 bg-muted border border-border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground"
@@ -142,15 +181,17 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3.5 rounded-xl font-mono text-sm font-bold uppercase tracking-wide bg-transparent border border-border text-muted-foreground hover:border-primary hover:text-primary transition-all"
+              disabled={isSubmitting}
+              className="flex-1 py-3.5 rounded-xl font-mono text-sm font-bold uppercase tracking-wide bg-transparent border border-border text-muted-foreground hover:border-primary hover:text-primary transition-all disabled:opacity-50"
             >
               Avbryt
             </button>
             <button
               type="submit"
-              className="flex-1 py-3.5 rounded-xl font-mono text-sm font-bold uppercase tracking-wide gradient-primary text-primary-foreground hover:-translate-y-0.5 hover:shadow-[0_8px_16px_rgba(255,107,74,0.3)] transition-all"
+              disabled={isSubmitting}
+              className="flex-1 py-3.5 rounded-xl font-mono text-sm font-bold uppercase tracking-wide gradient-primary text-primary-foreground hover:-translate-y-0.5 hover:shadow-[0_8px_16px_rgba(255,107,74,0.3)] transition-all disabled:opacity-50"
             >
-              Spara
+              {isSubmitting ? 'Sparar...' : 'Spara'}
             </button>
           </div>
         </form>
