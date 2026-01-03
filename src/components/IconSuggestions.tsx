@@ -1,158 +1,225 @@
-import { Users, Coins, Home, Activity, Check, X, Circle, Square, CheckSquare, ListChecks } from 'lucide-react';
+import { Check, X, Home, Calendar, Users } from 'lucide-react';
 
-// Linje-ikoner i korall-stil
+// Current app icon
+import currentAppIcon from '@/assets/app-icon.png';
+
+// Custom icons for reference
 import platformPhoneCheck from '@/assets/icons/platform-phone-check.png';
-import platformHandTap from '@/assets/icons/platform-hand-tap.png';
-import platformClick from '@/assets/icons/platform-click.png';
-
-const platformIcons = [
-  { src: platformPhoneCheck, name: 'Phone Check', desc: 'Mobil + check' },
-  { src: platformHandTap, name: 'Hand Tap', desc: 'Hand trycker' },
-  { src: platformClick, name: 'Cursor Click', desc: 'Pekare' },
-];
 
 const IconSuggestions = () => {
   return (
     <div className="p-5 max-w-[500px] mx-auto pb-20 space-y-8">
-      <h2 className="font-display text-2xl font-bold gradient-text">Ikonförslag</h2>
+      <div>
+        <h2 className="font-display text-2xl font-bold gradient-text">App-ikon förslag</h2>
+        <p className="text-sm text-muted-foreground mt-1">För App Store & hemskärm</p>
+      </div>
       
-      {/* CURRENT STYLE - What we use now */}
+      {/* CURRENT APP ICON */}
       <div className="bg-card border-2 border-primary/30 rounded-xl p-5">
         <div className="flex items-center gap-2 mb-4">
           <div className="w-3 h-3 rounded-full bg-primary animate-pulse" />
-          <h3 className="font-display text-lg font-bold gradient-text">Nuvarande stil</h3>
+          <h3 className="font-display text-lg font-bold gradient-text">Nuvarande</h3>
         </div>
-        <p className="text-xs text-muted-foreground mb-4">
-          Lucide line icons + korall gradient custom icons
-        </p>
         
-        {/* Bottom nav icons */}
-        <div className="mb-4">
-          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Bottom Nav</span>
-          <div className="grid grid-cols-4 gap-3 mt-2">
-            {[
-              { Icon: Home, label: 'Hem' },
-              { Icon: Activity, label: 'Status' },
-              { Icon: Users, label: 'Kunder' },
-              { Icon: Coins, label: 'Ekonomi' },
-            ].map(({ Icon, label }) => (
-              <div key={label} className="flex flex-col items-center gap-1 p-3 rounded-xl bg-background">
-                <Icon className="w-6 h-6 text-primary" strokeWidth={2} />
-                <span className="text-[9px] text-muted-foreground">{label}</span>
-              </div>
-            ))}
+        <div className="flex items-center gap-6">
+          <div className="flex flex-col items-center gap-2">
+            <img 
+              src={currentAppIcon} 
+              alt="Current app icon" 
+              className="w-20 h-20 rounded-2xl shadow-lg"
+            />
+            <span className="text-xs text-muted-foreground">1024×1024</span>
           </div>
-        </div>
-        
-        {/* Custom coral icons */}
-        <div>
-          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Custom Icons</span>
-          <div className="grid grid-cols-3 gap-3 mt-2">
-            {platformIcons.map(({ src, name, desc }) => (
-              <div key={name} className="flex flex-col items-center gap-1 p-3 rounded-xl bg-background">
-                <img src={src} alt={name} className="w-8 h-8 object-contain" />
-                <span className="text-[9px] text-muted-foreground">{desc}</span>
-              </div>
-            ))}
+          <div className="flex-1">
+            <p className="text-sm text-foreground">
+              Din nuvarande app-ikon
+            </p>
           </div>
         </div>
       </div>
 
       {/* OPTION 1: Outlined Polling Style */}
       <div className="bg-card border border-border rounded-xl p-5">
-        <h3 className="font-display text-lg font-bold mb-2">Alternativ 1: Outlined Polling</h3>
+        <h3 className="font-display text-lg font-bold mb-2">Alternativ 1: Polling Style</h3>
         <p className="text-xs text-muted-foreground mb-4">
-          Tunna linjer, cirklar med check/x — från Vecteezy polling
+          Baserat på Vecteezy polling — cirklar med checkmarks
         </p>
         
-        <div className="grid grid-cols-4 gap-3">
-          {/* Simulated polling style icons */}
-          <div className="flex flex-col items-center gap-1 p-3 rounded-xl bg-background">
-            <div className="w-8 h-8 rounded-full border-2 border-foreground flex items-center justify-center">
-              <Check className="w-5 h-5 text-foreground" strokeWidth={2.5} />
+        <div className="flex gap-4">
+          {/* Light version */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-20 h-20 rounded-2xl bg-white border border-border shadow-lg flex items-center justify-center p-3">
+              <div className="flex flex-col gap-1.5 w-full">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full border-2 border-gray-800 flex items-center justify-center">
+                    <Check className="w-2.5 h-2.5 text-gray-800" strokeWidth={3} />
+                  </div>
+                  <div className="flex-1 h-2 bg-gray-800 rounded-full" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full border-2 border-gray-400 flex items-center justify-center">
+                    <X className="w-2.5 h-2.5 text-gray-400" strokeWidth={3} />
+                  </div>
+                  <div className="flex-1 h-2 bg-gray-400 rounded-full" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full border-2 border-gray-800 flex items-center justify-center">
+                    <Check className="w-2.5 h-2.5 text-gray-800" strokeWidth={3} />
+                  </div>
+                  <div className="flex-1 h-2 bg-gray-800 rounded-full" />
+                </div>
+              </div>
             </div>
-            <span className="text-[9px] text-muted-foreground">Check</span>
+            <span className="text-[10px] text-muted-foreground">Ljus</span>
           </div>
-          <div className="flex flex-col items-center gap-1 p-3 rounded-xl bg-background">
-            <div className="w-8 h-8 rounded-full border-2 border-foreground flex items-center justify-center">
-              <X className="w-5 h-5 text-foreground" strokeWidth={2.5} />
+          
+          {/* Dark version */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-20 h-20 rounded-2xl bg-gray-900 shadow-lg flex items-center justify-center p-3">
+              <div className="flex flex-col gap-1.5 w-full">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full border-2 border-white flex items-center justify-center">
+                    <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
+                  </div>
+                  <div className="flex-1 h-2 bg-white rounded-full" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full border-2 border-gray-500 flex items-center justify-center">
+                    <X className="w-2.5 h-2.5 text-gray-500" strokeWidth={3} />
+                  </div>
+                  <div className="flex-1 h-2 bg-gray-500 rounded-full" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full border-2 border-white flex items-center justify-center">
+                    <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
+                  </div>
+                  <div className="flex-1 h-2 bg-white rounded-full" />
+                </div>
+              </div>
             </div>
-            <span className="text-[9px] text-muted-foreground">Avbryt</span>
+            <span className="text-[10px] text-muted-foreground">Mörk</span>
           </div>
-          <div className="flex flex-col items-center gap-1 p-3 rounded-xl bg-background">
-            <Circle className="w-8 h-8 text-foreground" strokeWidth={2} />
-            <span className="text-[9px] text-muted-foreground">Tom</span>
-          </div>
-          <div className="flex flex-col items-center gap-1 p-3 rounded-xl bg-background">
-            <div className="flex flex-col gap-0.5">
-              <div className="w-8 h-1.5 bg-foreground rounded-full" />
-              <div className="w-6 h-1.5 bg-foreground/60 rounded-full" />
-              <div className="w-7 h-1.5 bg-foreground/40 rounded-full" />
-            </div>
-            <span className="text-[9px] text-muted-foreground">Progress</span>
-          </div>
-        </div>
-        
-        <div className="mt-4 p-3 bg-muted/30 rounded-lg">
-          <span className="text-[10px] text-warning font-bold">⚠️ Konflikt:</span>
-          <span className="text-[10px] text-muted-foreground ml-1">
-            Svartvit stil matchar inte korall-gradient temat
-          </span>
         </div>
       </div>
 
-      {/* OPTION 2: Bold Minimalist Style */}
+      {/* OPTION 2: Bold Minimalist Checklist */}
       <div className="bg-card border border-border rounded-xl p-5">
-        <h3 className="font-display text-lg font-bold mb-2">Alternativ 2: Bold Minimalist</h3>
+        <h3 className="font-display text-lg font-bold mb-2">Alternativ 2: Bold Checklist</h3>
         <p className="text-xs text-muted-foreground mb-4">
-          Fyllda svarta former, vita ikoner — från Vecteezy checklist
+          Baserat på Vecteezy minimalist checklist — fylld bakgrund
         </p>
         
-        <div className="grid grid-cols-4 gap-3">
-          {/* Simulated bold minimalist style */}
-          <div className="flex flex-col items-center gap-1 p-3 rounded-xl bg-background">
-            <div className="w-8 h-8 rounded-lg bg-foreground flex items-center justify-center">
-              <Check className="w-5 h-5 text-background" strokeWidth={3} />
+        <div className="flex gap-4">
+          {/* Black version */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-20 h-20 rounded-2xl bg-gray-900 shadow-lg flex items-center justify-center p-3">
+              <div className="flex flex-col gap-1.5 w-full">
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-white" strokeWidth={3} />
+                  <div className="flex-1 h-2 bg-white rounded-sm" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-white" strokeWidth={3} />
+                  <div className="flex-1 h-2 bg-white rounded-sm" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-white" strokeWidth={3} />
+                  <div className="flex-1 h-2 bg-white rounded-sm" />
+                </div>
+              </div>
             </div>
-            <span className="text-[9px] text-muted-foreground">Check</span>
+            <span className="text-[10px] text-muted-foreground">Svart</span>
           </div>
-          <div className="flex flex-col items-center gap-1 p-3 rounded-xl bg-background">
-            <div className="w-8 h-8 rounded-lg bg-foreground flex items-center justify-center">
-              <Home className="w-4 h-4 text-background" strokeWidth={2.5} />
+          
+          {/* Coral gradient version */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-warning shadow-lg flex items-center justify-center p-3">
+              <div className="flex flex-col gap-1.5 w-full">
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-white" strokeWidth={3} />
+                  <div className="flex-1 h-2 bg-white rounded-sm" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-white" strokeWidth={3} />
+                  <div className="flex-1 h-2 bg-white rounded-sm" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-white" strokeWidth={3} />
+                  <div className="flex-1 h-2 bg-white rounded-sm" />
+                </div>
+              </div>
             </div>
-            <span className="text-[9px] text-muted-foreground">Hem</span>
+            <span className="text-[10px] text-muted-foreground">Korall</span>
           </div>
-          <div className="flex flex-col items-center gap-1 p-3 rounded-xl bg-background">
-            <div className="w-8 h-8 rounded-lg bg-foreground flex items-center justify-center">
-              <Users className="w-4 h-4 text-background" strokeWidth={2.5} />
-            </div>
-            <span className="text-[9px] text-muted-foreground">Kunder</span>
-          </div>
-          <div className="flex flex-col items-center gap-1 p-3 rounded-xl bg-background">
-            <ListChecks className="w-8 h-8 text-foreground" strokeWidth={2.5} />
-            <span className="text-[9px] text-muted-foreground">Lista</span>
-          </div>
-        </div>
-        
-        <div className="mt-4 p-3 bg-muted/30 rounded-lg">
-          <span className="text-[10px] text-destructive font-bold">❌ Problem:</span>
-          <span className="text-[10px] text-muted-foreground ml-1">
-            Helt annan estetik, kräver total redesign
-          </span>
         </div>
       </div>
 
-      {/* Recommendation */}
-      <div className="bg-gradient-to-br from-primary/10 to-warning/10 border border-primary/20 rounded-xl p-5">
-        <h3 className="font-display text-lg font-bold gradient-text mb-3">Rekommendation</h3>
-        <p className="text-sm text-foreground">
-          Behåll <strong>nuvarande stil</strong> — Lucide line icons + korall gradient passar bäst ihop och är redan konsekvent genom hela appen.
+      {/* OPTION 3: House/Calendar rental themed */}
+      <div className="bg-card border border-border rounded-xl p-5">
+        <h3 className="font-display text-lg font-bold mb-2">Alternativ 3: Uthyrning-tema</h3>
+        <p className="text-xs text-muted-foreground mb-4">
+          Hus + kalender/check — matchar appens syfte
         </p>
-        <div className="mt-4 flex gap-2">
-          <span className="px-3 py-1 bg-success/20 text-success text-xs font-bold rounded-full">✓ Konsekvent</span>
-          <span className="px-3 py-1 bg-success/20 text-success text-xs font-bold rounded-full">✓ On-brand</span>
-          <span className="px-3 py-1 bg-success/20 text-success text-xs font-bold rounded-full">✓ Läsbart</span>
+        
+        <div className="flex gap-4">
+          {/* Coral with house */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-warning shadow-lg flex items-center justify-center">
+              <Home className="w-10 h-10 text-white" strokeWidth={2} />
+            </div>
+            <span className="text-[10px] text-muted-foreground">Hus</span>
+          </div>
+          
+          {/* Coral with calendar */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-warning shadow-lg flex items-center justify-center">
+              <Calendar className="w-10 h-10 text-white" strokeWidth={2} />
+            </div>
+            <span className="text-[10px] text-muted-foreground">Kalender</span>
+          </div>
+          
+          {/* House + check combo */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-warning shadow-lg flex items-center justify-center relative">
+              <Home className="w-9 h-9 text-white" strokeWidth={2} />
+              <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-success flex items-center justify-center border-2 border-white">
+                <Check className="w-4 h-4 text-white" strokeWidth={3} />
+              </div>
+            </div>
+            <span className="text-[10px] text-muted-foreground">Hus + Check</span>
+          </div>
         </div>
+      </div>
+
+      {/* OPTION 4: Custom coral style like existing icons */}
+      <div className="bg-card border border-border rounded-xl p-5">
+        <h3 className="font-display text-lg font-bold mb-2">Alternativ 4: Korall linje-stil</h3>
+        <p className="text-xs text-muted-foreground mb-4">
+          Samma stil som dina custom ikoner
+        </p>
+        
+        <div className="flex gap-4">
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-20 h-20 rounded-2xl bg-white border border-border shadow-lg flex items-center justify-center p-2">
+              <img src={platformPhoneCheck} alt="Phone check" className="w-14 h-14 object-contain" />
+            </div>
+            <span className="text-[10px] text-muted-foreground">Phone Check</span>
+          </div>
+          
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/10 to-warning/10 border border-primary/20 shadow-lg flex items-center justify-center p-2">
+              <img src={platformPhoneCheck} alt="Phone check" className="w-14 h-14 object-contain" />
+            </div>
+            <span className="text-[10px] text-muted-foreground">Med bakgrund</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Info about generating */}
+      <div className="bg-muted/30 border border-border rounded-xl p-4">
+        <p className="text-sm text-muted-foreground">
+          💡 Säg till vilken stil du gillar så kan jag generera en riktig 1024×1024 app-ikon åt dig!
+        </p>
       </div>
     </div>
   );
