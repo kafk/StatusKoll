@@ -151,17 +151,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
         note: formData.platform === 'Direct' ? t('booking.createdDirect') : t('booking.createdVia', { platform: formData.platform }),
       });
 
-      // Create income cost entry (positive - revenue from booking)
-      await createCost.mutateAsync({
-        name: t('booking.incomeFromBooking', { name: validData.guestName }),
-        amount: -validData.price, // Negative = income
-        date: validData.checkIn,
-        type: 'variable',
-        transaction_title: t('booking.bookingIncome'),
-        customer_id: customer.id,
-      });
-
-      // Create commission cost entry (positive - expense)
+      // Create commission cost entry (only if commission > 0)
       if (validData.commission > 0) {
         await createCost.mutateAsync({
           name: t('booking.commissionCost', { name: validData.guestName }),
