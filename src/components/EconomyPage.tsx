@@ -133,6 +133,42 @@ const EconomyPage = () => {
         </Select>
       </div>
 
+      {/* Summary Cards */}
+      <div className="grid grid-cols-2 gap-3 mb-6">
+        <Card className="p-4 bg-gradient-to-br from-success/10 to-success/5 border-success/20">
+          <div className="flex items-center gap-2 mb-2">
+            <TrendingUp className="w-4 h-4 text-success" />
+            <span className="text-xs text-muted-foreground">{t('economy.income')}</span>
+          </div>
+          <p className="text-xl font-bold text-success">{income.toLocaleString()} €</p>
+        </Card>
+        
+        <Card className="p-4 bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
+          <div className="flex items-center gap-2 mb-2">
+            <TrendingDown className="w-4 h-4 text-destructive" />
+            <span className="text-xs text-muted-foreground">{t('economy.costs')}</span>
+          </div>
+          <p className="text-xl font-bold text-destructive">{totalCosts.toLocaleString()} €</p>
+        </Card>
+      </div>
+
+      {/* Profit Card */}
+      <Card className={`p-5 mb-6 border-2 ${profit >= 0 ? 'bg-gradient-to-br from-primary/10 to-primary/5 border-primary/30' : 'bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/30'}`}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${profit >= 0 ? 'bg-primary/20' : 'bg-destructive/20'}`}>
+              <Wallet className={`w-5 h-5 ${profit >= 0 ? 'text-primary' : 'text-destructive'}`} />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">{t('economy.profitAfterCosts')}</p>
+              <p className={`text-2xl font-bold ${profit >= 0 ? 'text-primary' : 'text-destructive'}`}>
+                {profit >= 0 ? '+' : ''}{profit.toLocaleString()} €
+              </p>
+            </div>
+          </div>
+        </div>
+      </Card>
+
       {/* Add Cost Form - Combined */}
       <Card className="p-4 mb-6">
         <h3 className="font-display font-bold text-lg mb-3 flex items-center gap-2">
@@ -208,42 +244,6 @@ const EconomyPage = () => {
               <Plus className="w-4 h-4 mr-1" />
               {t('common.add')}
             </Button>
-          </div>
-        </div>
-      </Card>
-
-      {/* Summary Cards */}
-      <div className="grid grid-cols-2 gap-3 mb-6">
-        <Card className="p-4 bg-gradient-to-br from-success/10 to-success/5 border-success/20">
-          <div className="flex items-center gap-2 mb-2">
-            <TrendingUp className="w-4 h-4 text-success" />
-            <span className="text-xs text-muted-foreground">{t('economy.income')}</span>
-          </div>
-          <p className="text-xl font-bold text-success">{income.toLocaleString()} €</p>
-        </Card>
-        
-        <Card className="p-4 bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
-          <div className="flex items-center gap-2 mb-2">
-            <TrendingDown className="w-4 h-4 text-destructive" />
-            <span className="text-xs text-muted-foreground">{t('economy.costs')}</span>
-          </div>
-          <p className="text-xl font-bold text-destructive">{totalCosts.toLocaleString()} €</p>
-        </Card>
-      </div>
-
-      {/* Profit Card */}
-      <Card className={`p-5 mb-6 border-2 ${profit >= 0 ? 'bg-gradient-to-br from-primary/10 to-primary/5 border-primary/30' : 'bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/30'}`}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${profit >= 0 ? 'bg-primary/20' : 'bg-destructive/20'}`}>
-              <Wallet className={`w-5 h-5 ${profit >= 0 ? 'text-primary' : 'text-destructive'}`} />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">{t('economy.profitAfterCosts')}</p>
-              <p className={`text-2xl font-bold ${profit >= 0 ? 'text-primary' : 'text-destructive'}`}>
-                {profit >= 0 ? '+' : ''}{profit.toLocaleString()} €
-              </p>
-            </div>
           </div>
         </div>
       </Card>
