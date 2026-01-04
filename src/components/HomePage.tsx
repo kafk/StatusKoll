@@ -2,10 +2,14 @@ import Header from './Header';
 import StatsGrid from './StatsGrid';
 import Timeline from './Timeline';
 
-const HomePage = () => {
+interface HomePageProps {
+  onSettingsClick?: () => void;
+}
+
+const HomePage = ({ onSettingsClick }: HomePageProps) => {
   return (
     <div className="pb-20">
-      <Header />
+      <Header onSettingsClick={onSettingsClick} />
       <StatsGrid />
       <Timeline />
     </div>
