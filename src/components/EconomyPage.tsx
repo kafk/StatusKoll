@@ -22,10 +22,21 @@ const EconomyPage = () => {
   const [newFixedName, setNewFixedName] = useState('');
   const [newFixedAmount, setNewFixedAmount] = useState('');
   const [newFixedDate, setNewFixedDate] = useState<Date>(new Date());
+  const [newFixedTransaction, setNewFixedTransaction] = useState('');
+  const [newFixedCustomer, setNewFixedCustomer] = useState<string>('');
+  
   const [newVariableName, setNewVariableName] = useState('');
   const [newVariableAmount, setNewVariableAmount] = useState('');
   const [newVariableDate, setNewVariableDate] = useState<Date>(new Date());
+  const [newVariableTransaction, setNewVariableTransaction] = useState('');
+  const [newVariableCustomer, setNewVariableCustomer] = useState<string>('');
+  
   const [selectedYear, setSelectedYear] = useState<string>('all');
+  
+  // Get active customers for dropdown
+  const activeCustomers = useMemo(() => {
+    return customers?.filter(c => c.status === 'confirmed' || c.status === 'pending') || [];
+  }, [customers]);
 
   // Get available years from data
   const availableYears = useMemo(() => {
@@ -77,11 +88,15 @@ const EconomyPage = () => {
         name: newFixedName,
         amount: parseFloat(newFixedAmount),
         date: format(newFixedDate, 'yyyy-MM-dd'),
-        type: 'fixed'
+        type: 'fixed',
+        transaction_title: newFixedTransaction || undefined,
+        customer_id: newFixedCustomer || undefined
       });
       setNewFixedName('');
       setNewFixedAmount('');
       setNewFixedDate(new Date());
+      setNewFixedTransaction('');
+      setNewFixedCustomer('');
     }
   };
 
@@ -91,11 +106,15 @@ const EconomyPage = () => {
         name: newVariableName,
         amount: parseFloat(newVariableAmount),
         date: format(newVariableDate, 'yyyy-MM-dd'),
-        type: 'variable'
+        type: 'variable',
+        transaction_title: newVariableTransaction || undefined,
+        customer_id: newVariableCustomer || undefined
       });
       setNewVariableName('');
       setNewVariableAmount('');
       setNewVariableDate(new Date());
+      setNewVariableTransaction('');
+      setNewVariableCustomer('');
     }
   };
 
@@ -183,60 +202,97 @@ const EconomyPage = () => {
             {variableCosts.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-2">Inga rörliga kostnader</p>
             ) : (
-              variableCosts.map(cost => (
-                <div key={cost.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
-                  <div>
-                    <span className="text-sm">{cost.name}</span>
-                    <p className="text-xs text-muted-foreground">{format(new Date(cost.date), 'd MMM yyyy', { locale: sv })}</p>
+              variableCosts.map(cost => {
+                const linkedCustomer = customers?.find(c => c.id === cost.customer_id);
+                return (
+                  <div key={cost.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm font-medium">{cost.name}</span>
+                      {cost.transaction_title && (
+                        <p className="text-xs text-muted-foreground truncate">{cost.transaction_title}</p>
+                      )}
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span>{format(new Date(cost.date), 'd MMM yyyy', { locale: sv })}</span>
+                        {linkedCustomer && (
+                          <span className="text-info">• {linkedCustomer.name}</span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{Number(cost.amount).toLocaleString()} €</span>
+                      <button 
+                        onClick={() => removeVariableCost(cost.id)}
+                        className="p-1 text-muted-foreground hover:text-destructive transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">{Number(cost.amount).toLocaleString()} €</span>
-                    <button 
-                      onClick={() => removeVariableCost(cost.id)}
-                      className="p-1 text-muted-foreground hover:text-destructive transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
           
-          <div className="flex flex-wrap gap-2">
-            <Input 
-              placeholder="Kostnad..." 
-              value={newVariableName}
-              onChange={(e) => setNewVariableName(e.target.value)}
-              className="flex-1 min-w-[100px]"
-            />
-            <Input 
-              placeholder="Belopp" 
-              type="number"
-              value={newVariableAmount}
-              onChange={(e) => setNewVariableAmount(e.target.value)}
-              className="w-24"
-            />
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" className={cn("w-[120px] justify-start text-left font-normal", !newVariableDate && "text-muted-foreground")}>
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {format(newVariableDate, 'd MMM', { locale: sv })}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={newVariableDate}
-                  onSelect={(date) => date && setNewVariableDate(date)}
-                  initialFocus
-                  className="p-3 pointer-events-auto"
-                />
-              </PopoverContent>
-            </Popover>
-            <Button size="icon" onClick={addVariableCost} disabled={createCost.isPending}>
-              <Plus className="w-4 h-4" />
-            </Button>
+          <div className="space-y-2">
+            <div className="flex flex-wrap gap-2">
+              <Input 
+                placeholder="Kostnad..." 
+                value={newVariableName}
+                onChange={(e) => setNewVariableName(e.target.value)}
+                className="flex-1 min-w-[100px]"
+              />
+              <Input 
+                placeholder="Belopp" 
+                type="number"
+                value={newVariableAmount}
+                onChange={(e) => setNewVariableAmount(e.target.value)}
+                className="w-24"
+              />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Input 
+                placeholder="Transaktions-titel (t.ex. utlandsbetalning...)" 
+                value={newVariableTransaction}
+                onChange={(e) => setNewVariableTransaction(e.target.value)}
+                className="flex-1 min-w-[150px]"
+              />
+              <Select value={newVariableCustomer} onValueChange={setNewVariableCustomer}>
+                <SelectTrigger className="w-[140px]">
+                  <SelectValue placeholder="Kund (valfri)" />
+                </SelectTrigger>
+                <SelectContent className="bg-card border-border z-50">
+                  <SelectItem value="">Ingen kund</SelectItem>
+                  {activeCustomers.map(customer => (
+                    <SelectItem key={customer.id} value={customer.id}>
+                      {customer.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex gap-2">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className={cn("flex-1 justify-start text-left font-normal", !newVariableDate && "text-muted-foreground")}>
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {format(newVariableDate, 'd MMM yyyy', { locale: sv })}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 z-50" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={newVariableDate}
+                    onSelect={(date) => date && setNewVariableDate(date)}
+                    initialFocus
+                    className="p-3 pointer-events-auto"
+                  />
+                </PopoverContent>
+              </Popover>
+              <Button onClick={addVariableCost} disabled={createCost.isPending}>
+                <Plus className="w-4 h-4 mr-1" />
+                Lägg till
+              </Button>
+            </div>
           </div>
           
           <div className="mt-3 pt-3 border-t border-border flex justify-between">
@@ -258,60 +314,97 @@ const EconomyPage = () => {
             {fixedCosts.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-2">Inga fasta kostnader</p>
             ) : (
-              fixedCosts.map(cost => (
-                <div key={cost.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
-                  <div>
-                    <span className="text-sm">{cost.name}</span>
-                    <p className="text-xs text-muted-foreground">{format(new Date(cost.date), 'd MMM yyyy', { locale: sv })}</p>
+              fixedCosts.map(cost => {
+                const linkedCustomer = customers?.find(c => c.id === cost.customer_id);
+                return (
+                  <div key={cost.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm font-medium">{cost.name}</span>
+                      {cost.transaction_title && (
+                        <p className="text-xs text-muted-foreground truncate">{cost.transaction_title}</p>
+                      )}
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span>{format(new Date(cost.date), 'd MMM yyyy', { locale: sv })}</span>
+                        {linkedCustomer && (
+                          <span className="text-info">• {linkedCustomer.name}</span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{Number(cost.amount).toLocaleString()} €</span>
+                      <button 
+                        onClick={() => removeFixedCost(cost.id)}
+                        className="p-1 text-muted-foreground hover:text-destructive transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">{Number(cost.amount).toLocaleString()} €</span>
-                    <button 
-                      onClick={() => removeFixedCost(cost.id)}
-                      className="p-1 text-muted-foreground hover:text-destructive transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
           
-          <div className="flex flex-wrap gap-2">
-            <Input 
-              placeholder="Kostnad..." 
-              value={newFixedName}
-              onChange={(e) => setNewFixedName(e.target.value)}
-              className="flex-1 min-w-[100px]"
-            />
-            <Input 
-              placeholder="Belopp" 
-              type="number"
-              value={newFixedAmount}
-              onChange={(e) => setNewFixedAmount(e.target.value)}
-              className="w-24"
-            />
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" className={cn("w-[120px] justify-start text-left font-normal", !newFixedDate && "text-muted-foreground")}>
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {format(newFixedDate, 'd MMM', { locale: sv })}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={newFixedDate}
-                  onSelect={(date) => date && setNewFixedDate(date)}
-                  initialFocus
-                  className="p-3 pointer-events-auto"
-                />
-              </PopoverContent>
-            </Popover>
-            <Button size="icon" onClick={addFixedCost} disabled={createCost.isPending}>
-              <Plus className="w-4 h-4" />
-            </Button>
+          <div className="space-y-2">
+            <div className="flex flex-wrap gap-2">
+              <Input 
+                placeholder="Kostnad..." 
+                value={newFixedName}
+                onChange={(e) => setNewFixedName(e.target.value)}
+                className="flex-1 min-w-[100px]"
+              />
+              <Input 
+                placeholder="Belopp" 
+                type="number"
+                value={newFixedAmount}
+                onChange={(e) => setNewFixedAmount(e.target.value)}
+                className="w-24"
+              />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Input 
+                placeholder="Transaktions-titel (t.ex. utlandsbetalning...)" 
+                value={newFixedTransaction}
+                onChange={(e) => setNewFixedTransaction(e.target.value)}
+                className="flex-1 min-w-[150px]"
+              />
+              <Select value={newFixedCustomer} onValueChange={setNewFixedCustomer}>
+                <SelectTrigger className="w-[140px]">
+                  <SelectValue placeholder="Kund (valfri)" />
+                </SelectTrigger>
+                <SelectContent className="bg-card border-border z-50">
+                  <SelectItem value="">Ingen kund</SelectItem>
+                  {activeCustomers.map(customer => (
+                    <SelectItem key={customer.id} value={customer.id}>
+                      {customer.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex gap-2">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className={cn("flex-1 justify-start text-left font-normal", !newFixedDate && "text-muted-foreground")}>
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {format(newFixedDate, 'd MMM yyyy', { locale: sv })}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 z-50" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={newFixedDate}
+                    onSelect={(date) => date && setNewFixedDate(date)}
+                    initialFocus
+                    className="p-3 pointer-events-auto"
+                  />
+                </PopoverContent>
+              </Popover>
+              <Button onClick={addFixedCost} disabled={createCost.isPending}>
+                <Plus className="w-4 h-4 mr-1" />
+                Lägg till
+              </Button>
+            </div>
           </div>
           
           <div className="mt-3 pt-3 border-t border-border flex justify-between">

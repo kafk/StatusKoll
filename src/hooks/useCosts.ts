@@ -10,6 +10,8 @@ export interface Cost {
   type: 'fixed' | 'variable';
   created_at: string;
   user_id: string | null;
+  transaction_title: string | null;
+  customer_id: string | null;
 }
 
 export interface CostFormData {
@@ -17,6 +19,8 @@ export interface CostFormData {
   amount: number;
   date: string;
   type: 'fixed' | 'variable';
+  transaction_title?: string;
+  customer_id?: string;
 }
 
 export const useCosts = () => {
