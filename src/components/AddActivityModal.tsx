@@ -1,17 +1,20 @@
-import { useState } from 'react';
-import { format } from 'date-fns';
+import { useState, useEffect } from 'react';
+import { format, parseISO } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { CalendarIcon } from 'lucide-react';
+import { DbEvent } from '@/hooks/useEvents';
 
 interface AddActivityModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (activity: ActivityFormData) => void;
+  onUpdate?: (activity: ActivityFormData & { id: string }) => void;
   customerName: string;
+  editingEvent?: DbEvent | null;
 }
 
 export interface ActivityFormData {
@@ -22,26 +25,52 @@ export interface ActivityFormData {
 }
 
 const activityTypes = [
-  { value: 'cleaning_booked', label: 'Städ bokat', emoji: '🧹' },
-  { value: 'payment_received', label: 'Betalning mottagen', emoji: '💰' },
-  { value: 'booking_made', label: 'Bokning gjord', emoji: '📅' },
+  { value: 'cleaning_booked', label: 'Städ bokat', emoji: '🧹', dbType: 'cleaning' },
+  { value: 'payment_received', label: 'Betalning mottagen', emoji: '💰', dbType: 'payment' },
+  { value: 'booking_made', label: 'Bokning gjord', emoji: '📅', dbType: 'booking' },
 ] as const;
 
-const AddActivityModal = ({ isOpen, onClose, onSubmit, customerName }: AddActivityModalProps) => {
+const getActivityTypeFromDbType = (dbType: string): ActivityFormData['type'] | null => {
+  const mapping = activityTypes.find(t => t.dbType === dbType);
+  return mapping ? mapping.value : null;
+};
+
+const AddActivityModal = ({ isOpen, onClose, onSubmit, onUpdate, customerName, editingEvent }: AddActivityModalProps) => {
   const [selectedType, setSelectedType] = useState<ActivityFormData['type'] | null>(null);
   const [date, setDate] = useState<Date>(new Date());
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
 
+  useEffect(() => {
+    if (editingEvent) {
+      const type = getActivityTypeFromDbType(editingEvent.type);
+      setSelectedType(type);
+      setDate(parseISO(editingEvent.date));
+      setAmount(editingEvent.amount || '');
+      setNote(editingEvent.note || '');
+    } else {
+      setSelectedType(null);
+      setDate(new Date());
+      setAmount('');
+      setNote('');
+    }
+  }, [editingEvent, isOpen]);
+
   const handleSubmit = () => {
     if (!selectedType) return;
 
-    onSubmit({
+    const activityData = {
       type: selectedType,
       date,
       amount: amount || undefined,
       note: note || undefined,
-    });
+    };
+
+    if (editingEvent && onUpdate) {
+      onUpdate({ ...activityData, id: editingEvent.id });
+    } else {
+      onSubmit(activityData);
+    }
 
     // Reset form
     setSelectedType(null);
@@ -57,7 +86,7 @@ const AddActivityModal = ({ isOpen, onClose, onSubmit, customerName }: AddActivi
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-card border border-border rounded-2xl w-full max-w-md p-6 animate-fade-in-up">
         <h3 className="font-display text-xl font-bold mb-4">
-          Lägg till aktivitet för {customerName}
+          {editingEvent ? 'Redigera aktivitet' : 'Lägg till aktivitet'} för {customerName}
         </h3>
 
         <div className="space-y-4">
@@ -151,7 +180,7 @@ const AddActivityModal = ({ isOpen, onClose, onSubmit, customerName }: AddActivi
             disabled={!selectedType}
             className="flex-1 bg-primary text-primary-foreground rounded-xl py-3 font-mono text-sm font-bold hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Lägg till
+            {editingEvent ? 'Spara' : 'Lägg till'}
           </button>
         </div>
       </div>

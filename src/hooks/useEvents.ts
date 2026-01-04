@@ -84,6 +84,37 @@ export const useCreateEvent = () => {
   });
 };
 
+export interface EventUpdateData {
+  id: string;
+  date?: string;
+  description?: string;
+  amount?: string | null;
+  note?: string | null;
+  performed_by?: string | null;
+  transaction_id?: string | null;
+}
+
+export const useUpdateEvent = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async ({ id, ...updates }: EventUpdateData) => {
+      const { data, error } = await supabase
+        .from('events')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+    },
+  });
+};
+
 // Helper to convert database event to UI format
 export const formatEventForUI = (event: DbEvent): RentalEvent => {
   const date = parseISO(event.date);

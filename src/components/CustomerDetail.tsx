@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { format, parseISO } from 'date-fns';
 import { Customer } from '@/types/rental';
 import { useToast } from '@/hooks/use-toast';
-import { useCreateEvent, useCustomerEvents } from '@/hooks/useEvents';
+import { useCreateEvent, useCustomerEvents, useUpdateEvent, DbEvent } from '@/hooks/useEvents';
 import { useUpdateCustomer } from '@/hooks/useCustomers';
 import AddActivityModal, { ActivityFormData } from './AddActivityModal';
+import { Pencil } from 'lucide-react';
 
 interface CustomerDetailProps {
   customer: Customer;
@@ -14,16 +15,11 @@ interface CustomerDetailProps {
 const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
   const { toast } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<DbEvent | null>(null);
   const createEvent = useCreateEvent();
+  const updateEvent = useUpdateEvent();
   const updateCustomer = useUpdateCustomer();
   const { data: events, isLoading: eventsLoading } = useCustomerEvents(customer.id);
-
-  const formatEventForTimeline = (event: { date: string; description: string; note?: string | null }) => ({
-    date: format(parseISO(event.date), 'd MMM yyyy'),
-    text: event.note || event.description,
-  });
-
-  const timelineEvents = events?.map(formatEventForTimeline) || customer.timeline;
 
   const handleMarkCleaningBooked = async () => {
     try {
@@ -111,6 +107,48 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
         variant: 'destructive',
       });
     }
+  };
+
+  const handleUpdateActivity = async (activity: ActivityFormData & { id: string }) => {
+    const typeMap = {
+      cleaning_booked: { type: 'cleaning' as const, label: 'Städ bokat' },
+      payment_received: { type: 'payment' as const, label: 'Betalning mottagen från Booking' },
+      booking_made: { type: 'booking' as const, label: 'Bokning gjord via Booking' },
+    };
+
+    const { type, label } = typeMap[activity.type];
+
+    try {
+      await updateEvent.mutateAsync({
+        id: activity.id,
+        date: format(activity.date, 'yyyy-MM-dd'),
+        description: `${label} för ${customer.name}`,
+        amount: activity.amount || null,
+        note: activity.note || null,
+      });
+
+      toast({
+        title: 'Aktivitet uppdaterad!',
+        description: `${label} har uppdaterats för ${customer.name}.`,
+      });
+      setEditingEvent(null);
+    } catch (error) {
+      toast({
+        title: 'Fel',
+        description: 'Kunde inte uppdatera aktiviteten.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleEditEvent = (event: DbEvent) => {
+    setEditingEvent(event);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingEvent(null);
   };
 
   return (
@@ -202,17 +240,26 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
 
           {eventsLoading ? (
             <div className="text-muted-foreground text-sm">Laddar aktiviteter...</div>
-          ) : timelineEvents.length === 0 ? (
+          ) : !events || events.length === 0 ? (
             <div className="text-muted-foreground text-sm">Inga aktiviteter än</div>
           ) : (
-            timelineEvents.map((event, index) => (
+            events.map((event) => (
               <div
-                key={index}
-                className="bg-card border border-border rounded-xl p-4 mb-3 relative"
+                key={event.id}
+                className="bg-card border border-border rounded-xl p-4 mb-3 relative group"
               >
                 <div className="absolute -left-[22px] top-5 w-3 h-3 rounded-full bg-primary border-2 border-background z-[1]" />
-                <div className="text-[11px] text-muted-foreground mb-1">{event.date}</div>
-                <div className="text-[13px] text-muted-foreground">{event.text}</div>
+                <button
+                  onClick={() => handleEditEvent(event)}
+                  className="absolute top-3 right-3 p-2 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-muted transition-all"
+                  title="Redigera"
+                >
+                  <Pencil className="w-4 h-4 text-muted-foreground" />
+                </button>
+                <div className="text-[11px] text-muted-foreground mb-1">
+                  {format(parseISO(event.date), 'd MMM yyyy')}
+                </div>
+                <div className="text-[13px] text-muted-foreground">{event.note || event.description}</div>
               </div>
             ))
           )}
@@ -221,9 +268,11 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
 
       <AddActivityModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={handleCloseModal}
         onSubmit={handleAddActivity}
+        onUpdate={handleUpdateActivity}
         customerName={customer.name}
+        editingEvent={editingEvent}
       />
     </div>
   );
