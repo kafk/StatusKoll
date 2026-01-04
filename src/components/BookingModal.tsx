@@ -190,8 +190,8 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
       className="fixed inset-0 bg-foreground/95 z-[1000] flex items-center justify-center p-5 animate-fade-in"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-card border border-border rounded-lg p-6 max-w-[400px] w-full animate-slide-up">
-        <div className="flex justify-between items-center mb-5">
+      <div className="bg-card border border-border rounded-lg p-6 max-w-[400px] w-full max-h-[90vh] flex flex-col animate-slide-up">
+        <div className="flex justify-between items-center mb-5 shrink-0">
           <h2 className="font-display text-2xl font-extrabold">{t('booking.new')}</h2>
           <button
             onClick={onClose}
@@ -201,7 +201,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="overflow-y-auto flex-1 pr-2">
           <div className="mb-4">
             <label className="block text-xs font-bold uppercase text-muted-foreground mb-2 tracking-wide">
               {t('booking.guestName')}
