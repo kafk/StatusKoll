@@ -224,6 +224,8 @@ const translations: Record<Language, Translations> = {
     'economy.noCustomer': 'Ingen kund',
     'economy.totalVariable': 'Totalt rörliga',
     'economy.totalFixed': 'Totalt fasta',
+    'economy.noIncome': 'Inga intäkter',
+    'economy.totalIncome': 'Totalt intäkter',
     
     // Statistics Page
     'statistics.title': 'Statistik',
@@ -468,6 +470,8 @@ const translations: Record<Language, Translations> = {
     'economy.noCustomer': 'No customer',
     'economy.totalVariable': 'Total variable',
     'economy.totalFixed': 'Total fixed',
+    'economy.noIncome': 'No income',
+    'economy.totalIncome': 'Total income',
     
     // Statistics Page
     'statistics.title': 'Statistics',
@@ -712,6 +716,8 @@ const translations: Record<Language, Translations> = {
     'economy.noCustomer': 'Kein Kunde',
     'economy.totalVariable': 'Gesamt variabel',
     'economy.totalFixed': 'Gesamt fix',
+    'economy.noIncome': 'Keine Einnahmen',
+    'economy.totalIncome': 'Gesamteinnahmen',
     
     // Statistics Page
     'statistics.title': 'Statistik',
@@ -956,6 +962,8 @@ const translations: Record<Language, Translations> = {
     'economy.noCustomer': 'Bez klijenta',
     'economy.totalVariable': 'Ukupno varijabilno',
     'economy.totalFixed': 'Ukupno fiksno',
+    'economy.noIncome': 'Nema prihoda',
+    'economy.totalIncome': 'Ukupni prihodi',
     
     // Statistics Page
     'statistics.title': 'Statistika',

@@ -210,6 +210,45 @@ const EconomyPage = () => {
         </div>
       </Card>
 
+      {/* Income Section */}
+      <div className="mb-6">
+        <h3 className="font-display font-bold text-lg mb-3 flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-success" />
+          {t('economy.income')}
+        </h3>
+        
+        <Card className="p-4">
+          <div className="space-y-3">
+            {filteredCustomers.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-2">{t('economy.noIncome')}</p>
+            ) : (
+              filteredCustomers.map(customer => {
+                const amount = parseFloat(customer.amount.replace('€', '').replace(',', '.')) || 0;
+                return (
+                  <div key={customer.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm font-medium">{customer.name}</span>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span>{format(new Date(customer.check_in), 'd MMM yyyy', { locale: dateLocale })}</span>
+                        {customer.platform && (
+                          <span className="text-success">• {customer.platform}</span>
+                        )}
+                      </div>
+                    </div>
+                    <span className="font-medium text-success">+{amount.toLocaleString()} €</span>
+                  </div>
+                );
+              })
+            )}
+          </div>
+          
+          <div className="mt-3 pt-3 border-t border-border flex justify-between">
+            <span className="text-sm text-muted-foreground">{t('economy.totalIncome')}</span>
+            <span className="font-bold text-success">+{income.toLocaleString()} €</span>
+          </div>
+        </Card>
+      </div>
+
       {/* Variable Costs */}
       <div className="mb-6">
         <h3 className="font-display font-bold text-lg mb-3 flex items-center gap-2">
