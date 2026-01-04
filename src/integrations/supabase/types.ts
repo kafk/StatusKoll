@@ -168,15 +168,96 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          related_customer_id: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message: string
+          related_customer_id?: string | null
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          related_customer_id?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_related_customer_id_fkey"
+            columns: ["related_customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_members: {
+        Row: {
+          created_at: string
+          id: string
+          member_email: string
+          member_name: string | null
+          member_user_id: string
+          owner_user_id: string
+          role: Database["public"]["Enums"]["team_role"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          member_email: string
+          member_name?: string | null
+          member_user_id: string
+          owner_user_id: string
+          role?: Database["public"]["Enums"]["team_role"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          member_email?: string
+          member_name?: string | null
+          member_user_id?: string
+          owner_user_id?: string
+          role?: Database["public"]["Enums"]["team_role"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_team_access: {
+        Args: { check_owner_id: string; check_user_id: string }
+        Returns: boolean
+      }
+      is_co_owner: {
+        Args: { check_owner_id: string; check_user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      team_role: "owner" | "co_owner" | "partner" | "cleaner"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -303,6 +384,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      team_role: ["owner", "co_owner", "partner", "cleaner"],
+    },
   },
 } as const

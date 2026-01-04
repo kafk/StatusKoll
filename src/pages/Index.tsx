@@ -4,13 +4,13 @@ import HomePage from '@/components/HomePage';
 import StatusPage from '@/components/StatusPage';
 import CustomersPage from '@/components/CustomersPage';
 import EconomyPage from '@/components/EconomyPage';
-import StatisticsPage from '@/components/StatisticsPage';
+import TeamPage from '@/components/TeamPage';
 import BottomNav from '@/components/BottomNav';
 import FAB from '@/components/FAB';
 import BookingModal from '@/components/BookingModal';
 import { useAuth } from '@/hooks/useAuth';
 
-type Page = 'home' | 'status' | 'customers' | 'economy' | 'statistics';
+type Page = 'home' | 'status' | 'customers' | 'economy' | 'statistics' | 'team';
 
 const Index = () => {
   const [activePage, setActivePage] = useState<Page>('home');
@@ -43,7 +43,7 @@ const Index = () => {
         {activePage === 'status' && <StatusPage />}
         {activePage === 'customers' && <CustomersPage />}
         {activePage === 'economy' && <EconomyPage />}
-        {activePage === 'statistics' && <StatisticsPage />}
+        {activePage === 'team' && <TeamPage />}
       </div>
 
       <FAB onClick={() => setIsModalOpen(true)} />

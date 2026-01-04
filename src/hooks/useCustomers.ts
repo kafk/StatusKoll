@@ -67,6 +67,31 @@ export const useCreateCustomer = () => {
         .single();
       
       if (error) throw error;
+
+      // Send notifications to team members (partners and cleaners)
+      try {
+        const { data: teamMembers } = await supabase
+          .from('team_members')
+          .select('member_user_id, role')
+          .eq('owner_user_id', user.id)
+          .in('role', ['partner', 'cleaner']);
+
+        if (teamMembers && teamMembers.length > 0) {
+          const notifications = teamMembers.map((member) => ({
+            user_id: member.member_user_id,
+            type: 'booking',
+            title: 'Ny bokning',
+            message: `${customer.name} har bokat ${customer.check_in} - ${customer.check_out}`,
+            related_customer_id: data.id,
+          }));
+
+          await supabase.from('notifications').insert(notifications);
+        }
+      } catch (notifError) {
+        console.error('Error sending notifications:', notifError);
+        // Don't fail the booking creation if notifications fail
+      }
+
       return data;
     },
     onSuccess: () => {
