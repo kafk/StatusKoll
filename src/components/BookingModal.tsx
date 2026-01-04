@@ -6,6 +6,7 @@ import { useCreateCustomer } from '@/hooks/useCustomers';
 import { useCreateEvent } from '@/hooks/useEvents';
 import { useCreateCost } from '@/hooks/useCosts';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { BookingDatePicker } from '@/components/ui/booking-date-picker';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -236,11 +237,11 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
             <label className="block text-xs font-bold uppercase text-muted-foreground mb-2 tracking-wide">
               {t('booking.checkIn')}
             </label>
-            <input
-              type="date"
+            <BookingDatePicker
               value={formData.checkIn}
-              onChange={(e) => setFormData({ ...formData, checkIn: e.target.value })}
-              className={`w-full px-3 py-3 bg-muted border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all ${errors.checkIn ? 'border-destructive' : 'border-border'}`}
+              onChange={(value) => setFormData({ ...formData, checkIn: value })}
+              placeholder={t('booking.selectDate')}
+              error={!!errors.checkIn}
             />
             {errors.checkIn && <p className="text-destructive text-xs mt-1">{errors.checkIn}</p>}
           </div>
@@ -249,11 +250,12 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
             <label className="block text-xs font-bold uppercase text-muted-foreground mb-2 tracking-wide">
               {t('booking.checkOut')}
             </label>
-            <input
-              type="date"
+            <BookingDatePicker
               value={formData.checkOut}
-              onChange={(e) => setFormData({ ...formData, checkOut: e.target.value })}
-              className={`w-full px-3 py-3 bg-muted border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all ${errors.checkOut ? 'border-destructive' : 'border-border'}`}
+              onChange={(value) => setFormData({ ...formData, checkOut: value })}
+              placeholder={t('booking.selectDate')}
+              error={!!errors.checkOut}
+              minDate={formData.checkIn ? new Date(formData.checkIn) : undefined}
             />
             {errors.checkOut && <p className="text-destructive text-xs mt-1">{errors.checkOut}</p>}
           </div>

@@ -112,6 +112,7 @@ const translations: Record<Language, Translations> = {
     'booking.bookingIncome': 'Bokningsintäkt',
     'booking.commissionCost': 'Provision - {name}',
     'booking.platformCommission': 'Plattformsavgift',
+    'booking.selectDate': 'Välj datum',
     
     // Validation errors
     'validation.guestNameRequired': 'Gästens namn krävs',
@@ -371,6 +372,7 @@ const translations: Record<Language, Translations> = {
     'booking.incomeFromBooking': 'Income - {name}',
     'booking.bookingIncome': 'Booking income',
     'booking.commissionCost': 'Commission - {name}',
+    'booking.selectDate': 'Select date',
     'booking.platformCommission': 'Platform fee',
     
     // Validation errors
@@ -632,6 +634,7 @@ const translations: Record<Language, Translations> = {
     'booking.bookingIncome': 'Buchungseinnahmen',
     'booking.commissionCost': 'Provision - {name}',
     'booking.platformCommission': 'Plattformgebühr',
+    'booking.selectDate': 'Datum wählen',
     
     // Validation errors
     'validation.guestNameRequired': 'Gastname ist erforderlich',
@@ -892,6 +895,7 @@ const translations: Record<Language, Translations> = {
     'booking.bookingIncome': 'Prihod od rezervacije',
     'booking.commissionCost': 'Provizija - {name}',
     'booking.platformCommission': 'Naknada platforme',
+    'booking.selectDate': 'Odaberi datum',
     
     // Validation errors
     'validation.guestNameRequired': 'Ime gosta je obavezno',
