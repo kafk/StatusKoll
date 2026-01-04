@@ -24,17 +24,13 @@ const EconomyPage = () => {
   const localeMap = { sv, en: enUS, de, hr };
   const dateLocale = localeMap[language] || sv;
 
-  const [newFixedName, setNewFixedName] = useState('');
-  const [newFixedAmount, setNewFixedAmount] = useState('');
-  const [newFixedDate, setNewFixedDate] = useState<Date>(new Date());
-  const [newFixedTransaction, setNewFixedTransaction] = useState('');
-  const [newFixedCustomer, setNewFixedCustomer] = useState<string>('');
-  
-  const [newVariableName, setNewVariableName] = useState('');
-  const [newVariableAmount, setNewVariableAmount] = useState('');
-  const [newVariableDate, setNewVariableDate] = useState<Date>(new Date());
-  const [newVariableTransaction, setNewVariableTransaction] = useState('');
-  const [newVariableCustomer, setNewVariableCustomer] = useState<string>('');
+  // Single combined form state
+  const [newCostName, setNewCostName] = useState('');
+  const [newCostAmount, setNewCostAmount] = useState('');
+  const [newCostDate, setNewCostDate] = useState<Date>(new Date());
+  const [newCostTransaction, setNewCostTransaction] = useState('');
+  const [newCostCustomer, setNewCostCustomer] = useState<string>('');
+  const [newCostType, setNewCostType] = useState<'variable' | 'fixed'>('variable');
   
   const [selectedYear, setSelectedYear] = useState<string>('all');
   
@@ -87,69 +83,32 @@ const EconomyPage = () => {
   const totalCosts = totalFixedCosts + totalVariableCosts;
   const profit = income - totalCosts;
 
-  const addFixedCost = async () => {
-    if (newFixedName && newFixedAmount) {
+  const addCost = async () => {
+    if (newCostName && newCostAmount) {
       await createCost.mutateAsync({
-        name: newFixedName,
-        amount: parseFloat(newFixedAmount),
-        date: format(newFixedDate, 'yyyy-MM-dd'),
-        type: 'fixed',
-        transaction_title: newFixedTransaction || undefined,
-        customer_id: newFixedCustomer || undefined
+        name: newCostName,
+        amount: parseFloat(newCostAmount),
+        date: format(newCostDate, 'yyyy-MM-dd'),
+        type: newCostType,
+        transaction_title: newCostTransaction || undefined,
+        customer_id: newCostCustomer || undefined
       });
-      setNewFixedName('');
-      setNewFixedAmount('');
-      setNewFixedDate(new Date());
-      setNewFixedTransaction('');
-      setNewFixedCustomer('');
+      setNewCostName('');
+      setNewCostAmount('');
+      setNewCostDate(new Date());
+      setNewCostTransaction('');
+      setNewCostCustomer('');
     }
   };
 
-  const addVariableCost = async () => {
-    if (newVariableName && newVariableAmount) {
-      await createCost.mutateAsync({
-        name: newVariableName,
-        amount: parseFloat(newVariableAmount),
-        date: format(newVariableDate, 'yyyy-MM-dd'),
-        type: 'variable',
-        transaction_title: newVariableTransaction || undefined,
-        customer_id: newVariableCustomer || undefined
-      });
-      setNewVariableName('');
-      setNewVariableAmount('');
-      setNewVariableDate(new Date());
-      setNewVariableTransaction('');
-      setNewVariableCustomer('');
-    }
-  };
-
-  const removeFixedCost = (id: string) => {
-    deleteCost.mutate(id);
-  };
-
-  const removeVariableCost = (id: string) => {
+  const removeCost = (id: string) => {
     deleteCost.mutate(id);
   };
 
   if (costsLoading) {
-  return (
-    <div className="pb-24">
-      <Header title={t('economy.title')} subtitle={t('economy.subtitle')} />
-
-      {/* Year Filter */}
-      <div className="mb-4">
-        <Select value={selectedYear} onValueChange={setSelectedYear}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder={t('economy.selectYear')} />
-          </SelectTrigger>
-          <SelectContent className="bg-card border-border">
-            <SelectItem value="all">{t('economy.allYears')}</SelectItem>
-            {availableYears.map(year => (
-              <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+    return (
+      <div className="pb-24">
+        <Header title={t('economy.title')} subtitle={t('economy.subtitle')} />
         <div className="text-center text-muted-foreground py-8">{t('common.loading')}</div>
       </div>
     );
@@ -173,6 +132,85 @@ const EconomyPage = () => {
           </SelectContent>
         </Select>
       </div>
+
+      {/* Add Cost Form - Combined */}
+      <Card className="p-4 mb-6">
+        <h3 className="font-display font-bold text-lg mb-3 flex items-center gap-2">
+          <Plus className="w-4 h-4" />
+          {t('economy.addCost')}
+        </h3>
+        
+        <div className="space-y-2">
+          <div className="flex flex-wrap gap-2">
+            <Input 
+              placeholder={t('economy.costPlaceholder')}
+              value={newCostName}
+              onChange={(e) => setNewCostName(e.target.value)}
+              className="flex-1 min-w-[100px]"
+            />
+            <Input 
+              placeholder={t('economy.amountPlaceholder')}
+              type="number"
+              value={newCostAmount}
+              onChange={(e) => setNewCostAmount(e.target.value)}
+              className="w-24"
+            />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Input 
+              placeholder={t('economy.transactionPlaceholder')}
+              value={newCostTransaction}
+              onChange={(e) => setNewCostTransaction(e.target.value)}
+              className="flex-1 min-w-[150px]"
+            />
+            <Select value={newCostCustomer} onValueChange={(val) => setNewCostCustomer(val === 'none' ? '' : val)}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder={t('economy.customerOptional')} />
+              </SelectTrigger>
+              <SelectContent className="bg-card border-border z-50">
+                <SelectItem value="none">{t('economy.noCustomer')}</SelectItem>
+                {activeCustomers.map(customer => (
+                  <SelectItem key={customer.id} value={customer.id}>
+                    {customer.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Select value={newCostType} onValueChange={(val) => setNewCostType(val as 'variable' | 'fixed')}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-card border-border z-50">
+                <SelectItem value="variable">{t('economy.variableCost')}</SelectItem>
+                <SelectItem value="fixed">{t('economy.fixedCost')}</SelectItem>
+              </SelectContent>
+            </Select>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className={cn("flex-1 justify-start text-left font-normal", !newCostDate && "text-muted-foreground")}>
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {format(newCostDate, 'd MMM yyyy', { locale: dateLocale })}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0 z-50" align="start">
+                <Calendar
+                  mode="single"
+                  selected={newCostDate}
+                  onSelect={(date) => date && setNewCostDate(date)}
+                  initialFocus
+                  className="p-3 pointer-events-auto"
+                />
+              </PopoverContent>
+            </Popover>
+            <Button onClick={addCost} disabled={createCost.isPending}>
+              <Plus className="w-4 h-4 mr-1" />
+              {t('common.add')}
+            </Button>
+          </div>
+        </div>
+      </Card>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 gap-3 mb-6">
@@ -257,7 +295,7 @@ const EconomyPage = () => {
         </h3>
         
         <Card className="p-4">
-          <div className="space-y-3 mb-4">
+          <div className="space-y-3">
             {variableCosts.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-2">{t('economy.noVariableCosts')}</p>
             ) : (
@@ -280,7 +318,7 @@ const EconomyPage = () => {
                     <div className="flex items-center gap-2">
                       <span className="font-medium">{Number(cost.amount).toLocaleString()} €</span>
                       <button 
-                        onClick={() => removeVariableCost(cost.id)}
+                        onClick={() => removeCost(cost.id)}
                         className="p-1 text-muted-foreground hover:text-destructive transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -290,68 +328,6 @@ const EconomyPage = () => {
                 );
               })
             )}
-          </div>
-          
-          <div className="space-y-2">
-            <div className="flex flex-wrap gap-2">
-              <Input 
-                placeholder={t('economy.costPlaceholder')}
-                value={newVariableName}
-                onChange={(e) => setNewVariableName(e.target.value)}
-                className="flex-1 min-w-[100px]"
-              />
-              <Input 
-                placeholder={t('economy.amountPlaceholder')}
-                type="number"
-                value={newVariableAmount}
-                onChange={(e) => setNewVariableAmount(e.target.value)}
-                className="w-24"
-              />
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Input 
-                placeholder={t('economy.transactionPlaceholder')}
-                value={newVariableTransaction}
-                onChange={(e) => setNewVariableTransaction(e.target.value)}
-                className="flex-1 min-w-[150px]"
-              />
-              <Select value={newVariableCustomer} onValueChange={(val) => setNewVariableCustomer(val === 'none' ? '' : val)}>
-                <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder={t('economy.customerOptional')} />
-                </SelectTrigger>
-                <SelectContent className="bg-card border-border z-50">
-                  <SelectItem value="none">{t('economy.noCustomer')}</SelectItem>
-                  {activeCustomers.map(customer => (
-                    <SelectItem key={customer.id} value={customer.id}>
-                      {customer.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex gap-2">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className={cn("flex-1 justify-start text-left font-normal", !newVariableDate && "text-muted-foreground")}>
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {format(newVariableDate, 'd MMM yyyy', { locale: dateLocale })}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 z-50" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={newVariableDate}
-                    onSelect={(date) => date && setNewVariableDate(date)}
-                    initialFocus
-                    className="p-3 pointer-events-auto"
-                  />
-                </PopoverContent>
-              </Popover>
-              <Button onClick={addVariableCost} disabled={createCost.isPending}>
-                <Plus className="w-4 h-4 mr-1" />
-                {t('common.add')}
-              </Button>
-            </div>
           </div>
           
           <div className="mt-3 pt-3 border-t border-border flex justify-between">
@@ -369,7 +345,7 @@ const EconomyPage = () => {
         </h3>
         
         <Card className="p-4">
-          <div className="space-y-3 mb-4">
+          <div className="space-y-3">
             {fixedCosts.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-2">{t('economy.noFixedCosts')}</p>
             ) : (
@@ -392,7 +368,7 @@ const EconomyPage = () => {
                     <div className="flex items-center gap-2">
                       <span className="font-medium">{Number(cost.amount).toLocaleString()} €</span>
                       <button 
-                        onClick={() => removeFixedCost(cost.id)}
+                        onClick={() => removeCost(cost.id)}
                         className="p-1 text-muted-foreground hover:text-destructive transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -402,68 +378,6 @@ const EconomyPage = () => {
                 );
               })
             )}
-          </div>
-          
-          <div className="space-y-2">
-            <div className="flex flex-wrap gap-2">
-              <Input 
-                placeholder={t('economy.costPlaceholder')}
-                value={newFixedName}
-                onChange={(e) => setNewFixedName(e.target.value)}
-                className="flex-1 min-w-[100px]"
-              />
-              <Input 
-                placeholder={t('economy.amountPlaceholder')}
-                type="number"
-                value={newFixedAmount}
-                onChange={(e) => setNewFixedAmount(e.target.value)}
-                className="w-24"
-              />
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Input 
-                placeholder={t('economy.transactionPlaceholder')}
-                value={newFixedTransaction}
-                onChange={(e) => setNewFixedTransaction(e.target.value)}
-                className="flex-1 min-w-[150px]"
-              />
-              <Select value={newFixedCustomer} onValueChange={(val) => setNewFixedCustomer(val === 'none' ? '' : val)}>
-                <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder={t('economy.customerOptional')} />
-                </SelectTrigger>
-                <SelectContent className="bg-card border-border z-50">
-                  <SelectItem value="none">{t('economy.noCustomer')}</SelectItem>
-                  {activeCustomers.map(customer => (
-                    <SelectItem key={customer.id} value={customer.id}>
-                      {customer.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex gap-2">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className={cn("flex-1 justify-start text-left font-normal", !newFixedDate && "text-muted-foreground")}>
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {format(newFixedDate, 'd MMM yyyy', { locale: dateLocale })}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 z-50" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={newFixedDate}
-                    onSelect={(date) => date && setNewFixedDate(date)}
-                    initialFocus
-                    className="p-3 pointer-events-auto"
-                  />
-                </PopoverContent>
-              </Popover>
-              <Button onClick={addFixedCost} disabled={createCost.isPending}>
-                <Plus className="w-4 h-4 mr-1" />
-                {t('common.add')}
-              </Button>
-            </div>
           </div>
           
           <div className="mt-3 pt-3 border-t border-border flex justify-between">

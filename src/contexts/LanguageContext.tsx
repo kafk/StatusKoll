@@ -226,6 +226,9 @@ const translations: Record<Language, Translations> = {
     'economy.totalFixed': 'Totalt fasta',
     'economy.noIncome': 'Inga intäkter',
     'economy.totalIncome': 'Totalt intäkter',
+    'economy.addCost': 'Lägg till kostnad',
+    'economy.variableCost': 'Rörlig',
+    'economy.fixedCost': 'Fast',
     
     // Statistics Page
     'statistics.title': 'Statistik',
@@ -472,6 +475,9 @@ const translations: Record<Language, Translations> = {
     'economy.totalFixed': 'Total fixed',
     'economy.noIncome': 'No income',
     'economy.totalIncome': 'Total income',
+    'economy.addCost': 'Add cost',
+    'economy.variableCost': 'Variable',
+    'economy.fixedCost': 'Fixed',
     
     // Statistics Page
     'statistics.title': 'Statistics',
@@ -718,6 +724,9 @@ const translations: Record<Language, Translations> = {
     'economy.totalFixed': 'Gesamt fix',
     'economy.noIncome': 'Keine Einnahmen',
     'economy.totalIncome': 'Gesamteinnahmen',
+    'economy.addCost': 'Kosten hinzufügen',
+    'economy.variableCost': 'Variabel',
+    'economy.fixedCost': 'Fix',
     
     // Statistics Page
     'statistics.title': 'Statistik',
@@ -964,6 +973,9 @@ const translations: Record<Language, Translations> = {
     'economy.totalFixed': 'Ukupno fiksno',
     'economy.noIncome': 'Nema prihoda',
     'economy.totalIncome': 'Ukupni prihodi',
+    'economy.addCost': 'Dodaj trošak',
+    'economy.variableCost': 'Varijabilni',
+    'economy.fixedCost': 'Fiksni',
     
     // Statistics Page
     'statistics.title': 'Statistika',
