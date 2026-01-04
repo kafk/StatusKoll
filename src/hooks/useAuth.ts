@@ -8,12 +8,28 @@ export const useAuth = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Function to link team membership after authentication
+    const linkTeamMembership = async () => {
+      try {
+        await supabase.rpc('link_team_membership');
+      } catch (error) {
+        console.error('Error linking team membership:', error);
+      }
+    };
+
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+        
+        // Link team membership when user signs in or signs up
+        if (session?.user && (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED')) {
+          setTimeout(() => {
+            linkTeamMembership();
+          }, 0);
+        }
       }
     );
 
@@ -22,6 +38,11 @@ export const useAuth = () => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
+      
+      // Also link on initial load if user is already logged in
+      if (session?.user) {
+        linkTeamMembership();
+      }
     });
 
     return () => subscription.unsubscribe();
