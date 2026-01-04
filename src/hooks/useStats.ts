@@ -5,7 +5,8 @@ export const useStats = () => {
   const { data: customers } = useCustomers();
   const { data: events } = useEvents();
 
-  const bookings = events?.filter(e => e.type === 'booking').length || 0;
+  // Count actual bookings from customers table
+  const bookings = customers?.length || 0;
   const cleanings = events?.filter(e => e.type === 'cleaning').length || 0;
   
   // Calculate total revenue from customer amounts
