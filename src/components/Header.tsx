@@ -45,7 +45,7 @@ const Header = ({ title = "STATUS", subtitle }: HeaderProps) => {
           onClick={() => navigate("/changelog")}
           className="px-3 py-1.5 bg-card border border-border rounded-full text-xs font-bold text-muted-foreground hover:border-primary hover:text-primary transition-all hover:-translate-y-0.5"
         >
-          v1.3
+          v1.4
         </button>
         <button
           onClick={handleLogout}

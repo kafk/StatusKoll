@@ -21,6 +21,7 @@ const translations: Record<Language, Translations> = {
     'settings.team': 'Team',
     'settings.language': 'Språk',
     'settings.languageDescription': 'Välj språk för appen',
+    'settings.logout': 'Logga ut',
     
     // Team
     'team.title': 'Team',
@@ -257,6 +258,7 @@ const translations: Record<Language, Translations> = {
     'settings.team': 'Team',
     'settings.language': 'Language',
     'settings.languageDescription': 'Choose app language',
+    'settings.logout': 'Log out',
     
     // Team
     'team.title': 'Team',
@@ -493,6 +495,7 @@ const translations: Record<Language, Translations> = {
     'settings.team': 'Team',
     'settings.language': 'Sprache',
     'settings.languageDescription': 'App-Sprache wählen',
+    'settings.logout': 'Abmelden',
     
     // Team
     'team.title': 'Team',
@@ -729,6 +732,7 @@ const translations: Record<Language, Translations> = {
     'settings.team': 'Tim',
     'settings.language': 'Jezik',
     'settings.languageDescription': 'Odaberite jezik aplikacije',
+    'settings.logout': 'Odjava',
     
     // Team
     'team.title': 'Tim',

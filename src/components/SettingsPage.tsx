@@ -1,13 +1,37 @@
 import { useState } from 'react';
-import { Settings, Users, Globe } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useNavigate } from 'react-router-dom';
+import { Settings, Users, Globe, LogOut } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
 import TeamSettings from './settings/TeamSettings';
 import LanguageSettings from './settings/LanguageSettings';
 
 const SettingsPage = () => {
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState('team');
+  const { signOut } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<'team' | 'language'>('team');
+
+  const handleLogout = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast({
+        title: t('common.error'),
+        description: t('header.logoutError'),
+        variant: "destructive",
+      });
+    } else {
+      navigate("/auth");
+    }
+  };
+
+  const menuItems = [
+    { id: 'team' as const, icon: Users, label: t('settings.team') },
+    { id: 'language' as const, icon: Globe, label: t('settings.language') },
+  ];
 
   return (
     <div className="pb-24">
@@ -20,26 +44,39 @@ const SettingsPage = () => {
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="w-full grid grid-cols-2 mb-6">
-          <TabsTrigger value="team" className="flex items-center gap-2">
-            <Users className="w-4 h-4" />
-            {t('settings.team')}
-          </TabsTrigger>
-          <TabsTrigger value="language" className="flex items-center gap-2">
-            <Globe className="w-4 h-4" />
-            {t('settings.language')}
-          </TabsTrigger>
-        </TabsList>
+      <div className="flex flex-col gap-2 mb-6">
+        {menuItems.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => setActiveTab(item.id)}
+            className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
+              activeTab === item.id
+                ? 'bg-primary/10 border-primary text-primary'
+                : 'bg-card border-border text-foreground hover:border-primary/50'
+            }`}
+          >
+            <item.icon className="w-5 h-5" />
+            <span className="font-medium">{item.label}</span>
+          </button>
+        ))}
+      </div>
 
-        <TabsContent value="team">
-          <TeamSettings />
-        </TabsContent>
+      <div className="mb-8">
+        {activeTab === 'team' && <TeamSettings />}
+        {activeTab === 'language' && <LanguageSettings />}
+      </div>
 
-        <TabsContent value="language">
-          <LanguageSettings />
-        </TabsContent>
-      </Tabs>
+      <div className="border-t border-border pt-6">
+        <Button
+          variant="outline"
+          className="w-full flex items-center justify-center gap-2 text-destructive border-destructive/30 hover:bg-destructive/10 hover:text-destructive"
+          onClick={handleLogout}
+        >
+          <LogOut className="w-4 h-4" />
+          {t('settings.logout')}
+        </Button>
+        <p className="text-center text-xs text-muted-foreground mt-4">v1.4</p>
+      </div>
     </div>
   );
 };
