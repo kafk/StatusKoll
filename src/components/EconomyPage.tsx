@@ -256,12 +256,12 @@ const EconomyPage = () => {
                 onChange={(e) => setNewVariableTransaction(e.target.value)}
                 className="flex-1 min-w-[150px]"
               />
-              <Select value={newVariableCustomer} onValueChange={setNewVariableCustomer}>
+              <Select value={newVariableCustomer} onValueChange={(val) => setNewVariableCustomer(val === 'none' ? '' : val)}>
                 <SelectTrigger className="w-[140px]">
                   <SelectValue placeholder="Kund (valfri)" />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-border z-50">
-                  <SelectItem value="">Ingen kund</SelectItem>
+                  <SelectItem value="none">Ingen kund</SelectItem>
                   {activeCustomers.map(customer => (
                     <SelectItem key={customer.id} value={customer.id}>
                       {customer.name}
@@ -368,12 +368,12 @@ const EconomyPage = () => {
                 onChange={(e) => setNewFixedTransaction(e.target.value)}
                 className="flex-1 min-w-[150px]"
               />
-              <Select value={newFixedCustomer} onValueChange={setNewFixedCustomer}>
+              <Select value={newFixedCustomer} onValueChange={(val) => setNewFixedCustomer(val === 'none' ? '' : val)}>
                 <SelectTrigger className="w-[140px]">
                   <SelectValue placeholder="Kund (valfri)" />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-border z-50">
-                  <SelectItem value="">Ingen kund</SelectItem>
+                  <SelectItem value="none">Ingen kund</SelectItem>
                   {activeCustomers.map(customer => (
                     <SelectItem key={customer.id} value={customer.id}>
                       {customer.name}
