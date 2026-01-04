@@ -7,6 +7,9 @@ interface CustomerListCardProps {
 }
 
 const CustomerListCard = ({ customer, onClick }: CustomerListCardProps) => {
+  // Derive status from the three criteria
+  const isComplete = customer.cleaningDone && customer.paymentDone && customer.bookingPaymentReceived;
+  
   return (
     <div
       onClick={onClick}
@@ -19,12 +22,12 @@ const CustomerListCard = ({ customer, onClick }: CustomerListCardProps) => {
         </div>
         <span
           className={`px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wide ${
-            customer.status === 'confirmed'
+            isComplete
               ? 'bg-success/15 text-success'
               : 'bg-warning/15 text-warning'
           }`}
         >
-          {customer.status === 'confirmed' ? 'Confirmed' : 'Pending'}
+          {isComplete ? 'Klar' : 'Pågående'}
         </span>
       </div>
 
