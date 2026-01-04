@@ -61,6 +61,7 @@ export const customers: Customer[] = [
     filterStatus: 'past',
     cleaningDone: true,
     paymentDone: true,
+    bookingPaymentReceived: true,
     timeline: [
       { date: '15 Jan 2025', text: 'Bokning skapad via Booking.com' },
       { date: '20 Jan 2025', text: 'Städning slutförd' },
@@ -81,6 +82,7 @@ export const customers: Customer[] = [
     filterStatus: 'current',
     cleaningDone: false,
     paymentDone: false,
+    bookingPaymentReceived: false,
     timeline: [
       { date: '5 Feb 2025', text: 'Bokning skapad via Booking.com' },
       { date: '8 Feb 2025', text: 'Incheckning bekräftad' },
@@ -100,6 +102,7 @@ export const customers: Customer[] = [
     filterStatus: 'future',
     cleaningDone: false,
     paymentDone: false,
+    bookingPaymentReceived: false,
     timeline: [
       { date: '18 Feb 2025', text: 'Bokning skapad via Booking.com' },
     ],
@@ -118,6 +121,7 @@ export const customers: Customer[] = [
     filterStatus: 'future',
     cleaningDone: false,
     paymentDone: false,
+    bookingPaymentReceived: false,
     timeline: [
       { date: '20 Jan 2025', text: 'Bokning skapad direkt' },
     ],

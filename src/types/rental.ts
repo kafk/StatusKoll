@@ -34,6 +34,7 @@ export interface Customer {
   filterStatus: FilterStatus;
   cleaningDone: boolean;
   paymentDone: boolean;
+  bookingPaymentReceived: boolean;
   timeline: TimelineEvent[];
 }
 

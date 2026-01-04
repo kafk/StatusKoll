@@ -62,6 +62,7 @@ export type Database = {
         Row: {
           adults: number | null
           amount: string
+          booking_payment_received: boolean | null
           check_in: string
           check_out: string
           children: number | null
@@ -81,6 +82,7 @@ export type Database = {
         Insert: {
           adults?: number | null
           amount: string
+          booking_payment_received?: boolean | null
           check_in: string
           check_out: string
           children?: number | null
@@ -100,6 +102,7 @@ export type Database = {
         Update: {
           adults?: number | null
           amount?: string
+          booking_payment_received?: boolean | null
           check_in?: string
           check_out?: string
           children?: number | null
