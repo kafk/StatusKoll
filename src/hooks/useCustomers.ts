@@ -7,10 +7,13 @@ export interface Customer {
   id: string;
   name: string;
   email: string | null;
+  phone: string | null;
   check_in: string;
   check_out: string;
   amount: string;
   guests: number | null;
+  adults: number | null;
+  children: number | null;
   platform: string | null;
   status: string;
   cleaning_done: boolean | null;
@@ -23,10 +26,13 @@ export interface Customer {
 export interface CustomerFormData {
   name: string;
   email?: string;
+  phone?: string;
   check_in: string;
   check_out: string;
   amount: string;
   guests?: number;
+  adults?: number;
+  children?: number;
   platform?: string;
   status?: 'confirmed' | 'pending';
 }
