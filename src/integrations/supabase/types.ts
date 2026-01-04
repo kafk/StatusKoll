@@ -262,6 +262,7 @@ export type Database = {
         Args: { check_owner_id: string; check_user_id: string }
         Returns: boolean
       }
+      link_team_membership: { Args: never; Returns: undefined }
     }
     Enums: {
       team_role: "owner" | "co_owner" | "partner" | "cleaner"
