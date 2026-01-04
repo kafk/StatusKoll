@@ -13,6 +13,7 @@ const translations: Record<Language, Translations> = {
     'nav.status': 'Status',
     'nav.customers': 'Kunder',
     'nav.economy': 'Ekonomi',
+    'nav.statistics': 'Statistik',
     'nav.settings': 'Inställningar',
     
     // Settings
@@ -85,6 +86,7 @@ const translations: Record<Language, Translations> = {
     'nav.status': 'Status',
     'nav.customers': 'Customers',
     'nav.economy': 'Economy',
+    'nav.statistics': 'Statistics',
     'nav.settings': 'Settings',
     
     // Settings
@@ -157,6 +159,7 @@ const translations: Record<Language, Translations> = {
     'nav.status': 'Status',
     'nav.customers': 'Kunden',
     'nav.economy': 'Finanzen',
+    'nav.statistics': 'Statistik',
     'nav.settings': 'Einstellungen',
     
     // Settings
@@ -229,6 +232,7 @@ const translations: Record<Language, Translations> = {
     'nav.status': 'Status',
     'nav.customers': 'Klijenti',
     'nav.economy': 'Financije',
+    'nav.statistics': 'Statistika',
     'nav.settings': 'Postavke',
     
     // Settings
