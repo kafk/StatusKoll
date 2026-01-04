@@ -18,6 +18,7 @@ export interface Customer {
   status: string;
   cleaning_done: boolean | null;
   payment_done: boolean | null;
+  booking_payment_received: boolean | null;
   created_at: string;
   updated_at: string;
   user_id: string | null;
@@ -149,6 +150,7 @@ export const formatCustomerForUI = (customer: Customer) => {
     filterStatus,
     cleaningDone: customer.cleaning_done || false,
     paymentDone: customer.payment_done || false,
+    bookingPaymentReceived: customer.booking_payment_received || false,
     timeline: [],
   };
 };

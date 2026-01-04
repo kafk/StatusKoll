@@ -79,6 +79,34 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
     }
   };
 
+  const handleMarkBookingPaymentReceived = async () => {
+    try {
+      await createEvent.mutateAsync({
+        customer_id: customer.id,
+        type: 'payment',
+        date: format(new Date(), 'yyyy-MM-dd'),
+        description: t('customer.bookingPaymentFor', { name: customer.name }),
+        note: t('customer.bookingPaymentNote'),
+      });
+      
+      await updateCustomer.mutateAsync({
+        id: customer.id,
+        booking_payment_received: true,
+      });
+
+      toast({
+        title: t('customer.bookingPaymentReceived'),
+        description: t('customer.bookingPaymentReceivedDesc', { name: customer.name }),
+      });
+    } catch (error) {
+      toast({
+        title: t('common.error'),
+        description: t('customer.markError'),
+        variant: 'destructive',
+      });
+    }
+  };
+
   const getTypeLabel = (type: ActivityFormData['type']) => {
     const typeMap = {
       cleaning_booked: t('activity.cleaningBooked'),
@@ -220,11 +248,11 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 mb-6">
+      <div className="grid grid-cols-3 gap-3 mb-6">
         <button
           onClick={handleMarkCleaningBooked}
           disabled={createEvent.isPending || updateCustomer.isPending}
-          className="bg-card border border-border rounded-2xl p-4 flex items-center gap-3 font-mono text-[11px] font-bold hover:border-primary hover:-translate-y-0.5 transition-all disabled:opacity-50"
+          className="bg-card border border-border rounded-2xl p-4 flex flex-col items-center gap-2 font-mono text-[10px] font-bold hover:border-primary hover:-translate-y-0.5 transition-all disabled:opacity-50"
         >
           <span className="text-2xl">🧹</span>
           {t('customer.markCleaningBooked')}
@@ -232,10 +260,18 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
         <button
           onClick={handleMarkCleaningPaid}
           disabled={createEvent.isPending || updateCustomer.isPending}
-          className="bg-card border border-border rounded-2xl p-4 flex items-center gap-3 font-mono text-[11px] font-bold hover:border-primary hover:-translate-y-0.5 transition-all disabled:opacity-50"
+          className="bg-card border border-border rounded-2xl p-4 flex flex-col items-center gap-2 font-mono text-[10px] font-bold hover:border-primary hover:-translate-y-0.5 transition-all disabled:opacity-50"
         >
           <span className="text-2xl">💳</span>
           {t('customer.markCleaningPaid')}
+        </button>
+        <button
+          onClick={handleMarkBookingPaymentReceived}
+          disabled={createEvent.isPending || updateCustomer.isPending}
+          className="bg-card border border-border rounded-2xl p-4 flex flex-col items-center gap-2 font-mono text-[10px] font-bold hover:border-primary hover:-translate-y-0.5 transition-all disabled:opacity-50"
+        >
+          <span className="text-2xl">📥</span>
+          {t('customer.markBookingPayment')}
         </button>
       </div>
 
