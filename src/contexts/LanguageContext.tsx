@@ -113,6 +113,9 @@ const translations: Record<Language, Translations> = {
     'booking.commissionCost': 'Provision - {name}',
     'booking.platformCommission': 'Plattformsavgift',
     'booking.selectDate': 'Välj datum',
+    'booking.platform': 'Plattform',
+    'booking.platformHint': 'Provision beräknas automatiskt ({percent}%)',
+    'booking.createdVia': 'Bokning via {platform}',
     
     // Validation errors
     'validation.guestNameRequired': 'Gästens namn krävs',
@@ -373,6 +376,9 @@ const translations: Record<Language, Translations> = {
     'booking.bookingIncome': 'Booking income',
     'booking.commissionCost': 'Commission - {name}',
     'booking.selectDate': 'Select date',
+    'booking.platform': 'Platform',
+    'booking.platformHint': 'Commission calculated automatically ({percent}%)',
+    'booking.createdVia': 'Booking via {platform}',
     'booking.platformCommission': 'Platform fee',
     
     // Validation errors
@@ -635,6 +641,9 @@ const translations: Record<Language, Translations> = {
     'booking.commissionCost': 'Provision - {name}',
     'booking.platformCommission': 'Plattformgebühr',
     'booking.selectDate': 'Datum wählen',
+    'booking.platform': 'Plattform',
+    'booking.platformHint': 'Provision automatisch berechnet ({percent}%)',
+    'booking.createdVia': 'Buchung über {platform}',
     
     // Validation errors
     'validation.guestNameRequired': 'Gastname ist erforderlich',
@@ -896,6 +905,9 @@ const translations: Record<Language, Translations> = {
     'booking.commissionCost': 'Provizija - {name}',
     'booking.platformCommission': 'Naknada platforme',
     'booking.selectDate': 'Odaberi datum',
+    'booking.platform': 'Platforma',
+    'booking.platformHint': 'Provizija automatski izračunata ({percent}%)',
+    'booking.createdVia': 'Rezervacija putem {platform}',
     
     // Validation errors
     'validation.guestNameRequired': 'Ime gosta je obavezno',
