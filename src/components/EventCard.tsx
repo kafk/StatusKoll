@@ -76,22 +76,16 @@ const EventCard = ({ event, index }: EventCardProps) => {
       </div>
 
       {/* Details grid */}
-      <div className="grid gap-2.5 mt-3 bg-muted/30 rounded-lg p-3">
+      <div className="grid gap-2 mt-3">
         {event.period && (
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5" />
-              Period:
-            </span>
+            <span className="text-muted-foreground">Period:</span>
             <span className="text-foreground font-semibold">{event.period}</span>
           </div>
         )}
         {event.source && (
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5" />
-              Källa:
-            </span>
+            <span className="text-muted-foreground">Källa:</span>
             <span className="text-foreground font-semibold">{event.source}</span>
           </div>
         )}
@@ -109,21 +103,14 @@ const EventCard = ({ event, index }: EventCardProps) => {
         )}
         {event.transaction && (
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground flex items-center gap-1.5">
-              <CreditCard className="w-3.5 h-3.5" />
-              Transaktion:
-            </span>
-            <span className="text-foreground font-mono text-xs bg-muted px-2 py-0.5 rounded">
-              {event.transaction}
-            </span>
+            <span className="text-muted-foreground">Transaktion:</span>
+            <span className="text-foreground font-mono text-xs">{event.transaction}</span>
           </div>
         )}
         {event.amount && (
-          <div className="flex justify-between text-sm items-center pt-2 border-t border-border/50">
-            <span className="text-muted-foreground font-medium">Belopp:</span>
-            <span className="text-warning font-display text-lg font-bold">
-              {event.amount}
-            </span>
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">Belopp:</span>
+            <span className="text-warning font-semibold">{event.amount}</span>
           </div>
         )}
       </div>
