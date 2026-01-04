@@ -44,6 +44,23 @@ export const useEvents = () => {
   });
 };
 
+export const useCustomerEvents = (customerId: string) => {
+  return useQuery({
+    queryKey: ['events', 'customer', customerId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .eq('customer_id', customerId)
+        .order('date', { ascending: false });
+      
+      if (error) throw error;
+      return data as DbEvent[];
+    },
+    enabled: !!customerId,
+  });
+};
+
 export const useCreateEvent = () => {
   const queryClient = useQueryClient();
   const { user } = useAuth();

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { Customer } from '@/types/rental';
 import { useToast } from '@/hooks/use-toast';
-import { useCreateEvent } from '@/hooks/useEvents';
+import { useCreateEvent, useCustomerEvents } from '@/hooks/useEvents';
 import { useUpdateCustomer } from '@/hooks/useCustomers';
 import AddActivityModal, { ActivityFormData } from './AddActivityModal';
 
@@ -16,6 +16,14 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const createEvent = useCreateEvent();
   const updateCustomer = useUpdateCustomer();
+  const { data: events, isLoading: eventsLoading } = useCustomerEvents(customer.id);
+
+  const formatEventForTimeline = (event: { date: string; description: string; note?: string | null }) => ({
+    date: format(parseISO(event.date), 'd MMM yyyy'),
+    text: event.note || event.description,
+  });
+
+  const timelineEvents = events?.map(formatEventForTimeline) || customer.timeline;
 
   const handleMarkCleaningBooked = async () => {
     try {
@@ -192,16 +200,22 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
         <div className="relative pl-[30px]">
           <div className="absolute left-2 top-0 bottom-0 w-0.5 bg-border" />
 
-          {customer.timeline.map((event, index) => (
-            <div
-              key={index}
-              className="bg-card border border-border rounded-xl p-4 mb-3 relative"
-            >
-              <div className="absolute -left-[22px] top-5 w-3 h-3 rounded-full bg-primary border-2 border-background z-[1]" />
-              <div className="text-[11px] text-muted-foreground mb-1">{event.date}</div>
-              <div className="text-[13px] text-muted-foreground">{event.text}</div>
-            </div>
-          ))}
+          {eventsLoading ? (
+            <div className="text-muted-foreground text-sm">Laddar aktiviteter...</div>
+          ) : timelineEvents.length === 0 ? (
+            <div className="text-muted-foreground text-sm">Inga aktiviteter än</div>
+          ) : (
+            timelineEvents.map((event, index) => (
+              <div
+                key={index}
+                className="bg-card border border-border rounded-xl p-4 mb-3 relative"
+              >
+                <div className="absolute -left-[22px] top-5 w-3 h-3 rounded-full bg-primary border-2 border-background z-[1]" />
+                <div className="text-[11px] text-muted-foreground mb-1">{event.date}</div>
+                <div className="text-[13px] text-muted-foreground">{event.text}</div>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
