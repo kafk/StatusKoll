@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { X, ChevronDown } from 'lucide-react';
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { useCreateCustomer } from '@/hooks/useCustomers';
@@ -7,11 +7,26 @@ import { useCreateEvent } from '@/hooks/useEvents';
 import { useCreateCost } from '@/hooks/useCosts';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { BookingDatePicker } from '@/components/ui/booking-date-picker';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+type Platform = 'Airbnb' | 'Booking' | 'VRBO' | 'Direct';
+
+const PLATFORM_COMMISSIONS: Record<Platform, number> = {
+  'Airbnb': 0.03,
+  'Booking': 0.15,
+  'VRBO': 0.08,
+  'Direct': 0,
+};
 
 const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
   const { t } = useLanguage();
@@ -30,18 +45,20 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
     children: '',
     price: '',
     commission: '',
+    platform: 'Direct' as Platform,
   });
 
-  // Auto-calculate commission (15%) when price changes
+  // Auto-calculate commission based on platform when price or platform changes
   useEffect(() => {
     if (formData.price) {
       const price = parseFloat(formData.price);
       if (!isNaN(price) && price > 0) {
-        const calculatedCommission = (price * 0.15).toFixed(2);
+        const rate = PLATFORM_COMMISSIONS[formData.platform];
+        const calculatedCommission = (price * rate).toFixed(2);
         setFormData(prev => ({ ...prev, commission: calculatedCommission }));
       }
     }
-  }, [formData.price]);
+  }, [formData.price, formData.platform]);
 
   // Create validation schema with translated messages
   const getBookingSchema = () => z.object({
@@ -121,7 +138,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
         adults: validData.adults,
         children: validData.children,
         guests: validData.adults + validData.children,
-        platform: 'Direct',
+        platform: formData.platform,
         status: 'pending',
       });
 
@@ -131,7 +148,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
         date: validData.checkIn,
         description: validData.guestName,
         amount: `${validData.price}€`,
-        note: t('booking.createdDirect'),
+        note: formData.platform === 'Direct' ? t('booking.createdDirect') : t('booking.createdVia', { platform: formData.platform }),
       });
 
       // Create income cost entry (positive - revenue from booking)
@@ -170,6 +187,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
         children: '',
         price: '',
         commission: '',
+        platform: 'Direct',
       });
       setErrors({});
       onClose();
@@ -290,6 +308,40 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
               className={`w-full px-3 py-3 bg-muted border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground ${errors.children ? 'border-destructive' : 'border-border'}`}
             />
             {errors.children && <p className="text-destructive text-xs mt-1">{errors.children}</p>}
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-xs font-bold uppercase text-muted-foreground mb-2 tracking-wide">
+              {t('booking.platform')}
+            </label>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  className="w-full px-3 py-3 bg-muted border border-border rounded-lg font-mono text-sm text-left flex items-center justify-between focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
+                >
+                  <span>{formData.platform}</span>
+                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[calc(100%-24px)] bg-card border border-border z-[1100]" align="start">
+                {(Object.keys(PLATFORM_COMMISSIONS) as Platform[]).map((platform) => (
+                  <DropdownMenuItem
+                    key={platform}
+                    onClick={() => setFormData({ ...formData, platform })}
+                    className="flex justify-between font-mono text-sm cursor-pointer"
+                  >
+                    <span>{platform}</span>
+                    <span className="text-muted-foreground">
+                      {(PLATFORM_COMMISSIONS[platform] * 100).toFixed(0)}%
+                    </span>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <p className="text-muted-foreground text-xs mt-1">
+              {t('booking.platformHint', { percent: (PLATFORM_COMMISSIONS[formData.platform] * 100).toFixed(0) })}
+            </p>
           </div>
 
           <div className="mb-4">
