@@ -16,17 +16,8 @@ const CustomerCard = ({ customer, onClick }: CustomerCardProps) => {
           <div className="font-display text-xl font-bold mb-1">{customer.name}</div>
           <div className="text-xs text-muted-foreground">{customer.period}</div>
         </div>
-        <div className="flex gap-1.5">
-          <div
-            className={`w-2 h-2 rounded-full ${
-              customer.cleaningDone ? 'bg-primary' : customer.filterStatus === 'current' ? 'bg-warning' : 'bg-secondary'
-            }`}
-          />
-          <div
-            className={`w-2 h-2 rounded-full ${
-              customer.paymentDone ? 'bg-primary' : 'bg-secondary'
-            }`}
-          />
+        <div className="text-right">
+          <div className="font-display text-lg font-bold text-primary">{customer.amount}</div>
         </div>
       </div>
 
