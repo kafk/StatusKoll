@@ -7,8 +7,8 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 
-const emailSchema = z.string().email('Ogiltig e-postadress');
-const passwordSchema = z.string().min(6, 'Lösenordet måste vara minst 6 tecken');
+const emailSchema = z.string().email('Invalid email address');
+const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -57,21 +57,21 @@ const Auth = () => {
         if (error) {
           if (error.message.includes('Invalid login credentials')) {
             toast({
-              title: 'Inloggning misslyckades',
-              description: 'Fel e-post eller lösenord.',
+              title: 'Login failed',
+              description: 'Wrong email or password.',
               variant: 'destructive',
             });
           } else {
             toast({
-              title: 'Fel',
+              title: 'Error',
               description: error.message,
               variant: 'destructive',
             });
           }
         } else {
           toast({
-            title: 'Välkommen tillbaka!',
-            description: 'Du har loggat in.',
+            title: 'Welcome back!',
+            description: 'You have logged in.',
           });
         }
       } else {
@@ -79,21 +79,21 @@ const Auth = () => {
         if (error) {
           if (error.message.includes('User already registered')) {
             toast({
-              title: 'Konto finns redan',
-              description: 'Ett konto med denna e-post finns redan. Försök logga in istället.',
+              title: 'Account already exists',
+              description: 'An account with this email already exists. Try logging in instead.',
               variant: 'destructive',
             });
           } else {
             toast({
-              title: 'Fel',
+              title: 'Error',
               description: error.message,
               variant: 'destructive',
             });
           }
         } else {
           toast({
-            title: 'Konto skapat!',
-            description: 'Du kan nu logga in.',
+            title: 'Account created!',
+            description: 'You can now log in.',
           });
           navigate('/');
         }
@@ -106,7 +106,7 @@ const Auth = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-muted-foreground">Laddar...</div>
+        <div className="text-muted-foreground">Loading...</div>
       </div>
     );
   }
@@ -120,13 +120,13 @@ const Auth = () => {
               StatusKoll
             </h1>
             <p className="text-muted-foreground">
-              {isLogin ? 'Logga in på ditt konto' : 'Skapa ett nytt konto'}
+              {isLogin ? 'Log in to your account' : 'Create a new account'}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email">E-post</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -135,7 +135,7 @@ const Auth = () => {
                   setEmail(e.target.value);
                   setErrors((prev) => ({ ...prev, email: undefined }));
                 }}
-                placeholder="din@email.se"
+                placeholder="your@email.com"
                 className={errors.email ? 'border-destructive' : ''}
               />
               {errors.email && (
@@ -144,7 +144,7 @@ const Auth = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Lösenord</Label>
+              <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -167,10 +167,10 @@ const Auth = () => {
               disabled={isSubmitting}
             >
               {isSubmitting
-                ? 'Laddar...'
+                ? 'Loading...'
                 : isLogin
-                ? 'Logga in'
-                : 'Skapa konto'}
+                ? 'Log in'
+                : 'Create account'}
             </Button>
           </form>
 
@@ -184,8 +184,8 @@ const Auth = () => {
               className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               {isLogin
-                ? 'Har du inget konto? Skapa ett här'
-                : 'Har du redan ett konto? Logga in'}
+                ? "Don't have an account? Create one here"
+                : 'Already have an account? Log in'}
             </button>
           </div>
         </div>
