@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react';
 import { getYear, parseISO } from 'date-fns';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
 import { Card } from '@/components/ui/card';
+import { Home, Globe, Building2, Users } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import Header from './Header';
 import { useCosts } from '@/hooks/useCosts';
@@ -110,6 +111,44 @@ const StatisticsPage = () => {
       return { year, income, costs: totalCosts, profit: income - totalCosts };
     });
   }, [costs, customers, selectedYears]);
+
+  // Calculate platform statistics
+  const platformStats = useMemo(() => {
+    const platforms = ['Airbnb', 'Booking', 'VRBO', 'Direct'];
+    const platformColors: Record<string, string> = {
+      'Airbnb': 'hsl(var(--destructive))',
+      'Booking': 'hsl(var(--info))',
+      'VRBO': 'hsl(var(--success))',
+      'Direct': 'hsl(var(--primary))'
+    };
+    const platformIcons: Record<string, typeof Home> = {
+      'Airbnb': Home,
+      'Booking': Globe,
+      'VRBO': Building2,
+      'Direct': Users
+    };
+
+    return platforms.map(platform => {
+      const platformCustomers = customers?.filter(c => 
+        (c.platform || 'Direct') === platform &&
+        (selectedYears.length === 0 || selectedYears.includes(getYear(parseISO(c.check_in))))
+      ) || [];
+      
+      const bookings = platformCustomers.length;
+      const revenue = platformCustomers.reduce((total, customer) => {
+        const amount = parseFloat(customer.amount.replace('€', '').replace(',', '.')) || 0;
+        return total + amount;
+      }, 0);
+
+      return {
+        platform,
+        bookings,
+        revenue,
+        color: platformColors[platform],
+        Icon: platformIcons[platform]
+      };
+    });
+  }, [customers, selectedYears]);
 
   return (
     <div className="pb-24">
@@ -235,6 +274,61 @@ const StatisticsPage = () => {
                 />
               ))}
             </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </Card>
+
+      {/* Platform Statistics */}
+      <Card className="p-4 mb-6">
+        <h3 className="font-display font-bold text-lg mb-4 flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-info" />
+          {t('statistics.platformStats')}
+        </h3>
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          {platformStats.map(({ platform, bookings, revenue, color, Icon }) => (
+            <div 
+              key={platform} 
+              className="p-4 rounded-xl bg-muted/50 border border-border"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <div 
+                  className="w-8 h-8 rounded-lg flex items-center justify-center"
+                  style={{ backgroundColor: color + '20' }}
+                >
+                  <Icon className="w-4 h-4" style={{ color }} />
+                </div>
+                <span className="font-medium text-sm">{platform}</span>
+              </div>
+              <div className="space-y-1">
+                <p className="text-2xl font-bold">{bookings}</p>
+                <p className="text-xs text-muted-foreground">{t('statistics.bookings')}</p>
+                <p className="text-sm font-medium" style={{ color }}>
+                  {revenue.toLocaleString()} €
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="h-48">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={platformStats}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis dataKey="platform" tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" />
+              <YAxis tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'hsl(var(--card))', 
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '8px'
+                }}
+                formatter={(value: number) => [`${value.toLocaleString()} €`, t('statistics.revenue')]}
+              />
+              <Bar dataKey="revenue" radius={[4, 4, 0, 0]}>
+                {platformStats.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
+            </BarChart>
           </ResponsiveContainer>
         </div>
       </Card>
