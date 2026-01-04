@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import NotificationBell from "./NotificationBell";
 
 interface HeaderProps {
   title?: string;
@@ -37,6 +38,7 @@ const Header = ({ title = "STATUS", subtitle }: HeaderProps) => {
         )}
       </div>
       <div className="flex items-center gap-2">
+        <NotificationBell />
         <button
           onClick={() => navigate("/changelog")}
           className="px-3 py-1.5 bg-card border border-border rounded-full text-xs font-bold text-muted-foreground hover:border-primary hover:text-primary transition-all hover:-translate-y-0.5"
