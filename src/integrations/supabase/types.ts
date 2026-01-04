@@ -251,6 +251,10 @@ export type Database = {
         Args: { check_owner_id: string; check_user_id: string }
         Returns: boolean
       }
+      is_cleaner: {
+        Args: { check_owner_id: string; check_user_id: string }
+        Returns: boolean
+      }
       is_co_owner: {
         Args: { check_owner_id: string; check_user_id: string }
         Returns: boolean
