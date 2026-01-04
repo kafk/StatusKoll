@@ -46,9 +46,11 @@ export type Database = {
       }
       customers: {
         Row: {
+          adults: number | null
           amount: string
           check_in: string
           check_out: string
+          children: number | null
           cleaning_done: boolean | null
           created_at: string
           email: string | null
@@ -56,15 +58,18 @@ export type Database = {
           id: string
           name: string
           payment_done: boolean | null
+          phone: string | null
           platform: string | null
           status: string
           updated_at: string
           user_id: string | null
         }
         Insert: {
+          adults?: number | null
           amount: string
           check_in: string
           check_out: string
+          children?: number | null
           cleaning_done?: boolean | null
           created_at?: string
           email?: string | null
@@ -72,15 +77,18 @@ export type Database = {
           id?: string
           name: string
           payment_done?: boolean | null
+          phone?: string | null
           platform?: string | null
           status?: string
           updated_at?: string
           user_id?: string | null
         }
         Update: {
+          adults?: number | null
           amount?: string
           check_in?: string
           check_out?: string
+          children?: number | null
           cleaning_done?: boolean | null
           created_at?: string
           email?: string | null
@@ -88,6 +96,7 @@ export type Database = {
           id?: string
           name?: string
           payment_done?: boolean | null
+          phone?: string | null
           platform?: string | null
           status?: string
           updated_at?: string
