@@ -30,7 +30,7 @@ const EconomyPage = () => {
   const [newCostDate, setNewCostDate] = useState<Date>(new Date());
   const [newCostTransaction, setNewCostTransaction] = useState('');
   const [newCostCustomer, setNewCostCustomer] = useState<string>('');
-  const [newCostType, setNewCostType] = useState<'variable' | 'fixed'>('variable');
+  const [newCostType, setNewCostType] = useState<'variable' | 'fixed' | 'income'>('variable');
   
   const [selectedYear, setSelectedYear] = useState<string>('all');
   
@@ -214,13 +214,14 @@ const EconomyPage = () => {
             </Select>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Select value={newCostType} onValueChange={(val) => setNewCostType(val as 'variable' | 'fixed')}>
+            <Select value={newCostType} onValueChange={(val) => setNewCostType(val as 'variable' | 'fixed' | 'income')}>
               <SelectTrigger className="w-[140px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-card border-border z-50">
                 <SelectItem value="variable">{t('economy.variableCost')}</SelectItem>
                 <SelectItem value="fixed">{t('economy.fixedCost')}</SelectItem>
+                <SelectItem value="income">{t('economy.incomeType')}</SelectItem>
               </SelectContent>
             </Select>
             <Popover>

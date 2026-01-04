@@ -7,7 +7,7 @@ export interface Cost {
   name: string;
   amount: number;
   date: string;
-  type: 'fixed' | 'variable';
+  type: 'fixed' | 'variable' | 'income';
   created_at: string;
   user_id: string | null;
   transaction_title: string | null;
@@ -18,7 +18,7 @@ export interface CostFormData {
   name: string;
   amount: number;
   date: string;
-  type: 'fixed' | 'variable';
+  type: 'fixed' | 'variable' | 'income';
   transaction_title?: string;
   customer_id?: string;
 }

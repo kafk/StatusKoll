@@ -229,6 +229,7 @@ const translations: Record<Language, Translations> = {
     'economy.addCost': 'Lägg till kostnad',
     'economy.variableCost': 'Rörlig',
     'economy.fixedCost': 'Fast',
+    'economy.incomeType': 'Intäkt',
     
     // Statistics Page
     'statistics.title': 'Statistik',
@@ -478,6 +479,7 @@ const translations: Record<Language, Translations> = {
     'economy.addCost': 'Add cost',
     'economy.variableCost': 'Variable',
     'economy.fixedCost': 'Fixed',
+    'economy.incomeType': 'Income',
     
     // Statistics Page
     'statistics.title': 'Statistics',
@@ -727,6 +729,7 @@ const translations: Record<Language, Translations> = {
     'economy.addCost': 'Kosten hinzufügen',
     'economy.variableCost': 'Variabel',
     'economy.fixedCost': 'Fix',
+    'economy.incomeType': 'Einnahme',
     
     // Statistics Page
     'statistics.title': 'Statistik',
@@ -976,6 +979,7 @@ const translations: Record<Language, Translations> = {
     'economy.addCost': 'Dodaj trošak',
     'economy.variableCost': 'Varijabilni',
     'economy.fixedCost': 'Fiksni',
+    'economy.incomeType': 'Prihod',
     
     // Statistics Page
     'statistics.title': 'Statistika',
