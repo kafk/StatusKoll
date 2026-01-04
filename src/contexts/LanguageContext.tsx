@@ -116,6 +116,10 @@ const translations: Record<Language, Translations> = {
     'booking.platform': 'Plattform',
     'booking.platformHint': 'Provision beräknas automatiskt ({percent}%)',
     'booking.createdVia': 'Bokning via {platform}',
+    'booking.edit': 'Redigera',
+    'booking.updated': 'Bokning uppdaterad!',
+    'booking.updatedFor': 'Bokning för {name} har uppdaterats.',
+    'booking.updateError': 'Kunde inte uppdatera bokningen. Försök igen.',
     
     // Validation errors
     'validation.guestNameRequired': 'Gästens namn krävs',
@@ -383,6 +387,10 @@ const translations: Record<Language, Translations> = {
     'booking.platformHint': 'Commission calculated automatically ({percent}%)',
     'booking.createdVia': 'Booking via {platform}',
     'booking.platformCommission': 'Platform fee',
+    'booking.edit': 'Edit',
+    'booking.updated': 'Booking updated!',
+    'booking.updatedFor': 'Booking for {name} has been updated.',
+    'booking.updateError': 'Could not update booking. Please try again.',
     
     // Validation errors
     'validation.guestNameRequired': 'Guest name is required',
@@ -650,6 +658,10 @@ const translations: Record<Language, Translations> = {
     'booking.platform': 'Plattform',
     'booking.platformHint': 'Provision automatisch berechnet ({percent}%)',
     'booking.createdVia': 'Buchung über {platform}',
+    'booking.edit': 'Bearbeiten',
+    'booking.updated': 'Buchung aktualisiert!',
+    'booking.updatedFor': 'Buchung für {name} wurde aktualisiert.',
+    'booking.updateError': 'Buchung konnte nicht aktualisiert werden. Bitte erneut versuchen.',
     
     // Validation errors
     'validation.guestNameRequired': 'Gastname ist erforderlich',
@@ -917,6 +929,10 @@ const translations: Record<Language, Translations> = {
     'booking.platform': 'Platforma',
     'booking.platformHint': 'Provizija automatski izračunata ({percent}%)',
     'booking.createdVia': 'Rezervacija putem {platform}',
+    'booking.edit': 'Uredi',
+    'booking.updated': 'Rezervacija ažurirana!',
+    'booking.updatedFor': 'Rezervacija za {name} je ažurirana.',
+    'booking.updateError': 'Nije moguće ažurirati rezervaciju. Pokušajte ponovo.',
     
     // Validation errors
     'validation.guestNameRequired': 'Ime gosta je obavezno',

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useCustomers, formatCustomerForUI } from '@/hooks/useCustomers';
+import { useCustomers, formatCustomerForUI, Customer as DbCustomer } from '@/hooks/useCustomers';
 import CustomerCard from './CustomerCard';
 import CustomerDetail from './CustomerDetail';
 import Header from './Header';
@@ -9,7 +9,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 const StatusPage = () => {
   const { t } = useLanguage();
   const { data: dbCustomers, isLoading } = useCustomers();
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | FilterStatus>('all');
   const [sort, setSort] = useState<SortOrder>('newest');
 
@@ -36,11 +36,18 @@ const StatusPage = () => {
       return a.period.localeCompare(b.period);
     });
 
-  if (selectedCustomer) {
+  const selectedCustomer = customers.find(c => c.id === selectedCustomerId);
+  const selectedDbCustomer = dbCustomers?.find(c => c.id === selectedCustomerId);
+
+  if (selectedCustomer && selectedDbCustomer) {
     return (
       <div className="pb-20">
         <Header />
-        <CustomerDetail customer={selectedCustomer} onBack={() => setSelectedCustomer(null)} />
+        <CustomerDetail 
+          customer={selectedCustomer} 
+          dbCustomer={selectedDbCustomer}
+          onBack={() => setSelectedCustomerId(null)} 
+        />
       </div>
     );
   }
@@ -101,7 +108,7 @@ const StatusPage = () => {
             <CustomerCard
               key={customer.id}
               customer={customer}
-              onClick={() => setSelectedCustomer(customer)}
+              onClick={() => setSelectedCustomerId(customer.id)}
             />
           ))
         )}
