@@ -256,6 +256,9 @@ const translations: Record<Language, Translations> = {
     'statistics.income': 'Intäkter',
     'statistics.costs': 'Kostnader',
     'statistics.profit': 'Vinst',
+    'statistics.platformStats': 'Statistik per plattform',
+    'statistics.bookings': 'bokningar',
+    'statistics.revenue': 'Intäkt',
     
     // Months
     'month.jan': 'Jan',
@@ -520,6 +523,9 @@ const translations: Record<Language, Translations> = {
     'statistics.income': 'Income',
     'statistics.costs': 'Costs',
     'statistics.profit': 'Profit',
+    'statistics.platformStats': 'Platform statistics',
+    'statistics.bookings': 'bookings',
+    'statistics.revenue': 'Revenue',
     
     // Months
     'month.jan': 'Jan',
@@ -784,6 +790,9 @@ const translations: Record<Language, Translations> = {
     'statistics.income': 'Einnahmen',
     'statistics.costs': 'Kosten',
     'statistics.profit': 'Gewinn',
+    'statistics.platformStats': 'Plattformstatistik',
+    'statistics.bookings': 'Buchungen',
+    'statistics.revenue': 'Umsatz',
     
     // Months
     'month.jan': 'Jan',
@@ -1048,6 +1057,9 @@ const translations: Record<Language, Translations> = {
     'statistics.income': 'Prihodi',
     'statistics.costs': 'Troškovi',
     'statistics.profit': 'Dobit',
+    'statistics.platformStats': 'Statistika po platformi',
+    'statistics.bookings': 'rezervacija',
+    'statistics.revenue': 'Prihod',
     
     // Months
     'month.jan': 'Sij',
