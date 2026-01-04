@@ -132,6 +132,24 @@ export const useUpdateEvent = () => {
   });
 };
 
+export const useDeleteEvent = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async (eventId: string) => {
+      const { error } = await supabase
+        .from('events')
+        .delete()
+        .eq('id', eventId);
+      
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+    },
+  });
+};
+
 // Helper to convert database event to UI format
 export const formatEventForUI = (event: DbEvent): RentalEvent => {
   const date = parseISO(event.date);
