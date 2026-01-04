@@ -144,7 +144,13 @@ export const formatEventForUI = (event: DbEvent): RentalEvent => {
     const checkIn = parseISO(customer.check_in);
     const checkOut = parseISO(customer.check_out);
     period = `${format(checkIn, 'd', { locale: sv })}-${format(checkOut, 'd MMM yyyy', { locale: sv })}`;
-    source = customer.platform ? `Via ${customer.platform}` : undefined;
+    
+    // If a team member made the change, show their name; otherwise show platform
+    if (event.performed_by) {
+      source = event.performed_by;
+    } else if (customer.platform) {
+      source = `Via ${customer.platform}`;
+    }
   }
   
   return {
