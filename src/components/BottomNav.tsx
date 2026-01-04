@@ -27,12 +27,12 @@ const BottomNav = ({ activePage, onPageChange }: BottomNavProps) => {
           <button
             key={id}
             onClick={() => onPageChange(id)}
-            className={`flex flex-col items-center gap-1 px-5 py-1 rounded-xl transition-all hover:bg-primary/10 ${
+            className={`flex flex-col items-center gap-0.5 px-2 sm:px-4 py-1 rounded-xl transition-all hover:bg-primary/10 min-w-0 ${
               activePage === id ? 'text-primary' : 'text-muted-foreground'
             }`}
           >
-            <Icon className="w-5 h-5" strokeWidth={2} />
-            <span className="text-[10px]">{t(labelKey)}</span>
+            <Icon className="w-5 h-5 shrink-0" strokeWidth={2} />
+            <span className="text-[9px] sm:text-[10px] truncate max-w-[48px]">{t(labelKey)}</span>
           </button>
         ))}
       </div>
