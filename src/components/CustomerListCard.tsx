@@ -1,5 +1,6 @@
 import { Customer } from '@/types/rental';
 import { Users, Coins, Globe } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface CustomerListCardProps {
   customer: Customer;
@@ -7,6 +8,7 @@ interface CustomerListCardProps {
 }
 
 const CustomerListCard = ({ customer, onClick }: CustomerListCardProps) => {
+  const { t } = useLanguage();
   // Derive status from the three criteria
   const isComplete = customer.cleaningDone && customer.paymentDone && customer.bookingPaymentReceived;
   
@@ -27,7 +29,7 @@ const CustomerListCard = ({ customer, onClick }: CustomerListCardProps) => {
               : 'bg-warning/15 text-warning'
           }`}
         >
-          {isComplete ? 'Klar' : 'Pågående'}
+          {isComplete ? t('status.done') : t('status.ongoing')}
         </span>
       </div>
 
