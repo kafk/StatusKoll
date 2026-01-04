@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 
 export type Language = 'sv' | 'en' | 'de' | 'hr';
 
@@ -57,6 +57,7 @@ const translations: Record<Language, Translations> = {
     // Common
     'common.loading': 'Laddar...',
     'common.save': 'Spara',
+    'common.saving': 'Sparar...',
     'common.cancel': 'Avbryt',
     'common.delete': 'Ta bort',
     'common.edit': 'Redigera',
@@ -73,12 +74,174 @@ const translations: Record<Language, Translations> = {
     'common.performedBy': 'Utförd av',
     'common.transaction': 'Transaktion',
     'common.note': 'Anteckning',
+    'common.back': 'Tillbaka',
+    'common.error': 'Fel',
+    'common.success': 'Klart',
     
     // Notifications
     'notif.title': 'Notiser',
     'notif.markAllRead': 'Markera alla som lästa',
     'notif.empty': 'Inga notiser',
     'notif.newBooking': 'Ny bokning',
+    
+    // Header
+    'header.logout': 'Logga ut',
+    'header.logoutError': 'Kunde inte logga ut.',
+    
+    // Booking Modal
+    'booking.new': 'Ny bokning',
+    'booking.guestName': 'Gästens namn',
+    'booking.guestNamePlaceholder': 'Namn Efternamn',
+    'booking.phone': 'Telefon',
+    'booking.phonePlaceholder': '+46 70 123 45 67',
+    'booking.checkIn': 'Incheckning',
+    'booking.checkOut': 'Utcheckning',
+    'booking.adults': 'Antal vuxna',
+    'booking.children': 'Antal barn',
+    'booking.price': 'Pris (€)',
+    'booking.created': 'Bokning skapad!',
+    'booking.createdFor': 'Bokning för {name} har skapats.',
+    'booking.createError': 'Kunde inte skapa bokningen. Försök igen.',
+    'booking.validationError': 'Valideringsfel',
+    'booking.checkForm': 'Kontrollera formuläret och försök igen.',
+    'booking.createdDirect': 'Bokning skapad direkt',
+    
+    // Validation errors
+    'validation.guestNameRequired': 'Gästens namn krävs',
+    'validation.guestNameMax': 'Namnet får vara max 100 tecken',
+    'validation.phoneMax': 'Telefonnumret får vara max 20 tecken',
+    'validation.checkInRequired': 'Incheckningsdatum krävs',
+    'validation.invalidDate': 'Ogiltigt datumformat',
+    'validation.checkOutRequired': 'Utcheckningsdatum krävs',
+    'validation.adultsRequired': 'Antal vuxna krävs',
+    'validation.minAdults': 'Minst 1 vuxen',
+    'validation.maxAdults': 'Max 50 vuxna',
+    'validation.negativeChildren': 'Kan inte vara negativt',
+    'validation.maxChildren': 'Max 50 barn',
+    'validation.priceRequired': 'Pris krävs',
+    'validation.pricePositive': 'Priset måste vara positivt',
+    'validation.priceMax': 'Priset är för högt',
+    'validation.checkOutAfterCheckIn': 'Utcheckning måste vara efter incheckning',
+    
+    // Customers Page
+    'customers.all': 'Alla kunder',
+    'customers.none': 'Inga kunder ännu',
+    'customers.backToList': '← Tillbaka till kunder',
+    
+    // Status Page
+    'status.filterByPeriod': 'Filtrera efter period:',
+    'status.sorting': 'Sortering:',
+    'status.current': 'Pågående',
+    'status.past': 'Avslutade',
+    'status.future': 'Kommande',
+    'status.newestFirst': 'Senast först',
+    'status.oldestFirst': 'Äldst först',
+    'status.noBookings': 'Inga bokningar hittades',
+    'status.done': 'Klar',
+    'status.ongoing': 'Pågående',
+    'status.upcoming': 'Kommande',
+    
+    // Customer Detail
+    'customer.checkIn': 'Incheckning',
+    'customer.checkOut': 'Utcheckning',
+    'customer.amount': 'Belopp',
+    'customer.status': 'Status',
+    'customer.markCleaningBooked': 'Markera Städ Bokat',
+    'customer.markCleaningPaid': 'Markera betald Städ',
+    'customer.activity': 'Aktivitet',
+    'customer.addActivity': '+ Lägg till',
+    'customer.loadingActivities': 'Laddar aktiviteter...',
+    'customer.noActivities': 'Inga aktiviteter än',
+    'customer.cleaningBooked': 'Städ bokat!',
+    'customer.cleaningBookedDesc': '{name}s städning är nu bokad.',
+    'customer.cleaningBookedNote': 'Städ bokat',
+    'customer.cleaningBookedFor': 'Städ bokat för {name}',
+    'customer.cleaningPaid': 'Städ betald!',
+    'customer.cleaningPaidDesc': '{name}s städning är nu markerad som betald.',
+    'customer.cleaningPaidNote': 'Städ betald',
+    'customer.cleaningPaidFor': 'Städ betald för {name}',
+    'customer.markError': 'Kunde inte markera städ.',
+    'customer.activityAdded': 'Aktivitet tillagd!',
+    'customer.activityAddedDesc': '{type} har lagts till för {name}.',
+    'customer.activityAddError': 'Kunde inte lägga till aktiviteten.',
+    'customer.activityUpdated': 'Aktivitet uppdaterad!',
+    'customer.activityUpdatedDesc': '{type} har uppdaterats för {name}.',
+    'customer.activityUpdateError': 'Kunde inte uppdatera aktiviteten.',
+    
+    // Activity Modal
+    'activity.add': 'Lägg till aktivitet',
+    'activity.edit': 'Redigera aktivitet',
+    'activity.for': 'för',
+    'activity.type': 'Typ av aktivitet',
+    'activity.date': 'Datum',
+    'activity.selectDate': 'Välj datum',
+    'activity.amount': 'Belopp',
+    'activity.amountPlaceholder': 't.ex. 5000 kr',
+    'activity.note': 'Anteckning (valfritt)',
+    'activity.notePlaceholder': 'Lägg till en anteckning...',
+    'activity.cleaningBooked': 'Städ bokat',
+    'activity.paymentReceived': 'Betalning mottagen',
+    'activity.bookingMade': 'Bokning gjord',
+    'activity.paymentFromBooking': 'Betalning mottagen från Booking',
+    'activity.bookingViaBooking': 'Bokning gjord via Booking',
+    
+    // Stats Grid
+    'stats.bookings': 'Bokningar',
+    'stats.cleanings': 'Städningar',
+    'stats.revenue': 'Intäkt',
+    
+    // Timeline
+    'timeline.noEvents': 'Inga händelser ännu',
+    'timeline.filter.all': 'Alla',
+    'timeline.filter.booking': 'Bokning',
+    'timeline.filter.cleaning': 'Städ',
+    'timeline.filter.payment': 'Betalning',
+    
+    // Economy Page
+    'economy.title': 'Ekonomi',
+    'economy.subtitle': 'Översikt av intäkter & kostnader',
+    'economy.selectYear': 'Välj år',
+    'economy.allYears': 'Alla år',
+    'economy.income': 'Intäkter',
+    'economy.costs': 'Kostnader',
+    'economy.profitAfterCosts': 'Vinst efter kostnader',
+    'economy.variableCosts': 'Rörliga kostnader',
+    'economy.fixedCosts': 'Fasta kostnader',
+    'economy.noVariableCosts': 'Inga rörliga kostnader',
+    'economy.noFixedCosts': 'Inga fasta kostnader',
+    'economy.costPlaceholder': 'Kostnad...',
+    'economy.amountPlaceholder': 'Belopp',
+    'economy.transactionPlaceholder': 'Transaktions-titel (t.ex. utlandsbetalning...)',
+    'economy.customerOptional': 'Kund (valfri)',
+    'economy.noCustomer': 'Ingen kund',
+    'economy.totalVariable': 'Totalt rörliga',
+    'economy.totalFixed': 'Totalt fasta',
+    
+    // Statistics Page
+    'statistics.title': 'Statistik',
+    'statistics.subtitle': 'Jämför data mellan år',
+    'statistics.selectYears': 'Välj år att jämföra',
+    'statistics.incomePerMonth': 'Intäkter per månad',
+    'statistics.costsPerMonth': 'Kostnader per månad',
+    'statistics.profitPerMonth': 'Vinst per månad',
+    'statistics.yearlySummary': 'Årssammanfattning',
+    'statistics.income': 'Intäkter',
+    'statistics.costs': 'Kostnader',
+    'statistics.profit': 'Vinst',
+    
+    // Months
+    'month.jan': 'Jan',
+    'month.feb': 'Feb',
+    'month.mar': 'Mar',
+    'month.apr': 'Apr',
+    'month.may': 'Maj',
+    'month.jun': 'Jun',
+    'month.jul': 'Jul',
+    'month.aug': 'Aug',
+    'month.sep': 'Sep',
+    'month.oct': 'Okt',
+    'month.nov': 'Nov',
+    'month.dec': 'Dec',
   },
   en: {
     // Navigation
@@ -130,6 +293,7 @@ const translations: Record<Language, Translations> = {
     // Common
     'common.loading': 'Loading...',
     'common.save': 'Save',
+    'common.saving': 'Saving...',
     'common.cancel': 'Cancel',
     'common.delete': 'Delete',
     'common.edit': 'Edit',
@@ -146,12 +310,174 @@ const translations: Record<Language, Translations> = {
     'common.performedBy': 'Performed by',
     'common.transaction': 'Transaction',
     'common.note': 'Note',
+    'common.back': 'Back',
+    'common.error': 'Error',
+    'common.success': 'Done',
     
     // Notifications
     'notif.title': 'Notifications',
     'notif.markAllRead': 'Mark all as read',
     'notif.empty': 'No notifications',
     'notif.newBooking': 'New booking',
+    
+    // Header
+    'header.logout': 'Log out',
+    'header.logoutError': 'Could not log out.',
+    
+    // Booking Modal
+    'booking.new': 'New booking',
+    'booking.guestName': 'Guest name',
+    'booking.guestNamePlaceholder': 'First Last',
+    'booking.phone': 'Phone',
+    'booking.phonePlaceholder': '+1 234 567 8900',
+    'booking.checkIn': 'Check-in',
+    'booking.checkOut': 'Check-out',
+    'booking.adults': 'Number of adults',
+    'booking.children': 'Number of children',
+    'booking.price': 'Price (€)',
+    'booking.created': 'Booking created!',
+    'booking.createdFor': 'Booking for {name} has been created.',
+    'booking.createError': 'Could not create booking. Please try again.',
+    'booking.validationError': 'Validation error',
+    'booking.checkForm': 'Check the form and try again.',
+    'booking.createdDirect': 'Booking created directly',
+    
+    // Validation errors
+    'validation.guestNameRequired': 'Guest name is required',
+    'validation.guestNameMax': 'Name can be max 100 characters',
+    'validation.phoneMax': 'Phone number can be max 20 characters',
+    'validation.checkInRequired': 'Check-in date is required',
+    'validation.invalidDate': 'Invalid date format',
+    'validation.checkOutRequired': 'Check-out date is required',
+    'validation.adultsRequired': 'Number of adults is required',
+    'validation.minAdults': 'At least 1 adult',
+    'validation.maxAdults': 'Max 50 adults',
+    'validation.negativeChildren': 'Cannot be negative',
+    'validation.maxChildren': 'Max 50 children',
+    'validation.priceRequired': 'Price is required',
+    'validation.pricePositive': 'Price must be positive',
+    'validation.priceMax': 'Price is too high',
+    'validation.checkOutAfterCheckIn': 'Check-out must be after check-in',
+    
+    // Customers Page
+    'customers.all': 'All customers',
+    'customers.none': 'No customers yet',
+    'customers.backToList': '← Back to customers',
+    
+    // Status Page
+    'status.filterByPeriod': 'Filter by period:',
+    'status.sorting': 'Sorting:',
+    'status.current': 'Current',
+    'status.past': 'Past',
+    'status.future': 'Future',
+    'status.newestFirst': 'Newest first',
+    'status.oldestFirst': 'Oldest first',
+    'status.noBookings': 'No bookings found',
+    'status.done': 'Done',
+    'status.ongoing': 'Ongoing',
+    'status.upcoming': 'Upcoming',
+    
+    // Customer Detail
+    'customer.checkIn': 'Check-in',
+    'customer.checkOut': 'Check-out',
+    'customer.amount': 'Amount',
+    'customer.status': 'Status',
+    'customer.markCleaningBooked': 'Mark Cleaning Booked',
+    'customer.markCleaningPaid': 'Mark Cleaning Paid',
+    'customer.activity': 'Activity',
+    'customer.addActivity': '+ Add',
+    'customer.loadingActivities': 'Loading activities...',
+    'customer.noActivities': 'No activities yet',
+    'customer.cleaningBooked': 'Cleaning booked!',
+    'customer.cleaningBookedDesc': '{name}\'s cleaning is now booked.',
+    'customer.cleaningBookedNote': 'Cleaning booked',
+    'customer.cleaningBookedFor': 'Cleaning booked for {name}',
+    'customer.cleaningPaid': 'Cleaning paid!',
+    'customer.cleaningPaidDesc': '{name}\'s cleaning is now marked as paid.',
+    'customer.cleaningPaidNote': 'Cleaning paid',
+    'customer.cleaningPaidFor': 'Cleaning paid for {name}',
+    'customer.markError': 'Could not mark cleaning.',
+    'customer.activityAdded': 'Activity added!',
+    'customer.activityAddedDesc': '{type} has been added for {name}.',
+    'customer.activityAddError': 'Could not add activity.',
+    'customer.activityUpdated': 'Activity updated!',
+    'customer.activityUpdatedDesc': '{type} has been updated for {name}.',
+    'customer.activityUpdateError': 'Could not update activity.',
+    
+    // Activity Modal
+    'activity.add': 'Add activity',
+    'activity.edit': 'Edit activity',
+    'activity.for': 'for',
+    'activity.type': 'Activity type',
+    'activity.date': 'Date',
+    'activity.selectDate': 'Select date',
+    'activity.amount': 'Amount',
+    'activity.amountPlaceholder': 'e.g. 5000 €',
+    'activity.note': 'Note (optional)',
+    'activity.notePlaceholder': 'Add a note...',
+    'activity.cleaningBooked': 'Cleaning booked',
+    'activity.paymentReceived': 'Payment received',
+    'activity.bookingMade': 'Booking made',
+    'activity.paymentFromBooking': 'Payment received from Booking',
+    'activity.bookingViaBooking': 'Booking made via Booking',
+    
+    // Stats Grid
+    'stats.bookings': 'Bookings',
+    'stats.cleanings': 'Cleanings',
+    'stats.revenue': 'Revenue',
+    
+    // Timeline
+    'timeline.noEvents': 'No events yet',
+    'timeline.filter.all': 'All',
+    'timeline.filter.booking': 'Booking',
+    'timeline.filter.cleaning': 'Cleaning',
+    'timeline.filter.payment': 'Payment',
+    
+    // Economy Page
+    'economy.title': 'Economy',
+    'economy.subtitle': 'Overview of income & expenses',
+    'economy.selectYear': 'Select year',
+    'economy.allYears': 'All years',
+    'economy.income': 'Income',
+    'economy.costs': 'Costs',
+    'economy.profitAfterCosts': 'Profit after costs',
+    'economy.variableCosts': 'Variable costs',
+    'economy.fixedCosts': 'Fixed costs',
+    'economy.noVariableCosts': 'No variable costs',
+    'economy.noFixedCosts': 'No fixed costs',
+    'economy.costPlaceholder': 'Cost...',
+    'economy.amountPlaceholder': 'Amount',
+    'economy.transactionPlaceholder': 'Transaction title (e.g. foreign payment...)',
+    'economy.customerOptional': 'Customer (optional)',
+    'economy.noCustomer': 'No customer',
+    'economy.totalVariable': 'Total variable',
+    'economy.totalFixed': 'Total fixed',
+    
+    // Statistics Page
+    'statistics.title': 'Statistics',
+    'statistics.subtitle': 'Compare data between years',
+    'statistics.selectYears': 'Select years to compare',
+    'statistics.incomePerMonth': 'Income per month',
+    'statistics.costsPerMonth': 'Costs per month',
+    'statistics.profitPerMonth': 'Profit per month',
+    'statistics.yearlySummary': 'Yearly summary',
+    'statistics.income': 'Income',
+    'statistics.costs': 'Costs',
+    'statistics.profit': 'Profit',
+    
+    // Months
+    'month.jan': 'Jan',
+    'month.feb': 'Feb',
+    'month.mar': 'Mar',
+    'month.apr': 'Apr',
+    'month.may': 'May',
+    'month.jun': 'Jun',
+    'month.jul': 'Jul',
+    'month.aug': 'Aug',
+    'month.sep': 'Sep',
+    'month.oct': 'Oct',
+    'month.nov': 'Nov',
+    'month.dec': 'Dec',
   },
   de: {
     // Navigation
@@ -203,6 +529,7 @@ const translations: Record<Language, Translations> = {
     // Common
     'common.loading': 'Laden...',
     'common.save': 'Speichern',
+    'common.saving': 'Speichern...',
     'common.cancel': 'Abbrechen',
     'common.delete': 'Löschen',
     'common.edit': 'Bearbeiten',
@@ -219,12 +546,174 @@ const translations: Record<Language, Translations> = {
     'common.performedBy': 'Durchgeführt von',
     'common.transaction': 'Transaktion',
     'common.note': 'Notiz',
+    'common.back': 'Zurück',
+    'common.error': 'Fehler',
+    'common.success': 'Fertig',
     
     // Notifications
     'notif.title': 'Benachrichtigungen',
     'notif.markAllRead': 'Alle als gelesen markieren',
     'notif.empty': 'Keine Benachrichtigungen',
     'notif.newBooking': 'Neue Buchung',
+    
+    // Header
+    'header.logout': 'Abmelden',
+    'header.logoutError': 'Konnte nicht abmelden.',
+    
+    // Booking Modal
+    'booking.new': 'Neue Buchung',
+    'booking.guestName': 'Gastname',
+    'booking.guestNamePlaceholder': 'Vorname Nachname',
+    'booking.phone': 'Telefon',
+    'booking.phonePlaceholder': '+49 170 123 4567',
+    'booking.checkIn': 'Check-in',
+    'booking.checkOut': 'Check-out',
+    'booking.adults': 'Anzahl Erwachsene',
+    'booking.children': 'Anzahl Kinder',
+    'booking.price': 'Preis (€)',
+    'booking.created': 'Buchung erstellt!',
+    'booking.createdFor': 'Buchung für {name} wurde erstellt.',
+    'booking.createError': 'Buchung konnte nicht erstellt werden. Bitte erneut versuchen.',
+    'booking.validationError': 'Validierungsfehler',
+    'booking.checkForm': 'Überprüfen Sie das Formular und versuchen Sie es erneut.',
+    'booking.createdDirect': 'Buchung direkt erstellt',
+    
+    // Validation errors
+    'validation.guestNameRequired': 'Gastname ist erforderlich',
+    'validation.guestNameMax': 'Name darf max. 100 Zeichen haben',
+    'validation.phoneMax': 'Telefonnummer darf max. 20 Zeichen haben',
+    'validation.checkInRequired': 'Check-in-Datum ist erforderlich',
+    'validation.invalidDate': 'Ungültiges Datumsformat',
+    'validation.checkOutRequired': 'Check-out-Datum ist erforderlich',
+    'validation.adultsRequired': 'Anzahl Erwachsene ist erforderlich',
+    'validation.minAdults': 'Mindestens 1 Erwachsener',
+    'validation.maxAdults': 'Max. 50 Erwachsene',
+    'validation.negativeChildren': 'Kann nicht negativ sein',
+    'validation.maxChildren': 'Max. 50 Kinder',
+    'validation.priceRequired': 'Preis ist erforderlich',
+    'validation.pricePositive': 'Preis muss positiv sein',
+    'validation.priceMax': 'Preis ist zu hoch',
+    'validation.checkOutAfterCheckIn': 'Check-out muss nach Check-in sein',
+    
+    // Customers Page
+    'customers.all': 'Alle Kunden',
+    'customers.none': 'Noch keine Kunden',
+    'customers.backToList': '← Zurück zu Kunden',
+    
+    // Status Page
+    'status.filterByPeriod': 'Nach Zeitraum filtern:',
+    'status.sorting': 'Sortierung:',
+    'status.current': 'Aktuell',
+    'status.past': 'Vergangen',
+    'status.future': 'Zukünftig',
+    'status.newestFirst': 'Neueste zuerst',
+    'status.oldestFirst': 'Älteste zuerst',
+    'status.noBookings': 'Keine Buchungen gefunden',
+    'status.done': 'Fertig',
+    'status.ongoing': 'Laufend',
+    'status.upcoming': 'Bevorstehend',
+    
+    // Customer Detail
+    'customer.checkIn': 'Check-in',
+    'customer.checkOut': 'Check-out',
+    'customer.amount': 'Betrag',
+    'customer.status': 'Status',
+    'customer.markCleaningBooked': 'Reinigung gebucht markieren',
+    'customer.markCleaningPaid': 'Reinigung bezahlt markieren',
+    'customer.activity': 'Aktivität',
+    'customer.addActivity': '+ Hinzufügen',
+    'customer.loadingActivities': 'Aktivitäten werden geladen...',
+    'customer.noActivities': 'Noch keine Aktivitäten',
+    'customer.cleaningBooked': 'Reinigung gebucht!',
+    'customer.cleaningBookedDesc': 'Reinigung für {name} ist jetzt gebucht.',
+    'customer.cleaningBookedNote': 'Reinigung gebucht',
+    'customer.cleaningBookedFor': 'Reinigung gebucht für {name}',
+    'customer.cleaningPaid': 'Reinigung bezahlt!',
+    'customer.cleaningPaidDesc': 'Reinigung für {name} ist jetzt als bezahlt markiert.',
+    'customer.cleaningPaidNote': 'Reinigung bezahlt',
+    'customer.cleaningPaidFor': 'Reinigung bezahlt für {name}',
+    'customer.markError': 'Konnte Reinigung nicht markieren.',
+    'customer.activityAdded': 'Aktivität hinzugefügt!',
+    'customer.activityAddedDesc': '{type} wurde für {name} hinzugefügt.',
+    'customer.activityAddError': 'Aktivität konnte nicht hinzugefügt werden.',
+    'customer.activityUpdated': 'Aktivität aktualisiert!',
+    'customer.activityUpdatedDesc': '{type} wurde für {name} aktualisiert.',
+    'customer.activityUpdateError': 'Aktivität konnte nicht aktualisiert werden.',
+    
+    // Activity Modal
+    'activity.add': 'Aktivität hinzufügen',
+    'activity.edit': 'Aktivität bearbeiten',
+    'activity.for': 'für',
+    'activity.type': 'Aktivitätstyp',
+    'activity.date': 'Datum',
+    'activity.selectDate': 'Datum auswählen',
+    'activity.amount': 'Betrag',
+    'activity.amountPlaceholder': 'z.B. 5000 €',
+    'activity.note': 'Notiz (optional)',
+    'activity.notePlaceholder': 'Notiz hinzufügen...',
+    'activity.cleaningBooked': 'Reinigung gebucht',
+    'activity.paymentReceived': 'Zahlung erhalten',
+    'activity.bookingMade': 'Buchung gemacht',
+    'activity.paymentFromBooking': 'Zahlung von Booking erhalten',
+    'activity.bookingViaBooking': 'Buchung über Booking gemacht',
+    
+    // Stats Grid
+    'stats.bookings': 'Buchungen',
+    'stats.cleanings': 'Reinigungen',
+    'stats.revenue': 'Einnahmen',
+    
+    // Timeline
+    'timeline.noEvents': 'Noch keine Ereignisse',
+    'timeline.filter.all': 'Alle',
+    'timeline.filter.booking': 'Buchung',
+    'timeline.filter.cleaning': 'Reinigung',
+    'timeline.filter.payment': 'Zahlung',
+    
+    // Economy Page
+    'economy.title': 'Finanzen',
+    'economy.subtitle': 'Übersicht über Einnahmen & Ausgaben',
+    'economy.selectYear': 'Jahr auswählen',
+    'economy.allYears': 'Alle Jahre',
+    'economy.income': 'Einnahmen',
+    'economy.costs': 'Kosten',
+    'economy.profitAfterCosts': 'Gewinn nach Kosten',
+    'economy.variableCosts': 'Variable Kosten',
+    'economy.fixedCosts': 'Fixkosten',
+    'economy.noVariableCosts': 'Keine variablen Kosten',
+    'economy.noFixedCosts': 'Keine Fixkosten',
+    'economy.costPlaceholder': 'Kosten...',
+    'economy.amountPlaceholder': 'Betrag',
+    'economy.transactionPlaceholder': 'Transaktionstitel (z.B. Auslandszahlung...)',
+    'economy.customerOptional': 'Kunde (optional)',
+    'economy.noCustomer': 'Kein Kunde',
+    'economy.totalVariable': 'Gesamt variabel',
+    'economy.totalFixed': 'Gesamt fix',
+    
+    // Statistics Page
+    'statistics.title': 'Statistik',
+    'statistics.subtitle': 'Daten zwischen Jahren vergleichen',
+    'statistics.selectYears': 'Jahre zum Vergleichen auswählen',
+    'statistics.incomePerMonth': 'Einnahmen pro Monat',
+    'statistics.costsPerMonth': 'Kosten pro Monat',
+    'statistics.profitPerMonth': 'Gewinn pro Monat',
+    'statistics.yearlySummary': 'Jahreszusammenfassung',
+    'statistics.income': 'Einnahmen',
+    'statistics.costs': 'Kosten',
+    'statistics.profit': 'Gewinn',
+    
+    // Months
+    'month.jan': 'Jan',
+    'month.feb': 'Feb',
+    'month.mar': 'Mär',
+    'month.apr': 'Apr',
+    'month.may': 'Mai',
+    'month.jun': 'Jun',
+    'month.jul': 'Jul',
+    'month.aug': 'Aug',
+    'month.sep': 'Sep',
+    'month.oct': 'Okt',
+    'month.nov': 'Nov',
+    'month.dec': 'Dez',
   },
   hr: {
     // Navigation
@@ -276,6 +765,7 @@ const translations: Record<Language, Translations> = {
     // Common
     'common.loading': 'Učitavanje...',
     'common.save': 'Spremi',
+    'common.saving': 'Spremanje...',
     'common.cancel': 'Odustani',
     'common.delete': 'Obriši',
     'common.edit': 'Uredi',
@@ -292,19 +782,181 @@ const translations: Record<Language, Translations> = {
     'common.performedBy': 'Izvršio',
     'common.transaction': 'Transakcija',
     'common.note': 'Bilješka',
+    'common.back': 'Natrag',
+    'common.error': 'Greška',
+    'common.success': 'Gotovo',
     
     // Notifications
     'notif.title': 'Obavijesti',
     'notif.markAllRead': 'Označi sve kao pročitano',
     'notif.empty': 'Nema obavijesti',
     'notif.newBooking': 'Nova rezervacija',
+    
+    // Header
+    'header.logout': 'Odjava',
+    'header.logoutError': 'Nije moguće odjaviti se.',
+    
+    // Booking Modal
+    'booking.new': 'Nova rezervacija',
+    'booking.guestName': 'Ime gosta',
+    'booking.guestNamePlaceholder': 'Ime Prezime',
+    'booking.phone': 'Telefon',
+    'booking.phonePlaceholder': '+385 91 123 4567',
+    'booking.checkIn': 'Prijava',
+    'booking.checkOut': 'Odjava',
+    'booking.adults': 'Broj odraslih',
+    'booking.children': 'Broj djece',
+    'booking.price': 'Cijena (€)',
+    'booking.created': 'Rezervacija stvorena!',
+    'booking.createdFor': 'Rezervacija za {name} je stvorena.',
+    'booking.createError': 'Nije moguće stvoriti rezervaciju. Pokušajte ponovo.',
+    'booking.validationError': 'Greška validacije',
+    'booking.checkForm': 'Provjerite obrazac i pokušajte ponovo.',
+    'booking.createdDirect': 'Rezervacija stvorena izravno',
+    
+    // Validation errors
+    'validation.guestNameRequired': 'Ime gosta je obavezno',
+    'validation.guestNameMax': 'Ime može imati max. 100 znakova',
+    'validation.phoneMax': 'Telefonski broj može imati max. 20 znakova',
+    'validation.checkInRequired': 'Datum prijave je obavezan',
+    'validation.invalidDate': 'Neispravan format datuma',
+    'validation.checkOutRequired': 'Datum odjave je obavezan',
+    'validation.adultsRequired': 'Broj odraslih je obavezan',
+    'validation.minAdults': 'Najmanje 1 odrasla osoba',
+    'validation.maxAdults': 'Max. 50 odraslih',
+    'validation.negativeChildren': 'Ne može biti negativno',
+    'validation.maxChildren': 'Max. 50 djece',
+    'validation.priceRequired': 'Cijena je obavezna',
+    'validation.pricePositive': 'Cijena mora biti pozitivna',
+    'validation.priceMax': 'Cijena je previsoka',
+    'validation.checkOutAfterCheckIn': 'Odjava mora biti nakon prijave',
+    
+    // Customers Page
+    'customers.all': 'Svi klijenti',
+    'customers.none': 'Još nema klijenata',
+    'customers.backToList': '← Natrag na klijente',
+    
+    // Status Page
+    'status.filterByPeriod': 'Filtriraj po razdoblju:',
+    'status.sorting': 'Sortiranje:',
+    'status.current': 'Trenutni',
+    'status.past': 'Prošli',
+    'status.future': 'Budući',
+    'status.newestFirst': 'Najnovije prvo',
+    'status.oldestFirst': 'Najstarije prvo',
+    'status.noBookings': 'Nema pronađenih rezervacija',
+    'status.done': 'Završeno',
+    'status.ongoing': 'U tijeku',
+    'status.upcoming': 'Nadolazeće',
+    
+    // Customer Detail
+    'customer.checkIn': 'Prijava',
+    'customer.checkOut': 'Odjava',
+    'customer.amount': 'Iznos',
+    'customer.status': 'Status',
+    'customer.markCleaningBooked': 'Označi čišćenje rezerviranim',
+    'customer.markCleaningPaid': 'Označi čišćenje plaćenim',
+    'customer.activity': 'Aktivnost',
+    'customer.addActivity': '+ Dodaj',
+    'customer.loadingActivities': 'Učitavanje aktivnosti...',
+    'customer.noActivities': 'Još nema aktivnosti',
+    'customer.cleaningBooked': 'Čišćenje rezervirano!',
+    'customer.cleaningBookedDesc': 'Čišćenje za {name} je sada rezervirano.',
+    'customer.cleaningBookedNote': 'Čišćenje rezervirano',
+    'customer.cleaningBookedFor': 'Čišćenje rezervirano za {name}',
+    'customer.cleaningPaid': 'Čišćenje plaćeno!',
+    'customer.cleaningPaidDesc': 'Čišćenje za {name} je sada označeno kao plaćeno.',
+    'customer.cleaningPaidNote': 'Čišćenje plaćeno',
+    'customer.cleaningPaidFor': 'Čišćenje plaćeno za {name}',
+    'customer.markError': 'Nije moguće označiti čišćenje.',
+    'customer.activityAdded': 'Aktivnost dodana!',
+    'customer.activityAddedDesc': '{type} je dodan za {name}.',
+    'customer.activityAddError': 'Nije moguće dodati aktivnost.',
+    'customer.activityUpdated': 'Aktivnost ažurirana!',
+    'customer.activityUpdatedDesc': '{type} je ažuriran za {name}.',
+    'customer.activityUpdateError': 'Nije moguće ažurirati aktivnost.',
+    
+    // Activity Modal
+    'activity.add': 'Dodaj aktivnost',
+    'activity.edit': 'Uredi aktivnost',
+    'activity.for': 'za',
+    'activity.type': 'Vrsta aktivnosti',
+    'activity.date': 'Datum',
+    'activity.selectDate': 'Odaberi datum',
+    'activity.amount': 'Iznos',
+    'activity.amountPlaceholder': 'npr. 5000 €',
+    'activity.note': 'Bilješka (neobavezno)',
+    'activity.notePlaceholder': 'Dodaj bilješku...',
+    'activity.cleaningBooked': 'Čišćenje rezervirano',
+    'activity.paymentReceived': 'Plaćanje primljeno',
+    'activity.bookingMade': 'Rezervacija napravljena',
+    'activity.paymentFromBooking': 'Plaćanje primljeno od Bookinga',
+    'activity.bookingViaBooking': 'Rezervacija napravljena putem Bookinga',
+    
+    // Stats Grid
+    'stats.bookings': 'Rezervacije',
+    'stats.cleanings': 'Čišćenja',
+    'stats.revenue': 'Prihod',
+    
+    // Timeline
+    'timeline.noEvents': 'Još nema događaja',
+    'timeline.filter.all': 'Sve',
+    'timeline.filter.booking': 'Rezervacija',
+    'timeline.filter.cleaning': 'Čišćenje',
+    'timeline.filter.payment': 'Plaćanje',
+    
+    // Economy Page
+    'economy.title': 'Financije',
+    'economy.subtitle': 'Pregled prihoda i troškova',
+    'economy.selectYear': 'Odaberi godinu',
+    'economy.allYears': 'Sve godine',
+    'economy.income': 'Prihodi',
+    'economy.costs': 'Troškovi',
+    'economy.profitAfterCosts': 'Dobit nakon troškova',
+    'economy.variableCosts': 'Varijabilni troškovi',
+    'economy.fixedCosts': 'Fiksni troškovi',
+    'economy.noVariableCosts': 'Nema varijabilnih troškova',
+    'economy.noFixedCosts': 'Nema fiksnih troškova',
+    'economy.costPlaceholder': 'Trošak...',
+    'economy.amountPlaceholder': 'Iznos',
+    'economy.transactionPlaceholder': 'Naslov transakcije (npr. inozemno plaćanje...)',
+    'economy.customerOptional': 'Klijent (neobavezno)',
+    'economy.noCustomer': 'Bez klijenta',
+    'economy.totalVariable': 'Ukupno varijabilno',
+    'economy.totalFixed': 'Ukupno fiksno',
+    
+    // Statistics Page
+    'statistics.title': 'Statistika',
+    'statistics.subtitle': 'Usporedi podatke između godina',
+    'statistics.selectYears': 'Odaberi godine za usporedbu',
+    'statistics.incomePerMonth': 'Prihodi po mjesecu',
+    'statistics.costsPerMonth': 'Troškovi po mjesecu',
+    'statistics.profitPerMonth': 'Dobit po mjesecu',
+    'statistics.yearlySummary': 'Godišnji sažetak',
+    'statistics.income': 'Prihodi',
+    'statistics.costs': 'Troškovi',
+    'statistics.profit': 'Dobit',
+    
+    // Months
+    'month.jan': 'Sij',
+    'month.feb': 'Velj',
+    'month.mar': 'Ožu',
+    'month.apr': 'Tra',
+    'month.may': 'Svi',
+    'month.jun': 'Lip',
+    'month.jul': 'Srp',
+    'month.aug': 'Kol',
+    'month.sep': 'Ruj',
+    'month.oct': 'Lis',
+    'month.nov': 'Stu',
+    'month.dec': 'Pro',
   },
 };
 
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, string>) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -320,8 +972,14 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('app-language', lang);
   };
 
-  const t = (key: string): string => {
-    return translations[language][key] || key;
+  const t = (key: string, params?: Record<string, string>): string => {
+    let text = translations[language][key] || key;
+    if (params) {
+      Object.entries(params).forEach(([paramKey, value]) => {
+        text = text.replace(`{${paramKey}}`, value);
+      });
+    }
+    return text;
   };
 
   return (

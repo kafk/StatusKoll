@@ -1,26 +1,28 @@
 import { useStats } from '@/hooks/useStats';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { CalendarCheck, Sparkles, Euro } from 'lucide-react';
 
 const StatsGrid = () => {
+  const { t } = useLanguage();
   const stats = useStats();
   
   const statItems = [
     { 
-      label: 'Bokningar', 
+      label: t('stats.bookings'), 
       value: stats.bookings,
       icon: CalendarCheck,
       color: 'text-primary',
       bgColor: 'bg-primary/10',
     },
     { 
-      label: 'Städningar', 
+      label: t('stats.cleanings'), 
       value: stats.cleanings,
       icon: Sparkles,
       color: 'text-secondary',
       bgColor: 'bg-secondary/10',
     },
     { 
-      label: 'Intäkt', 
+      label: t('stats.revenue'), 
       value: stats.revenue,
       icon: Euro,
       color: 'text-warning',

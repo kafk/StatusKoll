@@ -4,44 +4,7 @@ import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { useCreateCustomer } from '@/hooks/useCustomers';
 import { useCreateEvent } from '@/hooks/useEvents';
-
-// Validation schema for booking form
-const bookingSchema = z.object({
-  guestName: z.string()
-    .trim()
-    .min(1, 'Gästens namn krävs')
-    .max(100, 'Namnet får vara max 100 tecken'),
-  phone: z.string()
-    .trim()
-    .max(20, 'Telefonnumret får vara max 20 tecken')
-    .optional()
-    .or(z.literal('')),
-  checkIn: z.string()
-    .min(1, 'Incheckningsdatum krävs')
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Ogiltigt datumformat'),
-  checkOut: z.string()
-    .min(1, 'Utcheckningsdatum krävs')
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Ogiltigt datumformat'),
-  adults: z.string()
-    .min(1, 'Antal vuxna krävs')
-    .transform((val) => parseInt(val, 10))
-    .pipe(z.number().int().min(1, 'Minst 1 vuxen').max(50, 'Max 50 vuxna')),
-  children: z.string()
-    .transform((val) => val === '' ? 0 : parseInt(val, 10))
-    .pipe(z.number().int().min(0, 'Kan inte vara negativt').max(50, 'Max 50 barn')),
-  price: z.string()
-    .min(1, 'Pris krävs')
-    .transform((val) => parseFloat(val))
-    .pipe(z.number().positive('Priset måste vara positivt').max(1000000, 'Priset är för högt')),
-}).refine((data) => {
-  if (data.checkIn && data.checkOut) {
-    return new Date(data.checkOut) > new Date(data.checkIn);
-  }
-  return true;
-}, {
-  message: 'Utcheckning måste vara efter incheckning',
-  path: ['checkOut'],
-});
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -49,6 +12,7 @@ interface BookingModalProps {
 }
 
 const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
+  const { t } = useLanguage();
   const { toast } = useToast();
   const createCustomer = useCreateCustomer();
   const createEvent = useCreateEvent();
@@ -64,11 +28,49 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
     price: '',
   });
 
+  // Create validation schema with translated messages
+  const getBookingSchema = () => z.object({
+    guestName: z.string()
+      .trim()
+      .min(1, t('validation.guestNameRequired'))
+      .max(100, t('validation.guestNameMax')),
+    phone: z.string()
+      .trim()
+      .max(20, t('validation.phoneMax'))
+      .optional()
+      .or(z.literal('')),
+    checkIn: z.string()
+      .min(1, t('validation.checkInRequired'))
+      .regex(/^\d{4}-\d{2}-\d{2}$/, t('validation.invalidDate')),
+    checkOut: z.string()
+      .min(1, t('validation.checkOutRequired'))
+      .regex(/^\d{4}-\d{2}-\d{2}$/, t('validation.invalidDate')),
+    adults: z.string()
+      .min(1, t('validation.adultsRequired'))
+      .transform((val) => parseInt(val, 10))
+      .pipe(z.number().int().min(1, t('validation.minAdults')).max(50, t('validation.maxAdults'))),
+    children: z.string()
+      .transform((val) => val === '' ? 0 : parseInt(val, 10))
+      .pipe(z.number().int().min(0, t('validation.negativeChildren')).max(50, t('validation.maxChildren'))),
+    price: z.string()
+      .min(1, t('validation.priceRequired'))
+      .transform((val) => parseFloat(val))
+      .pipe(z.number().positive(t('validation.pricePositive')).max(1000000, t('validation.priceMax'))),
+  }).refine((data) => {
+    if (data.checkIn && data.checkOut) {
+      return new Date(data.checkOut) > new Date(data.checkIn);
+    }
+    return true;
+  }, {
+    message: t('validation.checkOutAfterCheckIn'),
+    path: ['checkOut'],
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
     
-    // Validate form data
+    const bookingSchema = getBookingSchema();
     const result = bookingSchema.safeParse(formData);
     
     if (!result.success) {
@@ -81,8 +83,8 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
       });
       setErrors(fieldErrors);
       toast({
-        title: 'Valideringsfel',
-        description: 'Kontrollera formuläret och försök igen.',
+        title: t('booking.validationError'),
+        description: t('booking.checkForm'),
         variant: 'destructive',
       });
       return;
@@ -92,7 +94,6 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
     const validData = result.data;
 
     try {
-      // Create customer with validated and sanitized data
       const customer = await createCustomer.mutateAsync({
         name: validData.guestName,
         phone: validData.phone || undefined,
@@ -106,19 +107,18 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
         status: 'pending',
       });
 
-      // Create booking event
       await createEvent.mutateAsync({
         customer_id: customer.id,
         type: 'booking',
         date: validData.checkIn,
         description: validData.guestName,
         amount: `${validData.price}€`,
-        note: `Bokning skapad direkt`,
+        note: t('booking.createdDirect'),
       });
 
       toast({
-        title: 'Bokning skapad!',
-        description: `Bokning för ${validData.guestName} har skapats.`,
+        title: t('booking.created'),
+        description: t('booking.createdFor', { name: validData.guestName }),
       });
 
       setFormData({
@@ -134,8 +134,8 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
       onClose();
     } catch (error) {
       toast({
-        title: 'Fel',
-        description: 'Kunde inte skapa bokningen. Försök igen.',
+        title: t('common.error'),
+        description: t('booking.createError'),
         variant: 'destructive',
       });
     } finally {
@@ -152,7 +152,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
     >
       <div className="bg-card border border-border rounded-lg p-6 max-w-[400px] w-full animate-slide-up">
         <div className="flex justify-between items-center mb-5">
-          <h2 className="font-display text-2xl font-extrabold">Ny bokning</h2>
+          <h2 className="font-display text-2xl font-extrabold">{t('booking.new')}</h2>
           <button
             onClick={onClose}
             className="w-8 h-8 rounded-lg bg-transparent border border-border text-muted-foreground flex items-center justify-center hover:bg-secondary/10 hover:border-secondary hover:text-secondary transition-all"
@@ -164,11 +164,11 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-xs font-bold uppercase text-muted-foreground mb-2 tracking-wide">
-              Gästens namn
+              {t('booking.guestName')}
             </label>
             <input
               type="text"
-              placeholder="Namn Efternamn"
+              placeholder={t('booking.guestNamePlaceholder')}
               maxLength={100}
               value={formData.guestName}
               onChange={(e) => setFormData({ ...formData, guestName: e.target.value })}
@@ -179,11 +179,11 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
 
           <div className="mb-4">
             <label className="block text-xs font-bold uppercase text-muted-foreground mb-2 tracking-wide">
-              Telefon
+              {t('booking.phone')}
             </label>
             <input
               type="tel"
-              placeholder="+46 70 123 45 67"
+              placeholder={t('booking.phonePlaceholder')}
               maxLength={20}
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -194,7 +194,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
 
           <div className="mb-4">
             <label className="block text-xs font-bold uppercase text-muted-foreground mb-2 tracking-wide">
-              Incheckning
+              {t('booking.checkIn')}
             </label>
             <input
               type="date"
@@ -207,7 +207,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
 
           <div className="mb-4">
             <label className="block text-xs font-bold uppercase text-muted-foreground mb-2 tracking-wide">
-              Utcheckning
+              {t('booking.checkOut')}
             </label>
             <input
               type="date"
@@ -220,7 +220,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
 
           <div className="mb-4">
             <label className="block text-xs font-bold uppercase text-muted-foreground mb-2 tracking-wide">
-              Antal vuxna
+              {t('booking.adults')}
             </label>
             <input
               type="number"
@@ -236,7 +236,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
 
           <div className="mb-4">
             <label className="block text-xs font-bold uppercase text-muted-foreground mb-2 tracking-wide">
-              Antal barn
+              {t('booking.children')}
             </label>
             <input
               type="number"
@@ -252,7 +252,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
 
           <div className="mb-4">
             <label className="block text-xs font-bold uppercase text-muted-foreground mb-2 tracking-wide">
-              Pris (€)
+              {t('booking.price')}
             </label>
             <input
               type="number"
@@ -274,14 +274,14 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
               disabled={isSubmitting}
               className="flex-1 py-3.5 rounded-xl font-mono text-sm font-bold uppercase tracking-wide bg-transparent border border-border text-muted-foreground hover:border-primary hover:text-primary transition-all disabled:opacity-50"
             >
-              Avbryt
+              {t('common.cancel')}
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
               className="flex-1 py-3.5 rounded-xl font-mono text-sm font-bold uppercase tracking-wide gradient-primary text-primary-foreground hover:-translate-y-0.5 hover:shadow-[0_8px_16px_rgba(255,107,74,0.3)] transition-all disabled:opacity-50"
             >
-              {isSubmitting ? 'Sparar...' : 'Spara'}
+              {isSubmitting ? t('common.saving') : t('common.save')}
             </button>
           </div>
         </form>

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import NotificationBell from "./NotificationBell";
 
 interface HeaderProps {
@@ -10,6 +11,7 @@ interface HeaderProps {
 }
 
 const Header = ({ title = "STATUS", subtitle }: HeaderProps) => {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const { signOut } = useAuth();
   const { toast } = useToast();
@@ -18,8 +20,8 @@ const Header = ({ title = "STATUS", subtitle }: HeaderProps) => {
     const { error } = await signOut();
     if (error) {
       toast({
-        title: "Fel",
-        description: "Kunde inte logga ut.",
+        title: t('common.error'),
+        description: t('header.logoutError'),
         variant: "destructive",
       });
     } else {
@@ -48,7 +50,7 @@ const Header = ({ title = "STATUS", subtitle }: HeaderProps) => {
         <button
           onClick={handleLogout}
           className="p-2 bg-card border border-border rounded-full text-muted-foreground hover:border-destructive hover:text-destructive transition-all hover:-translate-y-0.5"
-          title="Logga ut"
+          title={t('header.logout')}
         >
           <LogOut className="w-4 h-4" />
         </button>

@@ -4,23 +4,25 @@ import CustomerCard from './CustomerCard';
 import CustomerDetail from './CustomerDetail';
 import Header from './Header';
 import { Customer, FilterStatus, SortOrder } from '@/types/rental';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const StatusPage = () => {
+  const { t } = useLanguage();
   const { data: dbCustomers, isLoading } = useCustomers();
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [filter, setFilter] = useState<'all' | FilterStatus>('all');
   const [sort, setSort] = useState<SortOrder>('newest');
 
   const filterButtons = [
-    { label: 'Alla', value: 'all' as const },
-    { label: 'Pågående', value: 'current' as const },
-    { label: 'Avslutade', value: 'past' as const },
-    { label: 'Kommande', value: 'future' as const },
+    { label: t('common.all'), value: 'all' as const },
+    { label: t('status.current'), value: 'current' as const },
+    { label: t('status.past'), value: 'past' as const },
+    { label: t('status.future'), value: 'future' as const },
   ];
 
   const sortButtons = [
-    { label: 'Senast först', value: 'newest' as const },
-    { label: 'Äldst först', value: 'oldest' as const },
+    { label: t('status.newestFirst'), value: 'newest' as const },
+    { label: t('status.oldestFirst'), value: 'oldest' as const },
   ];
 
   const customers = dbCustomers?.map(formatCustomerForUI) || [];
@@ -49,7 +51,7 @@ const StatusPage = () => {
 
       <div className="mb-5">
         <div className="text-[11px] uppercase tracking-[1.5px] text-muted-foreground mb-3">
-          Filtrera efter period:
+          {t('status.filterByPeriod')}
         </div>
         <div className="flex gap-2 mb-5">
           {filterButtons.map((btn) => (
@@ -70,7 +72,7 @@ const StatusPage = () => {
 
       <div className="mb-6">
         <div className="text-[11px] uppercase tracking-[1.5px] text-muted-foreground mb-3">
-          Sortering:
+          {t('status.sorting')}
         </div>
         <div className="flex gap-2">
           {sortButtons.map((btn) => (
@@ -91,9 +93,9 @@ const StatusPage = () => {
 
       <div>
         {isLoading ? (
-          <div className="text-center text-muted-foreground py-8">Laddar...</div>
+          <div className="text-center text-muted-foreground py-8">{t('common.loading')}</div>
         ) : filteredCustomers.length === 0 ? (
-          <div className="text-center text-muted-foreground py-8">Inga bokningar hittades</div>
+          <div className="text-center text-muted-foreground py-8">{t('status.noBookings')}</div>
         ) : (
           filteredCustomers.map((customer) => (
             <CustomerCard
