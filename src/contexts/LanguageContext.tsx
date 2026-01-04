@@ -99,13 +99,19 @@ const translations: Record<Language, Translations> = {
     'booking.checkOut': 'Utcheckning',
     'booking.adults': 'Antal vuxna',
     'booking.children': 'Antal barn',
-    'booking.price': 'Pris (€)',
+    'booking.price': 'Totalt bokningspris (€)',
+    'booking.commission': 'Provision (€)',
+    'booking.commissionHint': 'Beräknas automatiskt (15%)',
     'booking.created': 'Bokning skapad!',
     'booking.createdFor': 'Bokning för {name} har skapats.',
     'booking.createError': 'Kunde inte skapa bokningen. Försök igen.',
     'booking.validationError': 'Valideringsfel',
     'booking.checkForm': 'Kontrollera formuläret och försök igen.',
     'booking.createdDirect': 'Bokning skapad direkt',
+    'booking.incomeFromBooking': 'Intäkt - {name}',
+    'booking.bookingIncome': 'Bokningsintäkt',
+    'booking.commissionCost': 'Provision - {name}',
+    'booking.platformCommission': 'Plattformsavgift',
     
     // Validation errors
     'validation.guestNameRequired': 'Gästens namn krävs',
@@ -122,6 +128,7 @@ const translations: Record<Language, Translations> = {
     'validation.priceRequired': 'Pris krävs',
     'validation.pricePositive': 'Priset måste vara positivt',
     'validation.priceMax': 'Priset är för högt',
+    'validation.commissionPositive': 'Provisionen kan inte vara negativ',
     'validation.checkOutAfterCheckIn': 'Utcheckning måste vara efter incheckning',
     
     // Customers Page
@@ -336,13 +343,19 @@ const translations: Record<Language, Translations> = {
     'booking.checkOut': 'Check-out',
     'booking.adults': 'Number of adults',
     'booking.children': 'Number of children',
-    'booking.price': 'Price (€)',
+    'booking.price': 'Total booking price (€)',
+    'booking.commission': 'Commission (€)',
+    'booking.commissionHint': 'Calculated automatically (15%)',
     'booking.created': 'Booking created!',
     'booking.createdFor': 'Booking for {name} has been created.',
     'booking.createError': 'Could not create booking. Please try again.',
     'booking.validationError': 'Validation error',
     'booking.checkForm': 'Check the form and try again.',
     'booking.createdDirect': 'Booking created directly',
+    'booking.incomeFromBooking': 'Income - {name}',
+    'booking.bookingIncome': 'Booking income',
+    'booking.commissionCost': 'Commission - {name}',
+    'booking.platformCommission': 'Platform fee',
     
     // Validation errors
     'validation.guestNameRequired': 'Guest name is required',
@@ -359,6 +372,7 @@ const translations: Record<Language, Translations> = {
     'validation.priceRequired': 'Price is required',
     'validation.pricePositive': 'Price must be positive',
     'validation.priceMax': 'Price is too high',
+    'validation.commissionPositive': 'Commission cannot be negative',
     'validation.checkOutAfterCheckIn': 'Check-out must be after check-in',
     
     // Customers Page
@@ -573,13 +587,19 @@ const translations: Record<Language, Translations> = {
     'booking.checkOut': 'Check-out',
     'booking.adults': 'Anzahl Erwachsene',
     'booking.children': 'Anzahl Kinder',
-    'booking.price': 'Preis (€)',
+    'booking.price': 'Gesamter Buchungspreis (€)',
+    'booking.commission': 'Provision (€)',
+    'booking.commissionHint': 'Automatisch berechnet (15%)',
     'booking.created': 'Buchung erstellt!',
     'booking.createdFor': 'Buchung für {name} wurde erstellt.',
     'booking.createError': 'Buchung konnte nicht erstellt werden. Bitte erneut versuchen.',
     'booking.validationError': 'Validierungsfehler',
     'booking.checkForm': 'Überprüfen Sie das Formular und versuchen Sie es erneut.',
     'booking.createdDirect': 'Buchung direkt erstellt',
+    'booking.incomeFromBooking': 'Einnahmen - {name}',
+    'booking.bookingIncome': 'Buchungseinnahmen',
+    'booking.commissionCost': 'Provision - {name}',
+    'booking.platformCommission': 'Plattformgebühr',
     
     // Validation errors
     'validation.guestNameRequired': 'Gastname ist erforderlich',
@@ -596,6 +616,7 @@ const translations: Record<Language, Translations> = {
     'validation.priceRequired': 'Preis ist erforderlich',
     'validation.pricePositive': 'Preis muss positiv sein',
     'validation.priceMax': 'Preis ist zu hoch',
+    'validation.commissionPositive': 'Provision kann nicht negativ sein',
     'validation.checkOutAfterCheckIn': 'Check-out muss nach Check-in sein',
     
     // Customers Page
@@ -810,13 +831,19 @@ const translations: Record<Language, Translations> = {
     'booking.checkOut': 'Odjava',
     'booking.adults': 'Broj odraslih',
     'booking.children': 'Broj djece',
-    'booking.price': 'Cijena (€)',
+    'booking.price': 'Ukupna cijena rezervacije (€)',
+    'booking.commission': 'Provizija (€)',
+    'booking.commissionHint': 'Automatski izračunato (15%)',
     'booking.created': 'Rezervacija stvorena!',
     'booking.createdFor': 'Rezervacija za {name} je stvorena.',
     'booking.createError': 'Nije moguće stvoriti rezervaciju. Pokušajte ponovo.',
     'booking.validationError': 'Greška validacije',
     'booking.checkForm': 'Provjerite obrazac i pokušajte ponovo.',
     'booking.createdDirect': 'Rezervacija stvorena izravno',
+    'booking.incomeFromBooking': 'Prihod - {name}',
+    'booking.bookingIncome': 'Prihod od rezervacije',
+    'booking.commissionCost': 'Provizija - {name}',
+    'booking.platformCommission': 'Naknada platforme',
     
     // Validation errors
     'validation.guestNameRequired': 'Ime gosta je obavezno',
@@ -833,6 +860,7 @@ const translations: Record<Language, Translations> = {
     'validation.priceRequired': 'Cijena je obavezna',
     'validation.pricePositive': 'Cijena mora biti pozitivna',
     'validation.priceMax': 'Cijena je previsoka',
+    'validation.commissionPositive': 'Provizija ne može biti negativna',
     'validation.checkOutAfterCheckIn': 'Odjava mora biti nakon prijave',
     
     // Customers Page

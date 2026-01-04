@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { useCreateCustomer } from '@/hooks/useCustomers';
 import { useCreateEvent } from '@/hooks/useEvents';
+import { useCreateCost } from '@/hooks/useCosts';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface BookingModalProps {
@@ -16,6 +17,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
   const { toast } = useToast();
   const createCustomer = useCreateCustomer();
   const createEvent = useCreateEvent();
+  const createCost = useCreateCost();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
@@ -26,7 +28,19 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
     adults: '',
     children: '',
     price: '',
+    commission: '',
   });
+
+  // Auto-calculate commission (15%) when price changes
+  useEffect(() => {
+    if (formData.price) {
+      const price = parseFloat(formData.price);
+      if (!isNaN(price) && price > 0) {
+        const calculatedCommission = (price * 0.15).toFixed(2);
+        setFormData(prev => ({ ...prev, commission: calculatedCommission }));
+      }
+    }
+  }, [formData.price]);
 
   // Create validation schema with translated messages
   const getBookingSchema = () => z.object({
@@ -56,6 +70,9 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
       .min(1, t('validation.priceRequired'))
       .transform((val) => parseFloat(val))
       .pipe(z.number().positive(t('validation.pricePositive')).max(1000000, t('validation.priceMax'))),
+    commission: z.string()
+      .transform((val) => val === '' ? 0 : parseFloat(val))
+      .pipe(z.number().min(0, t('validation.commissionPositive')).max(1000000, t('validation.priceMax'))),
   }).refine((data) => {
     if (data.checkIn && data.checkOut) {
       return new Date(data.checkOut) > new Date(data.checkIn);
@@ -116,6 +133,28 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
         note: t('booking.createdDirect'),
       });
 
+      // Create income cost entry (positive - revenue from booking)
+      await createCost.mutateAsync({
+        name: t('booking.incomeFromBooking', { name: validData.guestName }),
+        amount: -validData.price, // Negative = income
+        date: validData.checkIn,
+        type: 'variable',
+        transaction_title: t('booking.bookingIncome'),
+        customer_id: customer.id,
+      });
+
+      // Create commission cost entry (positive - expense)
+      if (validData.commission > 0) {
+        await createCost.mutateAsync({
+          name: t('booking.commissionCost', { name: validData.guestName }),
+          amount: validData.commission,
+          date: validData.checkIn,
+          type: 'variable',
+          transaction_title: t('booking.platformCommission'),
+          customer_id: customer.id,
+        });
+      }
+
       toast({
         title: t('booking.created'),
         description: t('booking.createdFor', { name: validData.guestName }),
@@ -129,6 +168,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
         adults: '',
         children: '',
         price: '',
+        commission: '',
       });
       setErrors({});
       onClose();
@@ -256,7 +296,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
             </label>
             <input
               type="number"
-              placeholder="150"
+              placeholder="885"
               min="0"
               max="1000000"
               step="0.01"
@@ -265,6 +305,24 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
               className={`w-full px-3 py-3 bg-muted border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground ${errors.price ? 'border-destructive' : 'border-border'}`}
             />
             {errors.price && <p className="text-destructive text-xs mt-1">{errors.price}</p>}
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-xs font-bold uppercase text-muted-foreground mb-2 tracking-wide">
+              {t('booking.commission')}
+            </label>
+            <input
+              type="number"
+              placeholder="132.75"
+              min="0"
+              max="1000000"
+              step="0.01"
+              value={formData.commission}
+              onChange={(e) => setFormData({ ...formData, commission: e.target.value })}
+              className={`w-full px-3 py-3 bg-muted border rounded-lg font-mono text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-muted-foreground ${errors.commission ? 'border-destructive' : 'border-border'}`}
+            />
+            <p className="text-muted-foreground text-xs mt-1">{t('booking.commissionHint')}</p>
+            {errors.commission && <p className="text-destructive text-xs mt-1">{errors.commission}</p>}
           </div>
 
           <div className="flex gap-3 mt-6">
