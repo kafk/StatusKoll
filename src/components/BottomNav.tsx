@@ -1,7 +1,7 @@
-import { Home, Activity, Users, Coins, Settings } from 'lucide-react';
+import { Home, Activity, Users, Coins, BarChart3, Settings } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-type Page = 'home' | 'status' | 'customers' | 'economy' | 'settings';
+type Page = 'home' | 'status' | 'customers' | 'economy' | 'statistics' | 'settings';
 
 interface BottomNavProps {
   activePage: Page;
@@ -16,6 +16,7 @@ const BottomNav = ({ activePage, onPageChange }: BottomNavProps) => {
     { id: 'status', labelKey: 'nav.status', icon: Activity },
     { id: 'customers', labelKey: 'nav.customers', icon: Users },
     { id: 'economy', labelKey: 'nav.economy', icon: Coins },
+    { id: 'statistics', labelKey: 'nav.statistics', icon: BarChart3 },
     { id: 'settings', labelKey: 'nav.settings', icon: Settings },
   ];
 
