@@ -1,5 +1,10 @@
+import { useState } from 'react';
+import { format } from 'date-fns';
 import { Customer } from '@/types/rental';
 import { useToast } from '@/hooks/use-toast';
+import { useCreateEvent } from '@/hooks/useEvents';
+import { useUpdateCustomer } from '@/hooks/useCustomers';
+import AddActivityModal, { ActivityFormData } from './AddActivityModal';
 
 interface CustomerDetailProps {
   customer: Customer;
@@ -8,26 +13,96 @@ interface CustomerDetailProps {
 
 const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
   const { toast } = useToast();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const createEvent = useCreateEvent();
+  const updateCustomer = useUpdateCustomer();
 
-  const handleMarkCleaned = () => {
-    toast({
-      title: 'Markerad som städad!',
-      description: `${customer.name}s bokning är nu markerad som städad.`,
-    });
+  const handleMarkCleaningBooked = async () => {
+    try {
+      await createEvent.mutateAsync({
+        customer_id: customer.id,
+        type: 'cleaning',
+        date: format(new Date(), 'yyyy-MM-dd'),
+        description: `Städ bokat för ${customer.name}`,
+        note: 'Städ bokat',
+      });
+      
+      await updateCustomer.mutateAsync({
+        id: customer.id,
+        cleaning_done: true,
+      });
+
+      toast({
+        title: 'Städ bokat!',
+        description: `${customer.name}s städning är nu bokad.`,
+      });
+    } catch (error) {
+      toast({
+        title: 'Fel',
+        description: 'Kunde inte markera städ som bokat.',
+        variant: 'destructive',
+      });
+    }
   };
 
-  const handleMarkPaid = () => {
-    toast({
-      title: 'Markerad som betald!',
-      description: `${customer.name}s bokning är nu markerad som betald.`,
-    });
+  const handleMarkCleaningPaid = async () => {
+    try {
+      await createEvent.mutateAsync({
+        customer_id: customer.id,
+        type: 'payment',
+        date: format(new Date(), 'yyyy-MM-dd'),
+        description: `Städ betald för ${customer.name}`,
+        note: 'Städ betald',
+      });
+      
+      await updateCustomer.mutateAsync({
+        id: customer.id,
+        payment_done: true,
+      });
+
+      toast({
+        title: 'Städ betald!',
+        description: `${customer.name}s städning är nu markerad som betald.`,
+      });
+    } catch (error) {
+      toast({
+        title: 'Fel',
+        description: 'Kunde inte markera städ som betald.',
+        variant: 'destructive',
+      });
+    }
   };
 
-  const handleAddActivity = () => {
-    toast({
-      title: 'Lägg till aktivitet',
-      description: 'Denna funktion kommer snart.',
-    });
+  const handleAddActivity = async (activity: ActivityFormData) => {
+    const typeMap = {
+      cleaning_booked: { type: 'cleaning' as const, label: 'Städ bokat' },
+      payment_received: { type: 'payment' as const, label: 'Betalning mottagen från Booking' },
+      booking_made: { type: 'booking' as const, label: 'Bokning gjord via Booking' },
+    };
+
+    const { type, label } = typeMap[activity.type];
+
+    try {
+      await createEvent.mutateAsync({
+        customer_id: customer.id,
+        type,
+        date: format(activity.date, 'yyyy-MM-dd'),
+        description: `${label} för ${customer.name}`,
+        amount: activity.amount,
+        note: activity.note,
+      });
+
+      toast({
+        title: 'Aktivitet tillagd!',
+        description: `${label} har lagts till för ${customer.name}.`,
+      });
+    } catch (error) {
+      toast({
+        title: 'Fel',
+        description: 'Kunde inte lägga till aktiviteten.',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
@@ -86,18 +161,20 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
 
       <div className="grid grid-cols-2 gap-3 mb-6">
         <button
-          onClick={handleMarkCleaned}
-          className="bg-card border border-border rounded-2xl p-4 flex items-center gap-3 font-mono text-[11px] font-bold hover:border-primary hover:-translate-y-0.5 transition-all"
+          onClick={handleMarkCleaningBooked}
+          disabled={createEvent.isPending || updateCustomer.isPending}
+          className="bg-card border border-border rounded-2xl p-4 flex items-center gap-3 font-mono text-[11px] font-bold hover:border-primary hover:-translate-y-0.5 transition-all disabled:opacity-50"
         >
           <span className="text-2xl">🧹</span>
-          Markera städad
+          Markera Städ Bokat
         </button>
         <button
-          onClick={handleMarkPaid}
-          className="bg-card border border-border rounded-2xl p-4 flex items-center gap-3 font-mono text-[11px] font-bold hover:border-primary hover:-translate-y-0.5 transition-all"
+          onClick={handleMarkCleaningPaid}
+          disabled={createEvent.isPending || updateCustomer.isPending}
+          className="bg-card border border-border rounded-2xl p-4 flex items-center gap-3 font-mono text-[11px] font-bold hover:border-primary hover:-translate-y-0.5 transition-all disabled:opacity-50"
         >
           <span className="text-2xl">💳</span>
-          Markera betald
+          Markera betald Städ
         </button>
       </div>
 
@@ -105,7 +182,7 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
         <div className="flex justify-between items-center mb-4">
           <h4 className="font-display text-lg font-bold">Aktivitet</h4>
           <button
-            onClick={handleAddActivity}
+            onClick={() => setIsModalOpen(true)}
             className="bg-transparent border border-border rounded-xl px-4 py-2 text-primary font-mono text-[11px] font-bold hover:border-primary hover:bg-primary/10 transition-all"
           >
             + Lägg till
@@ -127,6 +204,13 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
           ))}
         </div>
       </div>
+
+      <AddActivityModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleAddActivity}
+        customerName={customer.name}
+      />
     </div>
   );
 };
