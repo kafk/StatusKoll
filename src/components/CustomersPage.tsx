@@ -4,8 +4,10 @@ import CustomerListCard from './CustomerListCard';
 import CustomerDetail from './CustomerDetail';
 import Header from './Header';
 import { Customer } from '@/types/rental';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const CustomersPage = () => {
+  const { t } = useLanguage();
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const { data: dbCustomers, isLoading } = useCustomers();
 
@@ -24,13 +26,13 @@ const CustomersPage = () => {
     <div className="pb-20">
       <Header />
 
-      <h2 className="font-display text-xl font-bold mb-4">Alla kunder</h2>
+      <h2 className="font-display text-xl font-bold mb-4">{t('customers.all')}</h2>
 
       <div>
         {isLoading ? (
-          <div className="text-muted-foreground text-center py-8">Laddar...</div>
+          <div className="text-muted-foreground text-center py-8">{t('common.loading')}</div>
         ) : customers.length === 0 ? (
-          <div className="text-muted-foreground text-center py-8">Inga kunder ännu</div>
+          <div className="text-muted-foreground text-center py-8">{t('customers.none')}</div>
         ) : (
           customers.map((customer) => (
             <CustomerListCard

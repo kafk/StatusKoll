@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { format, getYear, parseISO } from 'date-fns';
-import { sv } from 'date-fns/locale';
+import { sv, enUS, de, hr } from 'date-fns/locale';
 import { Plus, Trash2, TrendingUp, TrendingDown, Wallet, CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,12 +12,17 @@ import { cn } from '@/lib/utils';
 import Header from './Header';
 import { useCosts, useCreateCost, useDeleteCost } from '@/hooks/useCosts';
 import { useCustomers } from '@/hooks/useCustomers';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const EconomyPage = () => {
+  const { t, language } = useLanguage();
   const { data: costs, isLoading: costsLoading } = useCosts();
   const { data: customers } = useCustomers();
   const createCost = useCreateCost();
   const deleteCost = useDeleteCost();
+
+  const localeMap = { sv, en: enUS, de, hr };
+  const dateLocale = localeMap[language] || sv;
 
   const [newFixedName, setNewFixedName] = useState('');
   const [newFixedAmount, setNewFixedAmount] = useState('');
@@ -129,37 +134,52 @@ const EconomyPage = () => {
   if (costsLoading) {
   return (
     <div className="pb-24">
-      <Header title="Ekonomi" subtitle="Översikt av intäkter & kostnader" />
+      <Header title={t('economy.title')} subtitle={t('economy.subtitle')} />
 
       {/* Year Filter */}
       <div className="mb-4">
         <Select value={selectedYear} onValueChange={setSelectedYear}>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Välj år" />
+            <SelectValue placeholder={t('economy.selectYear')} />
           </SelectTrigger>
           <SelectContent className="bg-card border-border">
-            <SelectItem value="all">Alla år</SelectItem>
+            <SelectItem value="all">{t('economy.allYears')}</SelectItem>
             {availableYears.map(year => (
               <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
-        <div className="text-center text-muted-foreground py-8">Laddar...</div>
+        <div className="text-center text-muted-foreground py-8">{t('common.loading')}</div>
       </div>
     );
   }
 
   return (
     <div className="pb-24">
-      <Header title="Ekonomi" subtitle="Översikt av intäkter & kostnader" />
+      <Header title={t('economy.title')} subtitle={t('economy.subtitle')} />
+
+      {/* Year Filter */}
+      <div className="mb-4">
+        <Select value={selectedYear} onValueChange={setSelectedYear}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder={t('economy.selectYear')} />
+          </SelectTrigger>
+          <SelectContent className="bg-card border-border">
+            <SelectItem value="all">{t('economy.allYears')}</SelectItem>
+            {availableYears.map(year => (
+              <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 gap-3 mb-6">
         <Card className="p-4 bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="w-4 h-4 text-success" />
-            <span className="text-xs text-muted-foreground">Intäkter</span>
+            <span className="text-xs text-muted-foreground">{t('economy.income')}</span>
           </div>
           <p className="text-xl font-bold text-success">{income.toLocaleString()} €</p>
         </Card>
@@ -167,7 +187,7 @@ const EconomyPage = () => {
         <Card className="p-4 bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
           <div className="flex items-center gap-2 mb-2">
             <TrendingDown className="w-4 h-4 text-destructive" />
-            <span className="text-xs text-muted-foreground">Kostnader</span>
+            <span className="text-xs text-muted-foreground">{t('economy.costs')}</span>
           </div>
           <p className="text-xl font-bold text-destructive">{totalCosts.toLocaleString()} €</p>
         </Card>
@@ -181,7 +201,7 @@ const EconomyPage = () => {
               <Wallet className={`w-5 h-5 ${profit >= 0 ? 'text-primary' : 'text-destructive'}`} />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Vinst efter kostnader</p>
+              <p className="text-sm text-muted-foreground">{t('economy.profitAfterCosts')}</p>
               <p className={`text-2xl font-bold ${profit >= 0 ? 'text-primary' : 'text-destructive'}`}>
                 {profit >= 0 ? '+' : ''}{profit.toLocaleString()} €
               </p>
@@ -194,13 +214,13 @@ const EconomyPage = () => {
       <div className="mb-6">
         <h3 className="font-display font-bold text-lg mb-3 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-info" />
-          Rörliga kostnader
+          {t('economy.variableCosts')}
         </h3>
         
         <Card className="p-4">
           <div className="space-y-3 mb-4">
             {variableCosts.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-2">Inga rörliga kostnader</p>
+              <p className="text-sm text-muted-foreground text-center py-2">{t('economy.noVariableCosts')}</p>
             ) : (
               variableCosts.map(cost => {
                 const linkedCustomer = customers?.find(c => c.id === cost.customer_id);
@@ -212,7 +232,7 @@ const EconomyPage = () => {
                         <p className="text-xs text-muted-foreground truncate">{cost.transaction_title}</p>
                       )}
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <span>{format(new Date(cost.date), 'd MMM yyyy', { locale: sv })}</span>
+                        <span>{format(new Date(cost.date), 'd MMM yyyy', { locale: dateLocale })}</span>
                         {linkedCustomer && (
                           <span className="text-info">• {linkedCustomer.name}</span>
                         )}
@@ -236,13 +256,13 @@ const EconomyPage = () => {
           <div className="space-y-2">
             <div className="flex flex-wrap gap-2">
               <Input 
-                placeholder="Kostnad..." 
+                placeholder={t('economy.costPlaceholder')}
                 value={newVariableName}
                 onChange={(e) => setNewVariableName(e.target.value)}
                 className="flex-1 min-w-[100px]"
               />
               <Input 
-                placeholder="Belopp" 
+                placeholder={t('economy.amountPlaceholder')}
                 type="number"
                 value={newVariableAmount}
                 onChange={(e) => setNewVariableAmount(e.target.value)}
@@ -251,17 +271,17 @@ const EconomyPage = () => {
             </div>
             <div className="flex flex-wrap gap-2">
               <Input 
-                placeholder="Transaktions-titel (t.ex. utlandsbetalning...)" 
+                placeholder={t('economy.transactionPlaceholder')}
                 value={newVariableTransaction}
                 onChange={(e) => setNewVariableTransaction(e.target.value)}
                 className="flex-1 min-w-[150px]"
               />
               <Select value={newVariableCustomer} onValueChange={(val) => setNewVariableCustomer(val === 'none' ? '' : val)}>
                 <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder="Kund (valfri)" />
+                  <SelectValue placeholder={t('economy.customerOptional')} />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-border z-50">
-                  <SelectItem value="none">Ingen kund</SelectItem>
+                  <SelectItem value="none">{t('economy.noCustomer')}</SelectItem>
                   {activeCustomers.map(customer => (
                     <SelectItem key={customer.id} value={customer.id}>
                       {customer.name}
@@ -275,7 +295,7 @@ const EconomyPage = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline" className={cn("flex-1 justify-start text-left font-normal", !newVariableDate && "text-muted-foreground")}>
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {format(newVariableDate, 'd MMM yyyy', { locale: sv })}
+                    {format(newVariableDate, 'd MMM yyyy', { locale: dateLocale })}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0 z-50" align="start">
@@ -290,13 +310,13 @@ const EconomyPage = () => {
               </Popover>
               <Button onClick={addVariableCost} disabled={createCost.isPending}>
                 <Plus className="w-4 h-4 mr-1" />
-                Lägg till
+                {t('common.add')}
               </Button>
             </div>
           </div>
           
           <div className="mt-3 pt-3 border-t border-border flex justify-between">
-            <span className="text-sm text-muted-foreground">Totalt rörliga</span>
+            <span className="text-sm text-muted-foreground">{t('economy.totalVariable')}</span>
             <span className="font-bold">{totalVariableCosts.toLocaleString()} €</span>
           </div>
         </Card>
@@ -306,13 +326,13 @@ const EconomyPage = () => {
       <div className="mb-6">
         <h3 className="font-display font-bold text-lg mb-3 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-warning" />
-          Fasta kostnader
+          {t('economy.fixedCosts')}
         </h3>
         
         <Card className="p-4">
           <div className="space-y-3 mb-4">
             {fixedCosts.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-2">Inga fasta kostnader</p>
+              <p className="text-sm text-muted-foreground text-center py-2">{t('economy.noFixedCosts')}</p>
             ) : (
               fixedCosts.map(cost => {
                 const linkedCustomer = customers?.find(c => c.id === cost.customer_id);
@@ -324,7 +344,7 @@ const EconomyPage = () => {
                         <p className="text-xs text-muted-foreground truncate">{cost.transaction_title}</p>
                       )}
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <span>{format(new Date(cost.date), 'd MMM yyyy', { locale: sv })}</span>
+                        <span>{format(new Date(cost.date), 'd MMM yyyy', { locale: dateLocale })}</span>
                         {linkedCustomer && (
                           <span className="text-info">• {linkedCustomer.name}</span>
                         )}
@@ -348,13 +368,13 @@ const EconomyPage = () => {
           <div className="space-y-2">
             <div className="flex flex-wrap gap-2">
               <Input 
-                placeholder="Kostnad..." 
+                placeholder={t('economy.costPlaceholder')}
                 value={newFixedName}
                 onChange={(e) => setNewFixedName(e.target.value)}
                 className="flex-1 min-w-[100px]"
               />
               <Input 
-                placeholder="Belopp" 
+                placeholder={t('economy.amountPlaceholder')}
                 type="number"
                 value={newFixedAmount}
                 onChange={(e) => setNewFixedAmount(e.target.value)}
@@ -363,17 +383,17 @@ const EconomyPage = () => {
             </div>
             <div className="flex flex-wrap gap-2">
               <Input 
-                placeholder="Transaktions-titel (t.ex. utlandsbetalning...)" 
+                placeholder={t('economy.transactionPlaceholder')}
                 value={newFixedTransaction}
                 onChange={(e) => setNewFixedTransaction(e.target.value)}
                 className="flex-1 min-w-[150px]"
               />
               <Select value={newFixedCustomer} onValueChange={(val) => setNewFixedCustomer(val === 'none' ? '' : val)}>
                 <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder="Kund (valfri)" />
+                  <SelectValue placeholder={t('economy.customerOptional')} />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-border z-50">
-                  <SelectItem value="none">Ingen kund</SelectItem>
+                  <SelectItem value="none">{t('economy.noCustomer')}</SelectItem>
                   {activeCustomers.map(customer => (
                     <SelectItem key={customer.id} value={customer.id}>
                       {customer.name}
@@ -387,7 +407,7 @@ const EconomyPage = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline" className={cn("flex-1 justify-start text-left font-normal", !newFixedDate && "text-muted-foreground")}>
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {format(newFixedDate, 'd MMM yyyy', { locale: sv })}
+                    {format(newFixedDate, 'd MMM yyyy', { locale: dateLocale })}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0 z-50" align="start">
@@ -402,13 +422,13 @@ const EconomyPage = () => {
               </Popover>
               <Button onClick={addFixedCost} disabled={createCost.isPending}>
                 <Plus className="w-4 h-4 mr-1" />
-                Lägg till
+                {t('common.add')}
               </Button>
             </div>
           </div>
           
           <div className="mt-3 pt-3 border-t border-border flex justify-between">
-            <span className="text-sm text-muted-foreground">Totalt fasta</span>
+            <span className="text-sm text-muted-foreground">{t('economy.totalFixed')}</span>
             <span className="font-bold">{totalFixedCosts.toLocaleString()} €</span>
           </div>
         </Card>

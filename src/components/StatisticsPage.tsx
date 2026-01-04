@@ -1,20 +1,25 @@
 import { useState, useMemo } from 'react';
-import { format, getYear, parseISO } from 'date-fns';
-import { sv } from 'date-fns/locale';
+import { getYear, parseISO } from 'date-fns';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import Header from './Header';
 import { useCosts } from '@/hooks/useCosts';
 import { useCustomers } from '@/hooks/useCustomers';
+import { useLanguage } from '@/contexts/LanguageContext';
 
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'];
 const COLORS = ['hsl(var(--primary))', 'hsl(var(--info))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--destructive))'];
 
 const StatisticsPage = () => {
+  const { t } = useLanguage();
   const { data: costs } = useCosts();
   const { data: customers } = useCustomers();
+
+  const MONTHS = [
+    t('month.jan'), t('month.feb'), t('month.mar'), t('month.apr'),
+    t('month.may'), t('month.jun'), t('month.jul'), t('month.aug'),
+    t('month.sep'), t('month.oct'), t('month.nov'), t('month.dec')
+  ];
 
   // Get available years from data
   const availableYears = useMemo(() => {
@@ -80,7 +85,7 @@ const StatisticsPage = () => {
       
       return dataPoint;
     });
-  }, [costs, customers, selectedYears]);
+  }, [costs, customers, selectedYears, MONTHS]);
 
   // Calculate yearly totals
   const yearlyTotals = useMemo(() => {
@@ -108,11 +113,11 @@ const StatisticsPage = () => {
 
   return (
     <div className="pb-24">
-      <Header title="Statistik" subtitle="Jämför data mellan år" />
+      <Header title={t('statistics.title')} subtitle={t('statistics.subtitle')} />
 
       {/* Year Selection */}
       <Card className="p-4 mb-6">
-        <h3 className="font-medium text-sm mb-3 text-muted-foreground">Välj år att jämföra</h3>
+        <h3 className="font-medium text-sm mb-3 text-muted-foreground">{t('statistics.selectYears')}</h3>
         <div className="flex flex-wrap gap-3">
           {availableYears.map(year => (
             <label key={year} className="flex items-center gap-2 cursor-pointer">
@@ -130,7 +135,7 @@ const StatisticsPage = () => {
       <Card className="p-4 mb-6">
         <h3 className="font-display font-bold text-lg mb-4 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-success" />
-          Intäkter per månad
+          {t('statistics.incomePerMonth')}
         </h3>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
@@ -166,7 +171,7 @@ const StatisticsPage = () => {
       <Card className="p-4 mb-6">
         <h3 className="font-display font-bold text-lg mb-4 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-destructive" />
-          Kostnader per månad
+          {t('statistics.costsPerMonth')}
         </h3>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
@@ -202,7 +207,7 @@ const StatisticsPage = () => {
       <Card className="p-4 mb-6">
         <h3 className="font-display font-bold text-lg mb-4 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-primary" />
-          Vinst per månad
+          {t('statistics.profitPerMonth')}
         </h3>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
@@ -236,7 +241,7 @@ const StatisticsPage = () => {
 
       {/* Yearly Summary */}
       <Card className="p-4">
-        <h3 className="font-display font-bold text-lg mb-4">Årssammanfattning</h3>
+        <h3 className="font-display font-bold text-lg mb-4">{t('statistics.yearlySummary')}</h3>
         <div className="space-y-4">
           {yearlyTotals.map((data, index) => (
             <div key={data.year} className="p-4 rounded-xl bg-muted/50 border border-border">
@@ -249,15 +254,15 @@ const StatisticsPage = () => {
               </div>
               <div className="grid grid-cols-3 gap-4 text-sm">
                 <div>
-                  <p className="text-muted-foreground">Intäkter</p>
+                  <p className="text-muted-foreground">{t('statistics.income')}</p>
                   <p className="font-medium text-success">{data.income.toLocaleString()} €</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Kostnader</p>
+                  <p className="text-muted-foreground">{t('statistics.costs')}</p>
                   <p className="font-medium text-destructive">{data.costs.toLocaleString()} €</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Vinst</p>
+                  <p className="text-muted-foreground">{t('statistics.profit')}</p>
                   <p className={`font-medium ${data.profit >= 0 ? 'text-primary' : 'text-destructive'}`}>
                     {data.profit >= 0 ? '+' : ''}{data.profit.toLocaleString()} €
                   </p>

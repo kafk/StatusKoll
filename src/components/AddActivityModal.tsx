@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { CalendarIcon } from 'lucide-react';
 import { DbEvent } from '@/hooks/useEvents';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface AddActivityModalProps {
   isOpen: boolean;
@@ -24,22 +25,23 @@ export interface ActivityFormData {
   note?: string;
 }
 
-const activityTypes = [
-  { value: 'cleaning_booked', label: 'Städ bokat', emoji: '🧹', dbType: 'cleaning' },
-  { value: 'payment_received', label: 'Betalning mottagen', emoji: '💰', dbType: 'payment' },
-  { value: 'booking_made', label: 'Bokning gjord', emoji: '📅', dbType: 'booking' },
-] as const;
-
-const getActivityTypeFromDbType = (dbType: string): ActivityFormData['type'] | null => {
-  const mapping = activityTypes.find(t => t.dbType === dbType);
-  return mapping ? mapping.value : null;
-};
-
 const AddActivityModal = ({ isOpen, onClose, onSubmit, onUpdate, customerName, editingEvent }: AddActivityModalProps) => {
+  const { t } = useLanguage();
   const [selectedType, setSelectedType] = useState<ActivityFormData['type'] | null>(null);
   const [date, setDate] = useState<Date>(new Date());
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
+
+  const activityTypes = [
+    { value: 'cleaning_booked' as const, label: t('activity.cleaningBooked'), emoji: '🧹', dbType: 'cleaning' },
+    { value: 'payment_received' as const, label: t('activity.paymentReceived'), emoji: '💰', dbType: 'payment' },
+    { value: 'booking_made' as const, label: t('activity.bookingMade'), emoji: '📅', dbType: 'booking' },
+  ];
+
+  const getActivityTypeFromDbType = (dbType: string): ActivityFormData['type'] | null => {
+    const mapping = activityTypes.find(t => t.dbType === dbType);
+    return mapping ? mapping.value : null;
+  };
 
   useEffect(() => {
     if (editingEvent) {
@@ -86,13 +88,13 @@ const AddActivityModal = ({ isOpen, onClose, onSubmit, onUpdate, customerName, e
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-card border border-border rounded-2xl w-full max-w-md p-6 animate-fade-in-up">
         <h3 className="font-display text-xl font-bold mb-4">
-          {editingEvent ? 'Redigera aktivitet' : 'Lägg till aktivitet'} för {customerName}
+          {editingEvent ? t('activity.edit') : t('activity.add')} {t('activity.for')} {customerName}
         </h3>
 
         <div className="space-y-4">
           <div>
             <label className="text-[11px] uppercase tracking-wider text-muted-foreground mb-2 block">
-              Typ av aktivitet
+              {t('activity.type')}
             </label>
             <div className="grid grid-cols-1 gap-2">
               {activityTypes.map((type) => (
@@ -115,7 +117,7 @@ const AddActivityModal = ({ isOpen, onClose, onSubmit, onUpdate, customerName, e
 
           <div>
             <label className="text-[11px] uppercase tracking-wider text-muted-foreground mb-2 block">
-              Datum
+              {t('activity.date')}
             </label>
             <Popover>
               <PopoverTrigger asChild>
@@ -127,7 +129,7 @@ const AddActivityModal = ({ isOpen, onClose, onSubmit, onUpdate, customerName, e
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, 'yyyy-MM-dd') : 'Välj datum'}
+                  {date ? format(date, 'yyyy-MM-dd') : t('activity.selectDate')}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -144,26 +146,26 @@ const AddActivityModal = ({ isOpen, onClose, onSubmit, onUpdate, customerName, e
           {selectedType === 'payment_received' && (
             <div>
               <label className="text-[11px] uppercase tracking-wider text-muted-foreground mb-2 block">
-                Belopp
+                {t('activity.amount')}
               </label>
               <Input
                 type="text"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="t.ex. 5000 kr"
+                placeholder={t('activity.amountPlaceholder')}
               />
             </div>
           )}
 
           <div>
             <label className="text-[11px] uppercase tracking-wider text-muted-foreground mb-2 block">
-              Anteckning (valfritt)
+              {t('activity.note')}
             </label>
             <Input
               type="text"
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              placeholder="Lägg till en anteckning..."
+              placeholder={t('activity.notePlaceholder')}
             />
           </div>
         </div>
@@ -173,14 +175,14 @@ const AddActivityModal = ({ isOpen, onClose, onSubmit, onUpdate, customerName, e
             onClick={onClose}
             className="flex-1 bg-transparent border border-border rounded-xl py-3 font-mono text-sm hover:border-primary transition-all"
           >
-            Avbryt
+            {t('common.cancel')}
           </button>
           <button
             onClick={handleSubmit}
             disabled={!selectedType}
             className="flex-1 bg-primary text-primary-foreground rounded-xl py-3 font-mono text-sm font-bold hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {editingEvent ? 'Spara' : 'Lägg till'}
+            {editingEvent ? t('common.save') : t('common.add')}
           </button>
         </div>
       </div>
