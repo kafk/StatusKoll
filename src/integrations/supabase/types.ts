@@ -18,31 +18,45 @@ export type Database = {
         Row: {
           amount: number
           created_at: string
+          customer_id: string | null
           date: string
           id: string
           name: string
+          transaction_title: string | null
           type: string
           user_id: string | null
         }
         Insert: {
           amount: number
           created_at?: string
+          customer_id?: string | null
           date: string
           id?: string
           name: string
+          transaction_title?: string | null
           type: string
           user_id?: string | null
         }
         Update: {
           amount?: number
           created_at?: string
+          customer_id?: string | null
           date?: string
           id?: string
           name?: string
+          transaction_title?: string | null
           type?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "costs_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       customers: {
         Row: {
