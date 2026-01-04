@@ -3,10 +3,20 @@ import { format, parseISO } from 'date-fns';
 import { Customer } from '@/types/rental';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useCreateEvent, useCustomerEvents, useUpdateEvent, DbEvent } from '@/hooks/useEvents';
+import { useCreateEvent, useCustomerEvents, useUpdateEvent, useDeleteEvent, DbEvent } from '@/hooks/useEvents';
 import { useUpdateCustomer } from '@/hooks/useCustomers';
 import AddActivityModal, { ActivityFormData } from './AddActivityModal';
-import { Pencil } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 interface CustomerDetailProps {
   customer: Customer;
@@ -18,8 +28,10 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
   const { toast } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<DbEvent | null>(null);
+  const [deletingEventId, setDeletingEventId] = useState<string | null>(null);
   const createEvent = useCreateEvent();
   const updateEvent = useUpdateEvent();
+  const deleteEvent = useDeleteEvent();
   const updateCustomer = useUpdateCustomer();
   const { data: events, isLoading: eventsLoading } = useCustomerEvents(customer.id);
 
@@ -192,6 +204,26 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
     setEditingEvent(null);
   };
 
+  const handleDeleteEvent = async () => {
+    if (!deletingEventId) return;
+    
+    try {
+      await deleteEvent.mutateAsync(deletingEventId);
+      toast({
+        title: t('customer.activityDeleted'),
+        description: t('customer.activityDeletedDesc'),
+      });
+    } catch (error) {
+      toast({
+        title: t('common.error'),
+        description: t('customer.activityDeleteError'),
+        variant: 'destructive',
+      });
+    } finally {
+      setDeletingEventId(null);
+    }
+  };
+
   const getStatusText = () => {
     if (customer.filterStatus === 'past') return t('status.done');
     if (customer.filterStatus === 'current') return t('status.ongoing');
@@ -300,13 +332,22 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
                 className="bg-card border border-border rounded-xl p-4 mb-3 relative group"
               >
                 <div className="absolute -left-[22px] top-5 w-3 h-3 rounded-full bg-primary border-2 border-background z-[1]" />
-                <button
-                  onClick={() => handleEditEvent(event)}
-                  className="absolute top-3 right-3 p-2 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-muted transition-all"
-                  title={t('common.edit')}
-                >
-                  <Pencil className="w-4 h-4 text-muted-foreground" />
-                </button>
+                <div className="absolute top-3 right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                  <button
+                    onClick={() => handleEditEvent(event)}
+                    className="p-2 rounded-lg hover:bg-muted"
+                    title={t('common.edit')}
+                  >
+                    <Pencil className="w-4 h-4 text-muted-foreground" />
+                  </button>
+                  <button
+                    onClick={() => setDeletingEventId(event.id)}
+                    className="p-2 rounded-lg hover:bg-destructive/10"
+                    title={t('common.delete')}
+                  >
+                    <Trash2 className="w-4 h-4 text-destructive" />
+                  </button>
+                </div>
                 <div className="text-[11px] text-muted-foreground mb-1">
                   {format(parseISO(event.date), 'd MMM yyyy')}
                 </div>
@@ -325,6 +366,26 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
         customerName={customer.name}
         editingEvent={editingEvent}
       />
+
+      <AlertDialog open={!!deletingEventId} onOpenChange={() => setDeletingEventId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('customer.deleteActivityTitle')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('customer.deleteActivityDesc')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteEvent}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {t('common.delete')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

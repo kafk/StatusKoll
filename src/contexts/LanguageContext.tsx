@@ -180,6 +180,11 @@ const translations: Record<Language, Translations> = {
     'customer.activityUpdated': 'Aktivitet uppdaterad!',
     'customer.activityUpdatedDesc': '{type} har uppdaterats för {name}.',
     'customer.activityUpdateError': 'Kunde inte uppdatera aktiviteten.',
+    'customer.activityDeleted': 'Aktivitet borttagen!',
+    'customer.activityDeletedDesc': 'Aktiviteten har tagits bort.',
+    'customer.activityDeleteError': 'Kunde inte ta bort aktiviteten.',
+    'customer.deleteActivityTitle': 'Ta bort aktivitet?',
+    'customer.deleteActivityDesc': 'Denna åtgärd går inte att ångra. Aktiviteten kommer att tas bort permanent.',
     
     // Activity Modal
     'activity.add': 'Lägg till aktivitet',
@@ -435,6 +440,11 @@ const translations: Record<Language, Translations> = {
     'customer.activityUpdated': 'Activity updated!',
     'customer.activityUpdatedDesc': '{type} has been updated for {name}.',
     'customer.activityUpdateError': 'Could not update activity.',
+    'customer.activityDeleted': 'Activity deleted!',
+    'customer.activityDeletedDesc': 'The activity has been removed.',
+    'customer.activityDeleteError': 'Could not delete activity.',
+    'customer.deleteActivityTitle': 'Delete activity?',
+    'customer.deleteActivityDesc': 'This action cannot be undone. The activity will be permanently deleted.',
     
     // Activity Modal
     'activity.add': 'Add activity',
@@ -690,6 +700,11 @@ const translations: Record<Language, Translations> = {
     'customer.activityUpdated': 'Aktivität aktualisiert!',
     'customer.activityUpdatedDesc': '{type} wurde für {name} aktualisiert.',
     'customer.activityUpdateError': 'Aktivität konnte nicht aktualisiert werden.',
+    'customer.activityDeleted': 'Aktivität gelöscht!',
+    'customer.activityDeletedDesc': 'Die Aktivität wurde entfernt.',
+    'customer.activityDeleteError': 'Aktivität konnte nicht gelöscht werden.',
+    'customer.deleteActivityTitle': 'Aktivität löschen?',
+    'customer.deleteActivityDesc': 'Diese Aktion kann nicht rückgängig gemacht werden. Die Aktivität wird dauerhaft gelöscht.',
     
     // Activity Modal
     'activity.add': 'Aktivität hinzufügen',
@@ -945,6 +960,11 @@ const translations: Record<Language, Translations> = {
     'customer.activityUpdated': 'Aktivnost ažurirana!',
     'customer.activityUpdatedDesc': '{type} je ažuriran za {name}.',
     'customer.activityUpdateError': 'Nije moguće ažurirati aktivnost.',
+    'customer.activityDeleted': 'Aktivnost izbrisana!',
+    'customer.activityDeletedDesc': 'Aktivnost je uklonjena.',
+    'customer.activityDeleteError': 'Nije moguće izbrisati aktivnost.',
+    'customer.deleteActivityTitle': 'Izbrisati aktivnost?',
+    'customer.deleteActivityDesc': 'Ova radnja se ne može poništiti. Aktivnost će biti trajno izbrisana.',
     
     // Activity Modal
     'activity.add': 'Dodaj aktivnost',
