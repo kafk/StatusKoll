@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { format, parseISO } from 'date-fns';
 import { Customer } from '@/types/rental';
+import { Customer as DbCustomer } from '@/hooks/useCustomers';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useCreateEvent, useCustomerEvents, useUpdateEvent, useDeleteEvent, DbEvent } from '@/hooks/useEvents';
 import { useUpdateCustomer } from '@/hooks/useCustomers';
 import AddActivityModal, { ActivityFormData } from './AddActivityModal';
+import EditBookingModal from './EditBookingModal';
 import { Pencil, Trash2 } from 'lucide-react';
 import {
   AlertDialog,
@@ -20,13 +22,15 @@ import {
 
 interface CustomerDetailProps {
   customer: Customer;
+  dbCustomer: DbCustomer;
   onBack: () => void;
 }
 
-const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
+const CustomerDetail = ({ customer, dbCustomer, onBack }: CustomerDetailProps) => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditBookingOpen, setIsEditBookingOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<DbEvent | null>(null);
   const [deletingEventId, setDeletingEventId] = useState<string | null>(null);
   const createEvent = useCreateEvent();
@@ -239,9 +243,18 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
         {t('customers.backToList')}
       </button>
 
-      <h3 className="font-display text-[28px] font-bold gradient-text-secondary mb-6">
-        {customer.name}
-      </h3>
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="font-display text-[28px] font-bold gradient-text-secondary">
+          {customer.name}
+        </h3>
+        <button
+          onClick={() => setIsEditBookingOpen(true)}
+          className="flex items-center gap-2 bg-card border border-border rounded-xl px-4 py-2.5 text-muted-foreground font-mono text-xs hover:border-primary hover:text-primary transition-all"
+        >
+          <Pencil className="w-4 h-4" />
+          {t('booking.edit')}
+        </button>
+      </div>
 
       <div className="grid grid-cols-2 gap-3 mb-6">
         <div className="bg-card border border-border rounded-2xl p-4">
@@ -357,6 +370,12 @@ const CustomerDetail = ({ customer, onBack }: CustomerDetailProps) => {
           )}
         </div>
       </div>
+
+      <EditBookingModal
+        isOpen={isEditBookingOpen}
+        onClose={() => setIsEditBookingOpen(false)}
+        customer={dbCustomer}
+      />
 
       <AddActivityModal
         isOpen={isModalOpen}
