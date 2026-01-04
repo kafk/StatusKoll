@@ -1,30 +1,55 @@
 import { useStats } from '@/hooks/useStats';
+import { CalendarCheck, Sparkles, Euro } from 'lucide-react';
 
 const StatsGrid = () => {
   const stats = useStats();
   
   const statItems = [
-    { label: 'Bokningar', value: stats.bookings },
-    { label: 'Städningar', value: stats.cleanings },
-    { label: 'Intäkt', value: stats.revenue },
+    { 
+      label: 'Bokningar', 
+      value: stats.bookings,
+      icon: CalendarCheck,
+      color: 'text-primary',
+      bgColor: 'bg-primary/10',
+    },
+    { 
+      label: 'Städningar', 
+      value: stats.cleanings,
+      icon: Sparkles,
+      color: 'text-secondary',
+      bgColor: 'bg-secondary/10',
+    },
+    { 
+      label: 'Intäkt', 
+      value: stats.revenue,
+      icon: Euro,
+      color: 'text-warning',
+      bgColor: 'bg-warning/10',
+    },
   ];
 
   return (
     <div className="grid grid-cols-3 gap-3 mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-      {statItems.map((stat, index) => (
-        <div
-          key={index}
-          className="bg-card border border-border rounded-lg p-4 relative overflow-hidden transition-all duration-300 shadow-card hover:shadow-card-hover hover:-translate-y-1 group"
-        >
-          <div className="absolute top-0 left-0 right-0 h-0.5 gradient-primary opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2">
-            {stat.label}
+      {statItems.map((stat, index) => {
+        const Icon = stat.icon;
+        return (
+          <div
+            key={index}
+            className="bg-card border border-border rounded-xl p-4 relative overflow-hidden transition-all duration-300 shadow-card hover:shadow-card-hover hover:-translate-y-1 group"
+          >
+            <div className="absolute top-0 left-0 right-0 h-1 gradient-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className={`w-8 h-8 ${stat.bgColor} rounded-lg flex items-center justify-center mb-3`}>
+              <Icon className={`w-4 h-4 ${stat.color}`} />
+            </div>
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
+              {stat.label}
+            </div>
+            <div className={`font-display text-2xl font-bold ${stat.color}`}>
+              {stat.value}
+            </div>
           </div>
-          <div className="font-display text-2xl font-bold text-primary">
-            {stat.value}
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

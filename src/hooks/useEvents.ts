@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { format, parseISO } from 'date-fns';
+import { sv } from 'date-fns/locale';
 import { RentalEvent, EventType } from '@/types/rental';
 import { useAuth } from './useAuth';
 
@@ -16,6 +17,13 @@ export interface DbEvent {
   transaction_id: string | null;
   created_at: string;
   user_id: string | null;
+  customers?: {
+    id: string;
+    name: string;
+    check_in: string;
+    check_out: string;
+    platform: string | null;
+  } | null;
 }
 
 export interface EventFormData {
@@ -35,7 +43,16 @@ export const useEvents = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('events')
-        .select('*')
+        .select(`
+          *,
+          customers (
+            id,
+            name,
+            check_in,
+            check_out,
+            platform
+          )
+        `)
         .order('date', { ascending: false });
       
       if (error) throw error;
@@ -118,12 +135,25 @@ export const useUpdateEvent = () => {
 // Helper to convert database event to UI format
 export const formatEventForUI = (event: DbEvent): RentalEvent => {
   const date = parseISO(event.date);
+  const customer = event.customers;
+  
+  let period: string | undefined;
+  let source: string | undefined;
+  
+  if (customer) {
+    const checkIn = parseISO(customer.check_in);
+    const checkOut = parseISO(customer.check_out);
+    period = `${format(checkIn, 'd', { locale: sv })}-${format(checkOut, 'd MMM yyyy', { locale: sv })}`;
+    source = customer.platform ? `Via ${customer.platform}` : undefined;
+  }
   
   return {
     id: event.id,
     type: event.type as EventType,
-    date: format(date, 'd MMM yyyy'),
+    date: format(date, 'd MMM yyyy', { locale: sv }),
     customer: event.description,
+    period,
+    source,
     amount: event.amount || undefined,
     note: event.note || undefined,
     performedBy: event.performed_by || undefined,
