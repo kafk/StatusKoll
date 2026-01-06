@@ -8,31 +8,7 @@ Rental & Booking Management (30 character limit)
 
 ---
 
-## Description (Swedish)
-
-StatusKoll gör det enkelt att hålla koll på dina uthyrningar och bokningar.
-
-FUNKTIONER:
-• Överblick över alla bokningar på startsidan
-• Spåra incheckning, utcheckning och städstatus
-• Hantera kunder och deras bokningshistorik
-• Se inkomster och utgifter i ekonomivyn
-• Statistik och rapporter för din verksamhet
-
-PERFEKT FÖR:
-• Stuguthyrning
-• Korttidsuthyrning
-• Airbnb-värdar
-• Bed & Breakfast
-• Semesterboenden
-
-StatusKoll hjälper dig att aldrig missa en incheckning, hålla reda på betalningar och se till att städningen är klar innan nästa gäst anländer.
-
-Enkel, snabb och pålitlig – precis som bokningshantering ska vara.
-
----
-
-## Description (English)
+## Description
 
 StatusKoll makes it easy to keep track of your rentals and bookings.
 
@@ -58,21 +34,12 @@ Simple, fast, and reliable – exactly how booking management should be.
 
 ## Keywords (100 character limit, comma-separated)
 
-Swedish:
-bokning,uthyrning,stuga,airbnb,gäst,incheckning,städning,hyra,kalender,bokningssystem
-
-English:
 booking,rental,cabin,airbnb,guest,checkin,cleaning,property,calendar,management
 
 ---
 
 ## What's New (Version 1.1)
 
-Swedish:
-• Förbättrad prestanda
-• Buggfixar och stabilitetsförbättringar
-
-English:
 • Improved performance
 • Bug fixes and stability improvements
 
@@ -100,11 +67,11 @@ Same content, tablet layout
 
 ## Screenshot Text Overlays (Suggested)
 
-1. "Alla bokningar på ett ställe" / "All bookings in one place"
-2. "Håll koll på dina gäster" / "Keep track of your guests"
-3. "Incheckning, betalning, städning" / "Check-in, payment, cleaning"
-4. "Se din ekonomi tydligt" / "See your finances clearly"
-5. "Statistik för din verksamhet" / "Statistics for your business"
+1. "All bookings in one place"
+2. "Keep track of your guests"
+3. "Check-in, payment, cleaning"
+4. "See your finances clearly"
+5. "Statistics for your business"
 
 ---
 
