@@ -200,8 +200,9 @@ const StatisticsPage = () => {
                     name={`${year}`}
                     stroke={COLORS[index % COLORS.length]}
                     strokeWidth={2}
-                    strokeDasharray={isCurrentYear ? undefined : "5 5"}
-                    dot={{ fill: COLORS[index % COLORS.length] }}
+                    strokeDasharray={isCurrentYear ? "0" : "5 5"}
+                    dot={{ fill: COLORS[index % COLORS.length], r: 4 }}
+                    connectNulls
                   />
                 );
               })}
@@ -240,8 +241,9 @@ const StatisticsPage = () => {
                     name={`${year}`}
                     stroke={COLORS[index % COLORS.length]}
                     strokeWidth={2}
-                    strokeDasharray={isCurrentYear ? undefined : "5 5"}
-                    dot={{ fill: COLORS[index % COLORS.length] }}
+                    strokeDasharray={isCurrentYear ? "0" : "5 5"}
+                    dot={{ fill: COLORS[index % COLORS.length], r: 4 }}
+                    connectNulls
                   />
                 );
               })}
@@ -280,8 +282,9 @@ const StatisticsPage = () => {
                     name={`${year}`}
                     stroke={COLORS[index % COLORS.length]}
                     strokeWidth={2}
-                    strokeDasharray={isCurrentYear ? undefined : "5 5"}
-                    dot={{ fill: COLORS[index % COLORS.length] }}
+                    strokeDasharray={isCurrentYear ? "0" : "5 5"}
+                    dot={{ fill: COLORS[index % COLORS.length], r: 4 }}
+                    connectNulls
                   />
                 );
               })}
