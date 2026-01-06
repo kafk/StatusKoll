@@ -7,6 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import TeamSettings from './settings/TeamSettings';
 import LanguageSettings from './settings/LanguageSettings';
+import { APP_VERSION } from '@/constants/version';
 
 const SettingsPage = () => {
   const { t } = useLanguage();
@@ -75,7 +76,12 @@ const SettingsPage = () => {
           <LogOut className="w-4 h-4" />
           {t('settings.logout')}
         </Button>
-        <p className="text-center text-xs text-muted-foreground mt-4">v1.4</p>
+        <button
+          onClick={() => navigate('/changelog')}
+          className="w-full text-center text-xs text-muted-foreground mt-4 hover:text-primary transition-colors"
+        >
+          v{APP_VERSION}
+        </button>
       </div>
     </div>
   );
