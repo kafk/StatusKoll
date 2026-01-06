@@ -9,7 +9,7 @@ import { useCosts } from '@/hooks/useCosts';
 import { useCustomers } from '@/hooks/useCustomers';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-const COLORS = ['hsl(var(--primary))', 'hsl(var(--info))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--destructive))'];
+const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--destructive))'];
 
 const StatisticsPage = () => {
   const { t } = useLanguage();
@@ -117,7 +117,7 @@ const StatisticsPage = () => {
     const platforms = ['Airbnb', 'Booking', 'VRBO', 'Direct'];
     const platformColors: Record<string, string> = {
       'Airbnb': 'hsl(var(--destructive))',
-      'Booking': 'hsl(var(--info))',
+      'Booking': 'hsl(var(--secondary))',
       'VRBO': 'hsl(var(--success))',
       'Direct': 'hsl(var(--primary))'
     };
@@ -296,7 +296,7 @@ const StatisticsPage = () => {
       {/* Platform Statistics */}
       <Card className="p-4 mb-6">
         <h3 className="font-display font-bold text-lg mb-4 flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-info" />
+          <span className="w-2 h-2 rounded-full bg-secondary" />
           {t('statistics.platformStats')}
         </h3>
         <div className="grid grid-cols-2 gap-3 mb-4">
