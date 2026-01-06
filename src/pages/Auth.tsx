@@ -16,6 +16,7 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [showVerificationMessage, setShowVerificationMessage] = useState(false);
   
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
@@ -91,11 +92,7 @@ const Auth = () => {
             });
           }
         } else {
-          toast({
-            title: 'Account created!',
-            description: 'You can now log in.',
-          });
-          navigate('/');
+          setShowVerificationMessage(true);
         }
       }
     } finally {
@@ -107,6 +104,41 @@ const Auth = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
+
+  if (showVerificationMessage) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background p-4">
+        <div className="w-full max-w-md">
+          <div className="bg-card border border-border rounded-2xl shadow-card p-8 text-center">
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h1 className="font-display text-2xl font-bold text-foreground mb-2">
+              Kontrollera din e-post
+            </h1>
+            <p className="text-muted-foreground mb-6">
+              Vi har skickat en verifieringslänk till <span className="font-medium text-foreground">{email}</span>. 
+              Klicka på länken för att aktivera ditt konto.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setShowVerificationMessage(false);
+                setIsLogin(true);
+                setEmail('');
+                setPassword('');
+              }}
+              className="text-sm text-primary hover:text-primary/80 transition-colors"
+            >
+              Tillbaka till inloggning
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
