@@ -58,6 +58,14 @@ workflows:
           /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" ios/App/App/Info.plist
           echo "✅ Export compliance set: No non-exempt encryption"
 
+      - name: Set iPhone only (no iPad)
+        script: |
+          # Set targeted device family to iPhone only (1 = iPhone, 2 = iPad, 1,2 = both)
+          /usr/libexec/PlistBuddy -c "Delete :UIDeviceFamily" ios/App/App/Info.plist 2>/dev/null || true
+          /usr/libexec/PlistBuddy -c "Add :UIDeviceFamily array" ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Add :UIDeviceFamily:0 integer 1" ios/App/App/Info.plist
+          echo "✅ Device family set: iPhone only"
+
       - name: Build iOS app
         script: |
           xcode-project build-ipa \
