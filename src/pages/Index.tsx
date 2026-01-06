@@ -39,7 +39,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-[428px] mx-auto px-5 relative z-[1]">
+      <div className="max-w-[428px] md:max-w-2xl lg:max-w-4xl mx-auto px-5 md:px-8 relative z-[1]">
         {activePage === 'home' && <HomePage onSettingsClick={() => setActivePage('settings')} />}
         {activePage === 'status' && <StatusPage />}
         {activePage === 'customers' && <CustomersPage />}

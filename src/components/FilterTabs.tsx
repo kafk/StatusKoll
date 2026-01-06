@@ -6,12 +6,12 @@ interface FilterTabsProps {
 
 const FilterTabs = ({ tabs, activeTab, onTabChange }: FilterTabsProps) => {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 md:gap-3">
       {tabs.map((tab) => (
         <button
           key={tab}
           onClick={() => onTabChange(tab)}
-          className={`px-3 py-1.5 rounded-full text-xs font-mono transition-all border ${
+          className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-mono transition-all border ${
             activeTab === tab
               ? 'bg-primary text-primary-foreground border-primary'
               : 'bg-transparent border-border text-muted-foreground hover:border-primary hover:text-primary'
