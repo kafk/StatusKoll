@@ -1,8 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Menu } from "lucide-react";
 import NotificationBell from "./NotificationBell";
-import { APP_VERSION } from "@/constants/version";
 
 interface HeaderProps {
   title?: string;
@@ -12,7 +10,6 @@ interface HeaderProps {
 
 const Header = ({ title = "STATUS", subtitle, onSettingsClick }: HeaderProps) => {
   const { t } = useLanguage();
-  const navigate = useNavigate();
 
   return (
     <header className="flex justify-between items-center pt-12 pb-8 md:pt-16 md:pb-10 animate-slide-down">
@@ -36,12 +33,6 @@ const Header = ({ title = "STATUS", subtitle, onSettingsClick }: HeaderProps) =>
       </div>
       <div className="flex items-center gap-2 md:gap-3">
         <NotificationBell />
-        <button
-          onClick={() => navigate("/changelog")}
-          className="px-3 py-1.5 md:px-4 md:py-2 bg-card border border-border rounded-full text-xs md:text-sm font-bold text-muted-foreground hover:border-primary hover:text-primary transition-all hover:-translate-y-0.5"
-        >
-          v{APP_VERSION}
-        </button>
       </div>
     </header>
   );
