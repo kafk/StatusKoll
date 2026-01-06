@@ -7,9 +7,9 @@ import {
   BarChart3, 
   CheckCircle2, 
   Smartphone,
-  Home,
   Sparkles
 } from "lucide-react";
+import appScreenshot from "@/assets/app-screenshot.jpeg";
 
 const Landing = () => {
   const features = [
@@ -90,13 +90,12 @@ const Landing = () => {
             <div className="pt-12">
               <div className="relative mx-auto max-w-sm">
                 <div className="bg-card rounded-[3rem] p-3 shadow-2xl border border-border">
-                  <div className="bg-muted rounded-[2.5rem] aspect-[9/19] flex items-center justify-center">
-                    <div className="text-center space-y-4 p-8">
-                      <Home className="h-16 w-16 mx-auto text-primary" />
-                      <p className="text-muted-foreground text-sm">
-                        App screenshot preview
-                      </p>
-                    </div>
+                  <div className="rounded-[2.5rem] overflow-hidden">
+                    <img 
+                      src={appScreenshot} 
+                      alt="StatusKoll app screenshot showing booking management" 
+                      className="w-full h-auto"
+                    />
                   </div>
                 </div>
               </div>
