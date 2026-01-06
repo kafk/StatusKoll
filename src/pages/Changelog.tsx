@@ -12,6 +12,15 @@ interface ChangelogEntry {
 
 const changelog: ChangelogEntry[] = [
   {
+    version: "1.4",
+    date: "2025-01-06",
+    changes: [
+      { type: "improvement", description: "iPhone-optimerad app för App Store" },
+      { type: "improvement", description: "Centraliserat versionsnummer för konsekvent visning" },
+      { type: "bugfix", description: "Fixat versionsnummer som visade olika värden" },
+    ],
+  },
+  {
     version: "1.3",
     date: "2025-01-03",
     changes: [
