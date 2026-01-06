@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import IconSuggestions from "./components/IconSuggestions";
 import Changelog from "./pages/Changelog";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Support from "./pages/Support";
 import Auth from "./pages/Auth";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/icons" element={<IconSuggestions />} />
             <Route path="/changelog" element={<Changelog />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/support" element={<Support />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
