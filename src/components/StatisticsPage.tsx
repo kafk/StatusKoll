@@ -9,7 +9,7 @@ import { useCosts } from '@/hooks/useCosts';
 import { useCustomers } from '@/hooks/useCustomers';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--destructive))'];
+const COLORS = ['hsl(var(--primary))', 'hsl(var(--foreground))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--destructive))'];
 
 const StatisticsPage = () => {
   const { t } = useLanguage();
