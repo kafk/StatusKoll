@@ -36,7 +36,7 @@ const Timeline = () => {
   return (
     <div>
       <div
-        className="flex justify-end items-center mb-5 animate-fade-in-up"
+        className="flex justify-end items-center mb-5 md:mb-6 animate-fade-in-up"
         style={{ animationDelay: '0.2s' }}
       >
         <FilterTabs 
@@ -49,10 +49,10 @@ const Timeline = () => {
         />
       </div>
 
-      <div className="relative pl-[30px]">
+      <div className="relative pl-[30px] md:pl-[40px]">
         {/* Timeline line */}
         <div
-          className="absolute left-2 top-0 bottom-0 w-0.5 opacity-30"
+          className="absolute left-2 md:left-3 top-0 bottom-0 w-0.5 opacity-30"
           style={{
             background:
               'linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 50%, hsl(var(--warning)) 100%)',
