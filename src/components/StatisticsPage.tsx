@@ -112,28 +112,40 @@ const StatisticsPage = () => {
     });
   }, [costs, customers, selectedYears]);
 
+  const normalizePlatform = (platform?: string | null) => {
+    const p = (platform || '').toLowerCase().trim();
+    if (!p) return 'Direct';
+    if (p.includes('airbnb')) return 'Airbnb';
+    if (p.includes('booking')) return 'Booking';
+    if (p.includes('vrbo')) return 'VRBO';
+    if (p.includes('direct') || p.includes('direkt')) return 'Direct';
+    return 'Direct';
+  };
+
   // Calculate platform statistics
   const platformStats = useMemo(() => {
     const platforms = ['Airbnb', 'Booking', 'VRBO', 'Direct'];
     const platformColors: Record<string, string> = {
-      'Airbnb': 'hsl(var(--destructive))',
-      'Booking': 'hsl(var(--secondary))',
-      'VRBO': 'hsl(var(--success))',
-      'Direct': 'hsl(var(--primary))'
+      Airbnb: 'hsl(var(--destructive))',
+      Booking: 'hsl(var(--foreground))',
+      VRBO: 'hsl(var(--success))',
+      Direct: 'hsl(var(--primary))',
     };
     const platformIcons: Record<string, typeof Home> = {
-      'Airbnb': Home,
-      'Booking': Globe,
-      'VRBO': Building2,
-      'Direct': Users
+      Airbnb: Home,
+      Booking: Globe,
+      VRBO: Building2,
+      Direct: Users,
     };
 
-    return platforms.map(platform => {
-      const platformCustomers = customers?.filter(c => 
-        (c.platform || 'Direct') === platform &&
-        (selectedYears.length === 0 || selectedYears.includes(getYear(parseISO(c.check_in))))
-      ) || [];
-      
+    return platforms.map((platform) => {
+      const platformCustomers =
+        customers?.filter(
+          (c) =>
+            normalizePlatform(c.platform) === platform &&
+            (selectedYears.length === 0 || selectedYears.includes(getYear(parseISO(c.check_in))))
+        ) || [];
+
       const bookings = platformCustomers.length;
       const revenue = platformCustomers.reduce((total, customer) => {
         const amount = parseFloat(customer.amount.replace('€', '').replace(',', '.')) || 0;
@@ -145,7 +157,7 @@ const StatisticsPage = () => {
         bookings,
         revenue,
         color: platformColors[platform],
-        Icon: platformIcons[platform]
+        Icon: platformIcons[platform],
       };
     });
   }, [customers, selectedYears]);
