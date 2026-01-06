@@ -41,10 +41,10 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <div className="max-w-[428px] md:max-w-2xl lg:max-w-4xl mx-auto px-5 md:px-8 relative z-[1]">
         {activePage === 'home' && <HomePage onSettingsClick={() => setActivePage('settings')} />}
-        {activePage === 'status' && <StatusPage />}
-        {activePage === 'customers' && <CustomersPage />}
-        {activePage === 'economy' && <EconomyPage />}
-        {activePage === 'statistics' && <StatisticsPage />}
+        {activePage === 'status' && <StatusPage onSettingsClick={() => setActivePage('settings')} />}
+        {activePage === 'customers' && <CustomersPage onSettingsClick={() => setActivePage('settings')} />}
+        {activePage === 'economy' && <EconomyPage onSettingsClick={() => setActivePage('settings')} />}
+        {activePage === 'statistics' && <StatisticsPage onSettingsClick={() => setActivePage('settings')} />}
         {activePage === 'settings' && <SettingsPage />}
       </div>
 

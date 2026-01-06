@@ -6,7 +6,11 @@ import Header from './Header';
 import { Customer } from '@/types/rental';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-const CustomersPage = () => {
+interface CustomersPageProps {
+  onSettingsClick?: () => void;
+}
+
+const CustomersPage = ({ onSettingsClick }: CustomersPageProps) => {
   const { t } = useLanguage();
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
   const { data: dbCustomers, isLoading } = useCustomers();
@@ -19,7 +23,7 @@ const CustomersPage = () => {
   if (selectedCustomer && selectedDbCustomer) {
     return (
       <div className="pb-20">
-        <Header />
+        <Header onSettingsClick={onSettingsClick} />
         <CustomerDetail 
           customer={selectedCustomer} 
           dbCustomer={selectedDbCustomer}
@@ -31,7 +35,7 @@ const CustomersPage = () => {
 
   return (
     <div className="pb-20">
-      <Header />
+      <Header onSettingsClick={onSettingsClick} />
 
       <h2 className="font-display text-xl font-bold mb-4">{t('customers.all')}</h2>
 

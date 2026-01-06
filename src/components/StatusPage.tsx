@@ -6,7 +6,11 @@ import Header from './Header';
 import { Customer, FilterStatus, SortOrder } from '@/types/rental';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-const StatusPage = () => {
+interface StatusPageProps {
+  onSettingsClick?: () => void;
+}
+
+const StatusPage = ({ onSettingsClick }: StatusPageProps) => {
   const { t } = useLanguage();
   const { data: dbCustomers, isLoading } = useCustomers();
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
@@ -42,7 +46,7 @@ const StatusPage = () => {
   if (selectedCustomer && selectedDbCustomer) {
     return (
       <div className="pb-20">
-        <Header />
+        <Header onSettingsClick={onSettingsClick} />
         <CustomerDetail 
           customer={selectedCustomer} 
           dbCustomer={selectedDbCustomer}
@@ -54,7 +58,7 @@ const StatusPage = () => {
 
   return (
     <div className="pb-20">
-      <Header />
+      <Header onSettingsClick={onSettingsClick} />
 
       <div className="mb-5">
         <div className="text-[11px] uppercase tracking-[1.5px] text-muted-foreground mb-3">

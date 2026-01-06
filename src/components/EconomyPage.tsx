@@ -14,7 +14,11 @@ import { useCosts, useCreateCost, useDeleteCost } from '@/hooks/useCosts';
 import { useCustomers } from '@/hooks/useCustomers';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-const EconomyPage = () => {
+interface EconomyPageProps {
+  onSettingsClick?: () => void;
+}
+
+const EconomyPage = ({ onSettingsClick }: EconomyPageProps) => {
   const { t, language } = useLanguage();
   const { data: costs, isLoading: costsLoading } = useCosts();
   const { data: customers } = useCustomers();
@@ -108,7 +112,7 @@ const EconomyPage = () => {
   if (costsLoading) {
     return (
       <div className="pb-24">
-        <Header title={t('economy.title')} subtitle={t('economy.subtitle')} />
+        <Header title={t('economy.title')} subtitle={t('economy.subtitle')} onSettingsClick={onSettingsClick} />
         <div className="text-center text-muted-foreground py-8">{t('common.loading')}</div>
       </div>
     );
@@ -116,7 +120,7 @@ const EconomyPage = () => {
 
   return (
     <div className="pb-24">
-      <Header title={t('economy.title')} subtitle={t('economy.subtitle')} />
+      <Header title={t('economy.title')} subtitle={t('economy.subtitle')} onSettingsClick={onSettingsClick} />
 
       {/* Year Filter */}
       <div className="mb-4">

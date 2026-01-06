@@ -11,7 +11,11 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 const COLORS = ['hsl(var(--primary))', 'hsl(var(--foreground))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--destructive))'];
 
-const StatisticsPage = () => {
+interface StatisticsPageProps {
+  onSettingsClick?: () => void;
+}
+
+const StatisticsPage = ({ onSettingsClick }: StatisticsPageProps) => {
   const { t } = useLanguage();
   const { data: costs } = useCosts();
   const { data: customers } = useCustomers();
@@ -164,7 +168,7 @@ const StatisticsPage = () => {
 
   return (
     <div className="pb-24">
-      <Header title={t('statistics.title')} subtitle={t('statistics.subtitle')} />
+      <Header title={t('statistics.title')} subtitle={t('statistics.subtitle')} onSettingsClick={onSettingsClick} />
 
       {/* Year Selection */}
       <Card className="p-4 mb-6">
