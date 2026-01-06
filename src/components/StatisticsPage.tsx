@@ -190,17 +190,21 @@ const StatisticsPage = () => {
                 }} 
               />
               <Legend />
-              {selectedYears.map((year, index) => (
-                <Line
-                  key={year}
-                  type="monotone"
-                  dataKey={`income_${year}`}
-                  name={`${year}`}
-                  stroke={COLORS[index % COLORS.length]}
-                  strokeWidth={2}
-                  dot={{ fill: COLORS[index % COLORS.length] }}
-                />
-              ))}
+              {selectedYears.map((year, index) => {
+                const isCurrentYear = index === 0;
+                return (
+                  <Line
+                    key={year}
+                    type="monotone"
+                    dataKey={`income_${year}`}
+                    name={`${year}`}
+                    stroke={COLORS[index % COLORS.length]}
+                    strokeWidth={2}
+                    strokeDasharray={isCurrentYear ? undefined : "5 5"}
+                    dot={{ fill: COLORS[index % COLORS.length] }}
+                  />
+                );
+              })}
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -226,17 +230,21 @@ const StatisticsPage = () => {
                 }} 
               />
               <Legend />
-              {selectedYears.map((year, index) => (
-                <Line
-                  key={year}
-                  type="monotone"
-                  dataKey={`costs_${year}`}
-                  name={`${year}`}
-                  stroke={COLORS[index % COLORS.length]}
-                  strokeWidth={2}
-                  dot={{ fill: COLORS[index % COLORS.length] }}
-                />
-              ))}
+              {selectedYears.map((year, index) => {
+                const isCurrentYear = index === 0;
+                return (
+                  <Line
+                    key={year}
+                    type="monotone"
+                    dataKey={`costs_${year}`}
+                    name={`${year}`}
+                    stroke={COLORS[index % COLORS.length]}
+                    strokeWidth={2}
+                    strokeDasharray={isCurrentYear ? undefined : "5 5"}
+                    dot={{ fill: COLORS[index % COLORS.length] }}
+                  />
+                );
+              })}
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -262,17 +270,21 @@ const StatisticsPage = () => {
                 }} 
               />
               <Legend />
-              {selectedYears.map((year, index) => (
-                <Line
-                  key={year}
-                  type="monotone"
-                  dataKey={`profit_${year}`}
-                  name={`${year}`}
-                  stroke={COLORS[index % COLORS.length]}
-                  strokeWidth={2}
-                  dot={{ fill: COLORS[index % COLORS.length] }}
-                />
-              ))}
+              {selectedYears.map((year, index) => {
+                const isCurrentYear = index === 0;
+                return (
+                  <Line
+                    key={year}
+                    type="monotone"
+                    dataKey={`profit_${year}`}
+                    name={`${year}`}
+                    stroke={COLORS[index % COLORS.length]}
+                    strokeWidth={2}
+                    strokeDasharray={isCurrentYear ? undefined : "5 5"}
+                    dot={{ fill: COLORS[index % COLORS.length] }}
+                  />
+                );
+              })}
             </LineChart>
           </ResponsiveContainer>
         </div>
