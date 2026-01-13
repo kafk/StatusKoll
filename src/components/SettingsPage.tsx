@@ -1,12 +1,9 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Settings, Users, Globe, LogOut } from 'lucide-react';
+import { Settings, Users, Globe, LogOut, Lightbulb, ChevronRight } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import TeamSettings from './settings/TeamSettings';
-import LanguageSettings from './settings/LanguageSettings';
 import { APP_VERSION } from '@/constants/version';
 
 const SettingsPage = () => {
@@ -14,7 +11,6 @@ const SettingsPage = () => {
   const { signOut } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'team' | 'language'>('team');
 
   const handleLogout = async () => {
     const { error } = await signOut();
@@ -30,8 +26,9 @@ const SettingsPage = () => {
   };
 
   const menuItems = [
-    { id: 'team' as const, icon: Users, label: t('settings.team') },
-    { id: 'language' as const, icon: Globe, label: t('settings.language') },
+    { path: '/settings/team', icon: Users, label: t('settings.team'), description: t('team.description') },
+    { path: '/settings/language', icon: Globe, label: t('settings.language'), description: t('settings.languageDescription') },
+    { path: '/settings/suggestions', icon: Lightbulb, label: t('suggestions.title'), description: t('suggestions.menuDescription') },
   ];
 
   return (
@@ -45,26 +42,23 @@ const SettingsPage = () => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 mb-6">
+      <div className="flex flex-col gap-2 mb-8">
         {menuItems.map((item) => (
           <button
-            key={item.id}
-            onClick={() => setActiveTab(item.id)}
-            className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${
-              activeTab === item.id
-                ? 'bg-primary/10 border-primary text-primary'
-                : 'bg-card border-border text-foreground hover:border-primary/50'
-            }`}
+            key={item.path}
+            onClick={() => navigate(item.path)}
+            className="flex items-center gap-3 p-4 rounded-xl border bg-card border-border text-foreground hover:border-primary/50 transition-all text-left"
           >
-            <item.icon className="w-5 h-5" />
-            <span className="font-medium">{item.label}</span>
+            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <item.icon className="w-5 h-5 text-primary" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className="font-medium block">{item.label}</span>
+              <span className="text-xs text-muted-foreground block truncate">{item.description}</span>
+            </div>
+            <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
           </button>
         ))}
-      </div>
-
-      <div className="mb-8">
-        {activeTab === 'team' && <TeamSettings />}
-        {activeTab === 'language' && <LanguageSettings />}
       </div>
 
       <div className="border-t border-border pt-6">

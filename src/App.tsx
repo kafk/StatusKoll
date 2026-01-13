@@ -12,6 +12,9 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Support from "./pages/Support";
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
+import TeamSettingsPage from "./pages/settings/TeamSettingsPage";
+import LanguageSettingsPage from "./pages/settings/LanguageSettingsPage";
+import SuggestionsPage from "./pages/settings/SuggestionsPage";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +33,9 @@ const App = () => (
             <Route path="/changelog" element={<Changelog />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/support" element={<Support />} />
+            <Route path="/settings/team" element={<TeamSettingsPage />} />
+            <Route path="/settings/language" element={<LanguageSettingsPage />} />
+            <Route path="/settings/suggestions" element={<SuggestionsPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
