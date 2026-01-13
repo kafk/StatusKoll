@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
+import { Play } from 'lucide-react';
 
 const emailSchema = z.string().email('Invalid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
@@ -219,6 +220,48 @@ const Auth = () => {
                 ? "Don't have an account? Create one here"
                 : 'Already have an account? Log in'}
             </button>
+          </div>
+
+          {/* Demo Button */}
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-border" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card px-2 text-muted-foreground">or</span>
+              </div>
+            </div>
+            
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full mt-4 gap-2"
+              disabled={isSubmitting}
+              onClick={async () => {
+                setIsSubmitting(true);
+                try {
+                  const { error } = await signIn('demo@statuskoll.se', 'demo123');
+                  if (error) {
+                    toast({
+                      title: 'Demo login failed',
+                      description: 'Could not access demo account.',
+                      variant: 'destructive',
+                    });
+                  } else {
+                    toast({
+                      title: 'Welcome to the demo!',
+                      description: 'You are now viewing the demo account.',
+                    });
+                  }
+                } finally {
+                  setIsSubmitting(false);
+                }
+              }}
+            >
+              <Play className="w-4 h-4" />
+              Try Demo
+            </Button>
           </div>
         </div>
       </div>
