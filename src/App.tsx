@@ -15,6 +15,10 @@ import Auth from "./pages/Auth";
 import TeamSettingsPage from "./pages/settings/TeamSettingsPage";
 import LanguageSettingsPage from "./pages/settings/LanguageSettingsPage";
 import SuggestionsPage from "./pages/settings/SuggestionsPage";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminSuggestions from "./pages/admin/AdminSuggestions";
+import { ProtectedAdminRoute } from "./components/ProtectedAdminRoute";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +40,9 @@ const App = () => (
             <Route path="/settings/team" element={<TeamSettingsPage />} />
             <Route path="/settings/language" element={<LanguageSettingsPage />} />
             <Route path="/settings/suggestions" element={<SuggestionsPage />} />
+            <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
+            <Route path="/admin/suggestions" element={<ProtectedAdminRoute><AdminSuggestions /></ProtectedAdminRoute>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

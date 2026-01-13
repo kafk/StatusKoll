@@ -14,6 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_users: {
+        Row: {
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       costs: {
         Row: {
           amount: number
@@ -254,6 +272,7 @@ export type Database = {
         Args: { check_owner_id: string; check_user_id: string }
         Returns: boolean
       }
+      is_admin: { Args: { check_user_id: string }; Returns: boolean }
       is_cleaner: {
         Args: { check_owner_id: string; check_user_id: string }
         Returns: boolean
