@@ -23,6 +23,17 @@ const translations: Record<Language, Translations> = {
     'settings.languageDescription': 'Välj språk för appen',
     'settings.logout': 'Logga ut',
     
+    // Suggestions
+    'suggestions.title': 'Förslag',
+    'suggestions.menuDescription': 'Skicka förbättringsförslag',
+    'suggestions.cardTitle': 'Har du en idé?',
+    'suggestions.description': 'Vi vill gärna höra dina tankar om hur vi kan förbättra appen. Skriv ditt förslag nedan så tar vi det i beaktning.',
+    'suggestions.placeholder': 'Beskriv ditt förslag här...',
+    'suggestions.send': 'Skicka förslag',
+    'suggestions.sending': 'Skickar...',
+    'suggestions.sent': 'Tack för ditt förslag!',
+    'suggestions.note': 'Alla förslag granskas av vårt team.',
+    
     // Team
     'team.title': 'Team',
     'team.description': 'Bjud in delägare, partners och städare',
@@ -293,6 +304,17 @@ const translations: Record<Language, Translations> = {
     'settings.language': 'Language',
     'settings.languageDescription': 'Choose app language',
     'settings.logout': 'Log out',
+    
+    // Suggestions
+    'suggestions.title': 'Suggestions',
+    'suggestions.menuDescription': 'Send improvement ideas',
+    'suggestions.cardTitle': 'Have an idea?',
+    'suggestions.description': 'We would love to hear your thoughts on how we can improve the app. Write your suggestion below and we will consider it.',
+    'suggestions.placeholder': 'Describe your suggestion here...',
+    'suggestions.send': 'Send suggestion',
+    'suggestions.sending': 'Sending...',
+    'suggestions.sent': 'Thank you for your suggestion!',
+    'suggestions.note': 'All suggestions are reviewed by our team.',
     
     // Team
     'team.title': 'Team',
@@ -565,6 +587,17 @@ const translations: Record<Language, Translations> = {
     'settings.languageDescription': 'App-Sprache wählen',
     'settings.logout': 'Abmelden',
     
+    // Suggestions
+    'suggestions.title': 'Vorschläge',
+    'suggestions.menuDescription': 'Verbesserungsvorschläge senden',
+    'suggestions.cardTitle': 'Haben Sie eine Idee?',
+    'suggestions.description': 'Wir würden gerne Ihre Gedanken hören, wie wir die App verbessern können. Schreiben Sie Ihren Vorschlag unten und wir werden ihn berücksichtigen.',
+    'suggestions.placeholder': 'Beschreiben Sie Ihren Vorschlag hier...',
+    'suggestions.send': 'Vorschlag senden',
+    'suggestions.sending': 'Wird gesendet...',
+    'suggestions.sent': 'Vielen Dank für Ihren Vorschlag!',
+    'suggestions.note': 'Alle Vorschläge werden von unserem Team geprüft.',
+    
     // Team
     'team.title': 'Team',
     'team.description': 'Miteigentümer, Partner und Reinigungskräfte einladen',
@@ -835,6 +868,17 @@ const translations: Record<Language, Translations> = {
     'settings.language': 'Jezik',
     'settings.languageDescription': 'Odaberite jezik aplikacije',
     'settings.logout': 'Odjava',
+    
+    // Suggestions
+    'suggestions.title': 'Prijedlozi',
+    'suggestions.menuDescription': 'Pošaljite prijedloge za poboljšanje',
+    'suggestions.cardTitle': 'Imate ideju?',
+    'suggestions.description': 'Rado bismo čuli vaše misli o tome kako možemo poboljšati aplikaciju. Napišite svoj prijedlog ispod i razmotrit ćemo ga.',
+    'suggestions.placeholder': 'Opišite svoj prijedlog ovdje...',
+    'suggestions.send': 'Pošalji prijedlog',
+    'suggestions.sending': 'Slanje...',
+    'suggestions.sent': 'Hvala vam na prijedlogu!',
+    'suggestions.note': 'Sve prijedloge pregledava naš tim.',
     
     // Team
     'team.title': 'Tim',
