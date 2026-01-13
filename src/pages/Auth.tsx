@@ -241,7 +241,7 @@ const Auth = () => {
               onClick={async () => {
                 setIsSubmitting(true);
                 try {
-                  const { error } = await signIn('demo@statuskoll.se', 'demo123');
+                  const { error } = await signIn('demo@statuskoll.se', 'Demo2026!');
                   if (error) {
                     toast({
                       title: 'Demo login failed',
