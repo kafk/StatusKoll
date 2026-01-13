@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useTeam, TeamRole } from '@/hooks/useTeam';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, UserPlus, Trash2, Mail, Crown, Briefcase, Sparkles } from 'lucide-react';
+import { Users, UserPlus, Trash2, Mail, Crown, Briefcase, Sparkles, Info } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,17 +18,37 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
+
+const DEMO_EMAIL = 'demo@statuskoll.se';
 
 const TeamSettings = () => {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const { teamMembers, loading, addTeamMember, removeTeamMember } = useTeam();
   const [newEmail, setNewEmail] = useState('');
   const [newName, setNewName] = useState('');
   const [newRole, setNewRole] = useState<TeamRole>('partner');
   const [isAdding, setIsAdding] = useState(false);
+  const [showDemoDialog, setShowDemoDialog] = useState(false);
+
+  const isDemoAccount = user?.email === DEMO_EMAIL;
 
   const handleAddMember = async () => {
     if (!newEmail.trim()) return;
+
+    // Show demo dialog instead of actually adding if on demo account
+    if (isDemoAccount) {
+      setShowDemoDialog(true);
+      return;
+    }
 
     setIsAdding(true);
     await addTeamMember(newEmail.trim(), newName.trim(), newRole);
@@ -203,6 +224,26 @@ const TeamSettings = () => {
           </div>
         )}
       </div>
+
+      {/* Demo account dialog */}
+      <Dialog open={showDemoDialog} onOpenChange={setShowDemoDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Info className="w-5 h-5 text-primary" />
+              Demokonto
+            </DialogTitle>
+            <DialogDescription className="pt-2">
+              Detta är ett demokonto. På ett riktigt konto skulle den inbjudna personen få tillgång till samma data som du ser här, baserat på den roll du väljer.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={() => setShowDemoDialog(false)}>
+              Jag förstår
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
