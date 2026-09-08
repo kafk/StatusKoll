@@ -9,9 +9,11 @@ import {
   Smartphone,
   Sparkles
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import appScreenshot from "@/assets/app-screenshot.jpeg";
 
 const Landing = () => {
+  const navigate = useNavigate();
   const features = [
     {
       icon: CalendarCheck,
@@ -78,6 +80,15 @@ const Landing = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button 
                 size="lg" 
+                className="gap-2 text-lg px-8 py-6"
+                onClick={() => navigate('/auth')}
+              >
+                <Sparkles className="h-5 w-5" />
+                Öppna appen
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline"
                 className="gap-2 text-lg px-8 py-6"
                 onClick={() => window.open('https://apps.apple.com/app/statuskoll', '_blank')}
               >
