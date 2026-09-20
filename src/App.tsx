@@ -18,9 +18,11 @@ import SuggestionsPage from "./pages/settings/SuggestionsPage";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminSuggestions from "./pages/admin/AdminSuggestions";
+import { Capacitor } from "@capacitor/core";
 import { ProtectedAdminRoute } from "./components/ProtectedAdminRoute";
 
 const queryClient = new QueryClient();
+const isNative = Capacitor.isNativePlatform();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -30,13 +32,15 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={isNative ? <Index /> : <Landing />} />
             <Route path="/dashboard" element={<Index />} />
+            <Route path="/app" element={<Index />} />
             <Route path="/landing" element={<Landing />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/icons" element={<IconSuggestions />} />
             <Route path="/changelog" element={<Changelog />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/support" element={<Support />} />
             <Route path="/settings/team" element={<TeamSettingsPage />} />
             <Route path="/settings/language" element={<LanguageSettingsPage />} />
